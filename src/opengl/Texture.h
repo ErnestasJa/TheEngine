@@ -2,9 +2,15 @@
 
 #include "GLObject.h"
 
-struct image;
-struct Texture: public GLObject
+class image;
+class Texture: public GLObject
 {
+public:
+	std::string name;
+	uint32_t Type;
+
+	static uint32_t current, active_slot;
+
     enum FILTER_MIN
     {
         FILTER_MIN_NEAREST = 0,
@@ -25,11 +31,6 @@ struct Texture: public GLObject
         CLAMP_EDGE,
         CLAMP_BORDER
     };
-
-    std::string name;
-    uint32_t Type;
-
-    static uint32_t current, active_slot;
 
     Texture();
     ~Texture();

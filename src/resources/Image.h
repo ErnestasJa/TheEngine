@@ -1,10 +1,11 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
-struct image
+class image
 {
-    uint32_t width, height, num_channels;
-    uint8_t * data;
+public:
+	uint8_t * data;
+	uint32_t width, height, num_channels;
 
     image()
     {
