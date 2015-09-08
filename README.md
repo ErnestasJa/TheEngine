@@ -1,2 +1,2 @@
 # TheEngine
-Surelly the best engine one could ever code.
+Surely the best engine one could ever code.
