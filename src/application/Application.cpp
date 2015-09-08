@@ -6,6 +6,7 @@
 #include "utility/StringUtil.h"
 
 #include "boost/filesystem/path.hpp"
+#include "boost/filesystem/operations.hpp"
 
 #include "Application.h"
 
@@ -145,7 +146,14 @@ bool Application::Init(const std::string  &title, uint32_t width, uint32_t heigh
 {
 	_appContext->_timer = timer_ptr(new Timer());
 
-	if (!PHYSFS_init(boost::filesystem::path(_argv[0]).normalize().string().c_str()))
+	auto normalizedWorkingDirectory = std::string(_argv[0]);
+
+#ifdef _WIN32
+	normalizedWorkingDirectory = boost::filesystem::canonical(normalizedWorkingDirectory).string();
+	boost::replace_all(normalizedWorkingDirectory, "/", "\\");
+#endif
+
+	if (!PHYSFS_init(normalizedWorkingDirectory.c_str()))
 	{
 		std::cout << "PHYSFS_init() failed: " << PHYSFS_getLastError() << std::endl;
 		return false;
@@ -158,6 +166,8 @@ bool Application::Init(const std::string  &title, uint32_t width, uint32_t heigh
 
 	boost::replace_all(_workingDirectoryPath, PHYSFS_getDirSeparator(), DSP());
 	RemoveFromEnd(_workingDirectoryPath, DSP());
+
+	printf("Working Directory: %s\n", _workingDirectoryPath.c_str());
 
 	InitSettings();
 	ApplySettings();
