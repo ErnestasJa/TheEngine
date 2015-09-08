@@ -23,7 +23,8 @@ class Helper:
         self.fullBuildPath = ""
         self.fullProjectBinPath = ""
         self.buildcores = "-j9"
-        self.projectPath = os.getcwd()
+        self.projectPath = os.path.dirname(os.path.dirname(os.getcwd()))
+        print(self.projectPath)
 
         if os.name == "posix":
             self.platform = OS.linux
