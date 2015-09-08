@@ -74,14 +74,4 @@
 # define SIGC_USING_STD(Symbol) namespace std { using ::Symbol; }
 #endif
 
-#ifdef SIGC_DLL
-# if defined(SIGC_BUILD) && defined(_WINDLL)
-#  define SIGC_API __declspec(dllexport)
-# elif !defined(SIGC_BUILD)
-#  define SIGC_API __declspec(dllimport)
-# else
-#  define SIGC_API
-# endif
-#else /* !SIGC_DLL */
-# define SIGC_API
-#endif /* !SIGC_DLL */
+#define SIGC_API
