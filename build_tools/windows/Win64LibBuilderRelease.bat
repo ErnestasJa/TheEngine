@@ -1,3 +1,4 @@
+@echo off
 cd ../../
 rmdir /s /q "build"
 rmdir /s /q "libs/win64release"
@@ -12,3 +13,4 @@ start /wait b2 -j8 --without-python --build-dir="../../build"  --toolset=msvc ar
 cd "../../build/"
 for /r %%f in (*.lib) do @xcopy /yq "%%f" "../libs/win64release"
 cd "../"
+rmdir /s /q "build"
