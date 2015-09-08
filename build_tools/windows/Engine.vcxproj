@@ -1,0 +1,287 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{5F716F95-3B1C-4007-9B9D-56F6967651F1}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Engine</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\libs\win32debug</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\libs\win64debug</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\libs\win32release</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\libs\win64release</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\src;..\..\libs\boost;..\..\libs\freetype2\include;..\..\libs\glfw\include;..\..\libs\glm;..\..\libs\glxw\include;..\..\libs\jsoncpp\include;..\..\libs\libsigc++;..\..\libs\physfs;..\..\libs\stb_image;..\..\libs\tinyxml2\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\src;..\..\libs\boost;..\..\libs\freetype2\include;..\..\libs\glfw\include;..\..\libs\glm;..\..\libs\glxw\include;..\..\libs\jsoncpp\include;..\..\libs\libsigc++;..\..\libs\physfs;..\..\libs\stb_image;..\..\libs\tinyxml2\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\src;..\..\libs\boost;..\..\libs\freetype2\include;..\..\libs\glfw\include;..\..\libs\glm;..\..\libs\glxw\include;..\..\libs\jsoncpp\include;..\..\libs\libsigc++;..\..\libs\physfs;..\..\libs\stb_image;..\..\libs\tinyxml2\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\src;..\..\libs\boost;..\..\libs\freetype2\include;..\..\libs\glfw\include;..\..\libs\glm;..\..\libs\glxw\include;..\..\libs\jsoncpp\include;..\..\libs\libsigc++;..\..\libs\physfs;..\..\libs\stb_image;..\..\libs\tinyxml2\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\application\AppContext.h" />
+    <ClInclude Include="..\..\src\application\Application.h" />
+    <ClInclude Include="..\..\src\application\ApplicationLauncher.h" />
+    <ClInclude Include="..\..\src\application\InputHandler.h" />
+    <ClInclude Include="..\..\src\application\Window.h" />
+    <ClInclude Include="..\..\src\Config.h" />
+    <ClInclude Include="..\..\src\core\Var.h" />
+    <ClInclude Include="..\..\src\core\VarGroup.h" />
+    <ClInclude Include="..\..\src\core\VarJsonReader.h" />
+    <ClInclude Include="..\..\src\gui\custom_elements\GUIColorPicker.h" />
+    <ClInclude Include="..\..\src\gui\custom_elements\ToggleGroup.h" />
+    <ClInclude Include="..\..\src\gui\font_rendering\Font.h" />
+    <ClInclude Include="..\..\src\gui\font_rendering\FontFamily.h" />
+    <ClInclude Include="..\..\src\gui\font_rendering\FontRenderer.h" />
+    <ClInclude Include="..\..\src\gui\GUI.h" />
+    <ClInclude Include="..\..\src\gui\GUIButton.h" />
+    <ClInclude Include="..\..\src\gui\GUICheckbox.h" />
+    <ClInclude Include="..\..\src\gui\GUIEditBox.h" />
+    <ClInclude Include="..\..\src\gui\GUIElement.h" />
+    <ClInclude Include="..\..\src\gui\GUIEnvironment.h" />
+    <ClInclude Include="..\..\src\gui\GUIEvent.h" />
+    <ClInclude Include="..\..\src\gui\GUIEventListener.h" />
+    <ClInclude Include="..\..\src\gui\GUIImage.h" />
+    <ClInclude Include="..\..\src\gui\GUIPane.h" />
+    <ClInclude Include="..\..\src\gui\GUISkin.h" />
+    <ClInclude Include="..\..\src\gui\GUISlider.h" />
+    <ClInclude Include="..\..\src\gui\GUIStaticText.h" />
+    <ClInclude Include="..\..\src\gui\GUITestElement.h" />
+    <ClInclude Include="..\..\src\gui\GUIWindow.h" />
+    <ClInclude Include="..\..\src\opengl\AABB.h" />
+    <ClInclude Include="..\..\src\opengl\BufferObject.h" />
+    <ClInclude Include="..\..\src\opengl\CubeMesh.h" />
+    <ClInclude Include="..\..\src\opengl\FrameBufferObject.h" />
+    <ClInclude Include="..\..\src\opengl\GLObject.h" />
+    <ClInclude Include="..\..\src\opengl\GridMesh.h" />
+    <ClInclude Include="..\..\src\opengl\GUIQuad.h" />
+    <ClInclude Include="..\..\src\opengl\IBufferObject.h" />
+    <ClInclude Include="..\..\src\opengl\Material.h" />
+    <ClInclude Include="..\..\src\opengl\Mesh.h" />
+    <ClInclude Include="..\..\src\opengl\MVar.h" />
+    <ClInclude Include="..\..\src\opengl\OpenGLUtil.h" />
+    <ClInclude Include="..\..\src\opengl\Quad.h" />
+    <ClInclude Include="..\..\src\opengl\RenderBufferObject.h" />
+    <ClInclude Include="..\..\src\opengl\Shader.h" />
+    <ClInclude Include="..\..\src\opengl\SlicedGUIQuad.h" />
+    <ClInclude Include="..\..\src\opengl\Texture.h" />
+    <ClInclude Include="..\..\src\Precomp.h" />
+    <ClInclude Include="..\..\src\resources\IImageLoader.h" />
+    <ClInclude Include="..\..\src\resources\Image.h" />
+    <ClInclude Include="..\..\src\resources\ImageLoader.h" />
+    <ClInclude Include="..\..\src\resources\IMeshLoader.h" />
+    <ClInclude Include="..\..\src\resources\IQM.h" />
+    <ClInclude Include="..\..\src\resources\IQMloader.h" />
+    <ClInclude Include="..\..\src\resources\MeshLoader.h" />
+    <ClInclude Include="..\..\src\resources\PNGLoader.h" />
+    <ClInclude Include="..\..\src\resources\ResourceCache.h" />
+    <ClInclude Include="..\..\src\resources\ShaderLoader.h" />
+    <ClInclude Include="..\..\src\resources\SoundManager.h" />
+    <ClInclude Include="..\..\src\resources\TGAloader.h" />
+    <ClInclude Include="..\..\src\scenegraph\Camera.h" />
+    <ClInclude Include="..\..\src\utility\Bit.h" />
+    <ClInclude Include="..\..\src\utility\Box3d.h" />
+    <ClInclude Include="..\..\src\utility\Helpers.h" />
+    <ClInclude Include="..\..\src\utility\Logger.h" />
+    <ClInclude Include="..\..\src\utility\Plane3d.h" />
+    <ClInclude Include="..\..\src\utility\Rect2d.h" />
+    <ClInclude Include="..\..\src\utility\SimplexNoise.h" />
+    <ClInclude Include="..\..\src\utility\StringUtil.h" />
+    <ClInclude Include="..\..\src\utility\Timer.h" />
+    <ClInclude Include="..\..\src\utility\Util.h" />
+    <ClInclude Include="..\..\src\utility\Vector.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\application\Application.cpp" />
+    <ClCompile Include="..\..\src\application\ApplicationLauncher.cpp" />
+    <ClCompile Include="..\..\src\application\InputHandler.cpp" />
+    <ClCompile Include="..\..\src\application\Window.cpp" />
+    <ClCompile Include="..\..\src\core\Var.cpp" />
+    <ClCompile Include="..\..\src\core\VarGroup.cpp" />
+    <ClCompile Include="..\..\src\core\VarJsonReader.cpp" />
+    <ClCompile Include="..\..\src\gui\custom_elements\GUIColorPicker.cpp" />
+    <ClCompile Include="..\..\src\gui\font_rendering\Font.cpp" />
+    <ClCompile Include="..\..\src\gui\font_rendering\FontFamily.cpp" />
+    <ClCompile Include="..\..\src\gui\font_rendering\FontRenderer.cpp" />
+    <ClCompile Include="..\..\src\gui\GUIButton.cpp" />
+    <ClCompile Include="..\..\src\gui\GUICheckbox.cpp" />
+    <ClCompile Include="..\..\src\gui\GUIEditBox.cpp" />
+    <ClCompile Include="..\..\src\gui\GUIElement.cpp" />
+    <ClCompile Include="..\..\src\gui\GUIEnvironment.cpp" />
+    <ClCompile Include="..\..\src\gui\GUIImage.cpp" />
+    <ClCompile Include="..\..\src\gui\GUIPane.cpp" />
+    <ClCompile Include="..\..\src\gui\GUISkin.cpp" />
+    <ClCompile Include="..\..\src\gui\GUISlider.cpp" />
+    <ClCompile Include="..\..\src\gui\GUIStaticText.cpp" />
+    <ClCompile Include="..\..\src\gui\GUIWindow.cpp" />
+    <ClCompile Include="..\..\src\opengl\AABB.cpp" />
+    <ClCompile Include="..\..\src\opengl\BufferObject.cpp" />
+    <ClCompile Include="..\..\src\opengl\CubeMesh.cpp" />
+    <ClCompile Include="..\..\src\opengl\FrameBufferObject.cpp" />
+    <ClCompile Include="..\..\src\opengl\GLObject.cpp" />
+    <ClCompile Include="..\..\src\opengl\IBufferObject.cpp" />
+    <ClCompile Include="..\..\src\opengl\Material.cpp" />
+    <ClCompile Include="..\..\src\opengl\Mesh.cpp" />
+    <ClCompile Include="..\..\src\opengl\MVar.cpp" />
+    <ClCompile Include="..\..\src\opengl\OpenGLUtil.cpp" />
+    <ClCompile Include="..\..\src\opengl\RenderBufferObject.cpp" />
+    <ClCompile Include="..\..\src\opengl\Texture.cpp" />
+    <ClCompile Include="..\..\src\resources\IImageLoader.cpp" />
+    <ClCompile Include="..\..\src\resources\Image.cpp" />
+    <ClCompile Include="..\..\src\resources\ImageLoader.cpp" />
+    <ClCompile Include="..\..\src\resources\IMeshLoader.cpp" />
+    <ClCompile Include="..\..\src\resources\IQMLoader.cpp" />
+    <ClCompile Include="..\..\src\resources\MeshLoader.cpp" />
+    <ClCompile Include="..\..\src\resources\PNGLoader.cpp" />
+    <ClCompile Include="..\..\src\resources\ShaderLoader.cpp" />
+    <ClCompile Include="..\..\src\resources\TGAloader.cpp" />
+    <ClCompile Include="..\..\src\scenegraph\Camera.cpp" />
+    <ClCompile Include="..\..\src\utility\Helpers.cpp" />
+    <ClCompile Include="..\..\src\utility\Logger.cpp" />
+    <ClCompile Include="..\..\src\utility\SimplexNoise.cpp" />
+    <ClCompile Include="..\..\src\utility\Timer.cpp" />
+    <ClCompile Include="..\..\src\utility\Util.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\src\opengl\AABB.inl" />
+    <None Include="..\..\src\utility\Helpers.inl" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
