@@ -3,19 +3,18 @@
 
 #include "GLObject.h"
 
-struct RenderBufferObject: public GLObject
+struct RenderBufferObject : public GLObject
 {
-    static uint32_t current;
+	static uint32_t current;
 
-    RenderBufferObject();
-    virtual ~RenderBufferObject();
+	RenderBufferObject();
+	virtual ~RenderBufferObject();
 
-    void Init(uint32_t internal_format, uint32_t w, uint32_t h);
-    void Set();
-    void unset();
+	void Init(uint32_t internal_format, uint32_t w, uint32_t h);
+	void Set();
+	void unset();
 
-    virtual GLO_TYPE GetType();
-
+	virtual GLO_TYPE GetType();
 };
 
 typedef std::shared_ptr<RenderBufferObject> render_BufferObject_ptr;

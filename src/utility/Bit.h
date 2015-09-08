@@ -10,27 +10,27 @@ static constexpr uint32_t bit()
 
 inline bool CheckBit(uint32_t b, uint32_t b2)
 {
-	return (b&b2)==b2;
+	return (b&b2) == b2;
 }
 
 inline bool CheckBit(uint8_t b, uint8_t b2)
 {
-	return (b&b2)==b2;
+	return (b&b2) == b2;
 }
 
 inline void RemoveBit(uint32_t & b, uint32_t b2)
 {
-    b &= ~b2;
+	b &= ~b2;
 }
 
 inline void RemoveBit(uint8_t & b, uint8_t b2)
 {
-    b &= ~b2;
+	b &= ~b2;
 }
 
 inline void AddBit(uint32_t & b, uint32_t b2)
 {
-    b |= b2;
+	b |= b2;
 }
 
 enum BITS

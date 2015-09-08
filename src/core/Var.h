@@ -14,7 +14,7 @@ uint32_t allocAndCopyStr(char *& dest, const char * orig);
 class Var
 {
 public:
-    static Var Null;
+	static Var Null;
 
 public:
 	Var();

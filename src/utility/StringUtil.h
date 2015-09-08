@@ -5,20 +5,19 @@
 
 namespace util
 {
-    std::string GetParentDirectory(std::string dir, std::string separator)
-    {
-        auto pos = dir.find_last_of(separator);
+	std::string GetParentDirectory(std::string dir, std::string separator)
+	{
+		auto pos = dir.find_last_of(separator);
 
-        if(pos==std::string::npos) return dir;
+		if (pos == std::string::npos) return dir;
 
-        if( (dir.length()-pos) == separator.length())
-            pos = dir.find_last_of(separator, pos-separator.length());
+		if ((dir.length() - pos) == separator.length())
+			pos = dir.find_last_of(separator, pos - separator.length());
 
-        dir = dir.substr(0,pos);
+		dir = dir.substr(0, pos);
 
-        return dir;
-    }
-
+		return dir;
+	}
 }
 
 #endif // STRING_UTIL_H_INCLUDED

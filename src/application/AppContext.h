@@ -9,25 +9,25 @@
 
 struct AppContext
 {
-    AppContext()
-    {
-        _window = nullptr;
-        _guiEnv = nullptr;
-        _timer = nullptr;
-        _logger = nullptr;
-        _glUtil = nullptr;
-        _input = nullptr;
-    }
+	AppContext()
+	{
+		_window = nullptr;
+		_guiEnv = nullptr;
+		_timer = nullptr;
+		_logger = nullptr;
+		_glUtil = nullptr;
+		_input = nullptr;
+	}
 
-    bool IsInitialized()
-    {
-        return _window && _glUtil && _timer && _logger;
-    }
+	bool IsInitialized()
+	{
+		return _window && _glUtil && _timer && _logger;
+	}
 
-    Window* _window;
-    OpenGLUtil * _glUtil;
-    GUIEnvironment* _guiEnv;
-    timer_ptr   _timer;
-    Logger* _logger;
-    InputHandler* _input;
+	Window* _window;
+	OpenGLUtil * _glUtil;
+	GUIEnvironment* _guiEnv;
+	timer_ptr   _timer;
+	Logger* _logger;
+	InputHandler* _input;
 };

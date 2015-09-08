@@ -12,28 +12,28 @@
 
 namespace helpers
 {
-uint32_t read(const std::string & file, char *& buf);
+	uint32_t read(const std::string & file, char *& buf);
 
-struct u8vec4
-{
-    uint8_t v[4];
-};
+	struct u8vec4
+	{
+		uint8_t v[4];
+	};
 
-template <typename T> inline std::string to_str(const T& t);
-template <typename T> inline std::wstring to_wstr(const T& t);
-template <typename T> inline T limit(T val, T min, T max);
-const inline glm::vec4 color255(uint8_t r,uint8_t g,uint8_t b,uint8_t a);
-inline void invert(glm::vec3 & vec);
-template <class T> inline bool equals(const T & v1, const T & v2);
-inline float coslerp(float y1,float y2,float mu);
-inline glm::vec3 hsv2rgb(float h,float s,float v);
+	template <typename T> inline std::string to_str(const T& t);
+	template <typename T> inline std::wstring to_wstr(const T& t);
+	template <typename T> inline T limit(T val, T min, T max);
+	const inline glm::vec4 color255(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+	inline void invert(glm::vec3 & vec);
+	template <class T> inline bool equals(const T & v1, const T & v2);
+	inline float coslerp(float y1, float y2, float mu);
+	inline glm::vec3 hsv2rgb(float h, float s, float v);
 
-inline glm::vec3 rgb2hsv(float r, float g, float b);
+	inline glm::vec3 rgb2hsv(float r, float g, float b);
 
-inline int wtoi(const wchar_t *str)
-{
-  return (int)wcstol(str, 0, 10);
-}
+	inline int wtoi(const wchar_t *str)
+	{
+		return (int)wcstol(str, 0, 10);
+	}
 
 #include "Helpers.inl"
 }
@@ -41,7 +41,7 @@ inline int wtoi(const wchar_t *str)
 template <class T>
 inline std::shared_ptr<T> share(T* t)
 {
-    return std::shared_ptr<T>(t);
+	return std::shared_ptr<T>(t);
 }
 
 #define _DEBUG_OGL

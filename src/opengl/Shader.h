@@ -2,9 +2,9 @@
 
 struct Binding
 {
-    std::string name;
-    int32_t index;
-    uint32_t Type;
+	std::string name;
+	int32_t index;
+	uint32_t Type;
 };
 
 /**
@@ -22,216 +22,214 @@ struct Binding
 
 struct Shader
 {
-    std::string name, vsstr, psstr, gsstr;
-    uint32_t program, vsobj, psobj, gsobj;
-    bool geom;
-    vector<Binding> bindings;
+	std::string name, vsstr, psstr, gsstr;
+	uint32_t program, vsobj, psobj, gsobj;
+	bool geom;
+	vector<Binding> bindings;
 
-    Shader ( const std::string & name, const std::string & vsstr, const std::string & psstr)
-        : name ( name ), vsstr ( vsstr ), psstr ( psstr ) , program ( 0 ), vsobj ( 0 ), psobj ( 0 ), geom(false)
-        {
-        };
+	Shader(const std::string & name, const std::string & vsstr, const std::string & psstr)
+		: name(name), vsstr(vsstr), psstr(psstr), program(0), vsobj(0), psobj(0), geom(false)
+	{
+	};
 
-    Shader ( const std::string & name, const std::string & vsstr, const std::string & psstr, const std::string & gsstr)
-        : name ( name ), vsstr ( vsstr ), psstr ( psstr ) , gsstr (gsstr) , program ( 0 ), vsobj ( 0 ), psobj ( 0 ), gsobj ( 0 ), geom ( true )
-        {
+	Shader(const std::string & name, const std::string & vsstr, const std::string & psstr, const std::string & gsstr)
+		: name(name), vsstr(vsstr), psstr(psstr), gsstr(gsstr), program(0), vsobj(0), psobj(0), gsobj(0), geom(true)
+	{
+	};
 
-        };
+	~Shader()
+	{
+		if (program)
+			glDeleteProgram(program);
+	}
 
-    ~Shader()
-    {
-        if(program)
-        glDeleteProgram(program);
-    }
+	static Shader * LoadShader(const std::string & name, const Binding *uniforms = nullptr, const Binding *texs = nullptr)
+	{
+		char * vsh = nullptr;
+		char * fsh = nullptr;
 
-    static Shader * LoadShader(const std::string & name, const Binding *uniforms = nullptr, const Binding *texs = nullptr)
-    {
-        char * vsh=nullptr;
-        char * fsh=nullptr;
+		uint32_t l1 = helpers::read(name + ".vert", vsh);
 
-        uint32_t l1 = helpers::read(name+".vert",vsh);
+		if (l1 == 0)
+			return nullptr;
 
-        if(l1==0)
-            return nullptr;
+		uint32_t l2 = helpers::read(name + ".frag", fsh);
 
-        uint32_t l2 = helpers::read(name+".frag",fsh);
+		if (l2 == 0)
+			return nullptr;
 
-        if(l2==0)
-            return nullptr;
+		Shader * sh = new Shader(name, vsh, fsh);
 
-        Shader * sh = new Shader(name,vsh,fsh);
+		sh->Compile();
+		sh->link();
 
-        sh->Compile();
-        sh->link();
+		delete[] vsh;
+		delete[] fsh;
 
-        delete [] vsh;
-        delete [] fsh;
+		if (sh->program == 0)
+		{
+			delete sh;
+			return nullptr;
+		}
 
-        if(sh->program==0)
-        {
-            delete sh;
-            return nullptr;
-        }
+		return sh;
+	}
 
-        return sh;
-    }
+	static void ShowCompilationInfo(uint32_t obj, const std::string & tname, const std::string & name)
+	{
+		int32_t length = 0;
 
-    static void ShowCompilationInfo ( uint32_t obj, const std::string & tname, const std::string & name )
-    {
-        int32_t length = 0;
+		if (tname == "PROG")
+			glGetProgramiv(obj, GL_INFO_LOG_LENGTH, &length);
+		else
+			glGetShaderiv(obj, GL_INFO_LOG_LENGTH, &length);
 
-        if ( tname=="PROG" )
-            glGetProgramiv ( obj, GL_INFO_LOG_LENGTH, &length );
-        else
-            glGetShaderiv ( obj, GL_INFO_LOG_LENGTH, &length );
+		if (length > 1)
+		{
+			GLchar *log = new GLchar[length];
 
-        if ( length > 1 )
-        {
-            GLchar *log = new GLchar[length];
+			if (tname == "PROG")
+				glGetProgramInfoLog(obj, length, &length, log);
+			else
+				glGetShaderInfoLog(obj, length, &length, log);
 
-            if ( tname == "PROG" )
-                glGetProgramInfoLog ( obj, length, &length, log );
-            else
-                glGetShaderInfoLog ( obj, length, &length, log );
+			printf("GLSL ERROR (%s:%s): [%i] %s\n", tname.c_str(), name.c_str(), length, log);
 
+			delete[] log;
+		}
+	}
 
-            printf ( "GLSL ERROR (%s:%s): [%i] %s\n", tname.c_str(), name.c_str(), length, log);
+	static void Compile(GLenum Type, uint32_t &obj, const std::string & def, const std::string & tname, const std::string & name, bool msg = true)
+	{
+		obj = glCreateShader(Type);
+		char const * str = def.c_str();
 
-            delete[] log;
-        }
-    }
+		glShaderSource(obj, 1, &str, nullptr);
+		glCompileShader(obj);
 
-    static void Compile ( GLenum Type, uint32_t &obj, const std::string & def, const std::string & tname, const std::string & name, bool msg = true )
-    {
-        obj = glCreateShader ( Type );
-        char const * str = def.c_str();
+		int32_t success;
+		glGetShaderiv(obj, GL_COMPILE_STATUS, &success);
 
-        glShaderSource ( obj, 1, &str, nullptr );
-        glCompileShader ( obj );
+		if (!success)
+		{
+			ShowCompilationInfo(obj, tname, name);
 
-        int32_t success;
-        glGetShaderiv ( obj, GL_COMPILE_STATUS, &success );
+			glDeleteShader(obj);
+			obj = 0;
 
-        if ( !success )
-        {
-            ShowCompilationInfo ( obj, tname, name );
+			printf("error compiling shader\n");
+		}
+	}
 
-            glDeleteShader ( obj );
-            obj = 0;
+	void Compile(const std::string & vsdef, const std::string & psdef)
+	{
+		Compile(GL_VERTEX_SHADER, vsobj, vsdef, "VS", name);
+		Compile(GL_FRAGMENT_SHADER, psobj, psdef, "PS", name);
+		link(true);
+	}
 
-            printf ( "error compiling shader\n" );
-        }
-    }
+	void Compile(const std::string & vsdef, const std::string & psdef, const std::string & gsdef)
+	{
+		Compile(GL_VERTEX_SHADER, vsobj, vsdef, "VS", name);
+		Compile(GL_FRAGMENT_SHADER, psobj, psdef, "PS", name);
+		Compile(GL_GEOMETRY_SHADER, gsobj, gsdef, "GS", name);
+		link(true);
+	}
 
-    void Compile ( const std::string & vsdef, const std::string & psdef)
-    {
-        Compile ( GL_VERTEX_SHADER,   vsobj, vsdef, "VS", name );
-        Compile ( GL_FRAGMENT_SHADER, psobj, psdef, "PS", name );
-        link ( true );
-    }
+	void Compile()
+	{
+		if (geom) Compile(vsstr, psstr, gsstr);
+		else Compile(vsstr, psstr);
+	}
 
-    void Compile ( const std::string & vsdef, const std::string & psdef, const std::string & gsdef)
-    {
-        Compile ( GL_VERTEX_SHADER,   vsobj, vsdef, "VS", name );
-        Compile ( GL_FRAGMENT_SHADER, psobj, psdef, "PS", name );
-        Compile ( GL_GEOMETRY_SHADER, gsobj, gsdef, "GS", name );
-        link ( true );
-    }
+	void link(bool msg = true)
+	{
+		program = vsobj && psobj ? glCreateProgram() : 0;
+		int32_t success = 0;
 
-    void Compile()
-    {
-        if ( geom ) Compile ( vsstr, psstr, gsstr );
-        else Compile ( vsstr, psstr );
-    }
+		if (program)
+		{
+			glAttachShader(program, vsobj);
+			glAttachShader(program, psobj);
+			if (geom)
+				glAttachShader(program, gsobj);
 
-    void link (bool msg = true )
-    {
-        program = vsobj && psobj ? glCreateProgram() : 0;
-        int32_t success = 0;
+			glLinkProgram(program);
+			glGetProgramiv(program, GL_LINK_STATUS, &success);
 
-        if ( program )
-        {
-            glAttachShader ( program, vsobj );
-            glAttachShader ( program, psobj );
-            if(geom)
-                glAttachShader ( program, gsobj );
+			if (!success)
+			{
+				if (program)
+				{
+					ShowCompilationInfo(program, "PROG", name);
 
-            glLinkProgram ( program );
-            glGetProgramiv ( program, GL_LINK_STATUS, &success );
+					glDeleteProgram(program);
+					program = 0;
+				}
 
-            if ( !success )
-            {
-                if ( program )
-                {
-                    ShowCompilationInfo ( program, "PROG", name );
+				printf("error linking shader\n");
+			}
+			else
+			{
+				glDetachShader(program, vsobj);
+				glDetachShader(program, psobj);
+				if (geom)
+					glDetachShader(program, gsobj);
+				QueryAllBindingLocations();
+			}
+		}
+	}
 
-                    glDeleteProgram ( program );
-                    program = 0;
-                }
+	void Set()
+	{
+		glUseProgram(program);
+	}
 
-                printf ( "error linking shader\n" );
-            }
-            else
-            {
-                glDetachShader(program, vsobj);
-                glDetachShader(program, psobj);
-                if(geom)
-                    glDetachShader ( program, gsobj );
-                QueryAllBindingLocations();
-            }
-        }
-    }
+	// @deprecated (serengeor#1#):
+	int32_t getparam(const std::string & pname)
+	{
+		return  glGetUniformLocation(program, pname.c_str());
+	}
 
-    void Set()
-    {
-        glUseProgram ( program );
-    }
+	Binding GetBinding(const std::string & pname)
+	{
+		for (Binding &t : bindings)
+		{
+			if (t.name == pname)
+				return t;
+		}
 
-// @deprecated (serengeor#1#):
-    int32_t getparam ( const std::string & pname )
-    {
-        return  glGetUniformLocation ( program, pname.c_str() );
-    }
+		return Binding();
+	}
 
-    Binding GetBinding ( const std::string & pname )
-    {
-        for ( Binding &t : bindings)
-        {
-            if(t.name==pname)
-                return t;
-        }
+	void QueryAllBindingLocations()
+	{
+		bindings.clear();
+		Binding b;
 
-        return Binding();
-    }
+		int32_t total = -1;
+		glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &total);
 
-    void QueryAllBindingLocations()
-    {
-        bindings.clear();
-        Binding b;
+		printf("Binding count: %i\n", total);
 
-        int32_t total = -1;
-        glGetProgramiv( program, GL_ACTIVE_UNIFORMS, &total );
+		for (int i = 0; i < total; ++i)
+		{
+			int name_len = -1, num = -1;
+			GLenum Type = GL_ZERO;
+			char name[100];
+			glGetActiveUniform(program, GLuint(i), sizeof(name) - 1,
+				&name_len, &num, &Type, name);
+			name[name_len] = 0;
+			GLuint location = glGetUniformLocation(program, name);
 
-        printf ( "Binding count: %i\n", total);
+			b.index = location;
+			b.name = name;
+			b.Type = Type;
+			bindings.push_back(b);
 
-        for(int i=0; i<total; ++i)
-        {
-            int name_len=-1, num=-1;
-            GLenum Type = GL_ZERO;
-            char name[100];
-            glGetActiveUniform( program, GLuint(i), sizeof(name)-1,
-                &name_len, &num, &Type, name );
-            name[name_len] = 0;
-            GLuint location = glGetUniformLocation( program, name );
-
-            b.index = location;
-            b.name = name;
-            b.Type = Type;
-            bindings.push_back(b);
-
-            printf ( "Binding index=%i; name='%s'; Type=%i;\n",  b.index, b.name.c_str(), b.Type);
-        }
-    }
+			printf("Binding index=%i; name='%s'; Type=%i;\n", b.index, b.name.c_str(), b.Type);
+		}
+	}
 };
 
 typedef std::shared_ptr<Shader> ShaderPtr;

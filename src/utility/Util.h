@@ -105,7 +105,6 @@ void scale(glm::vec4 & v, const glm::vec3& s);
 void makeJointMatrix(glm::mat3x4 & mat, const glm::quat & rot, const glm::vec3& pos, const glm::vec3& s);
 glm::mat3x4 mul(const glm::mat3x4 & m1, const glm::mat3x4 & m2);
 
-
 #ifdef swap
 #undef swap
 #endif
@@ -116,29 +115,28 @@ glm::mat3x4 mul(const glm::mat3x4 & m1, const glm::mat3x4 & m2);
 #undef min
 #endif
 
-
 template<class T>
 static inline T max(T a, T b)
 {
-    return a > b ? a : b;
+	return a > b ? a : b;
 }
 
 template<class T>
 static inline T min(T a, T b)
 {
-    return a < b ? a : b;
+	return a < b ? a : b;
 }
 
 template<class T>
 static inline T clamp(T val, T minval, T maxval)
 {
-    return max(minval, min(val, maxval));
+	return max(minval, min(val, maxval));
 }
 
 template<class T>
 static inline void swap(T &a, T &b)
 {
-    T t = a;
-    a = b;
-    b = t;
+	T t = a;
+	a = b;
+	b = t;
 }

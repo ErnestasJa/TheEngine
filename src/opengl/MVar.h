@@ -7,29 +7,29 @@ typedef std::shared_ptr<Shader> ShaderPtr;
 template <class T>
 struct MVar
 {
-    MVar();
-    MVar(int32_t binding_index, std::string name, T val);
-    MVar(int32_t binding_index, std::string name);
-    MVar(std::string name);
+	MVar();
+	MVar(int32_t binding_index, std::string name, T val);
+	MVar(int32_t binding_index, std::string name);
+	MVar(std::string name);
 
-    void Set() const;
-    void Set(int32_t binding_index) const;
+	void Set() const;
+	void Set(int32_t binding_index) const;
 
-    MVar<T> & operator = (const T & val);
+	MVar<T> & operator = (const T & val);
 	operator T ()
 	{
 		return value;
 	}
 
-///-------------------------------
-    std::string name;
-    T value;
-    uint32_t count;
-    int32_t binding_index;
+	///-------------------------------
+	std::string name;
+	T value;
+	uint32_t count;
+	int32_t binding_index;
 };
 
 template <class T>
-MVar<T>::MVar():count(1), binding_index(-1){}
+MVar<T>::MVar() :count(1), binding_index(-1) {}
 
 template <class T>
 MVar<T>::MVar(int32_t binding_index, std::string name, T val)
@@ -71,8 +71,8 @@ void MVar<glm::vec3>::Set() const;
 template <class T>
 MVar<T> & MVar<T>::operator = (const T & val)
 {
-    value = val;
-    return *this;
+	value = val;
+	return *this;
 }
 
 #endif // SG_MVAR_H

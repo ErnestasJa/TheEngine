@@ -9,17 +9,17 @@ class Rect2D;
 
 class GUIStaticText;
 class GUIImage;
-class GUIButton:public GUIElement
+class GUIButton :public GUIElement
 {
 private:
-    std::wstring m_text;
-    uint32_t cur_style;
-    glm::vec4 col_active,col_hover,col_clicked,col_disabled,col_text,cur_col;
-    bool m_toggled,m_toggle;
-    GUIImage* m_overlay_image;
+	std::wstring m_text;
+	uint32_t cur_style;
+	glm::vec4 col_active, col_hover, col_clicked, col_disabled, col_text, cur_col;
+	bool m_toggled, m_toggle;
+	GUIImage* m_overlay_image;
 public:
-    GUIButton(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring text=L"text", bool toggle=false, bool toggle_status=false);
-    virtual ~GUIButton();
+	GUIButton(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring text = L"text", bool toggle = false, bool toggle_status = false);
+	virtual ~GUIButton();
 
 	bool is_toggled()
 	{
@@ -30,13 +30,12 @@ public:
 		m_toggled = b;
 	}
 
-    void Render();
+	void Render();
 
-    void set_text(const std::wstring &text);
-    void set_image(GUIImage *image);
-    void remove_image();
+	void set_text(const std::wstring &text);
+	void set_image(GUIImage *image);
+	void remove_image();
 
-    virtual bool OnEvent(const GUIEvent & e);
+	virtual bool OnEvent(const GUIEvent & e);
 protected:
 };
-

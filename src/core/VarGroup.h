@@ -13,7 +13,7 @@ public:
 	VarGroup();
 	VarGroup(const char * groupName);
 	VarGroup(const VarGroup & o);
-    VarGroup & operator = (const VarGroup & other);
+	VarGroup & operator = (const VarGroup & other);
 	virtual ~VarGroup();
 	const char * Name() const;
 

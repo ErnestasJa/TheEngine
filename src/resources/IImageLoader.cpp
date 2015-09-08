@@ -4,10 +4,10 @@
 
 iimage_loader::iimage_loader()
 {
-    //ctor
+	//ctor
 }
 
 iimage_loader::~iimage_loader()
 {
-    //dtor
+	//dtor
 }

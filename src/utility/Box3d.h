@@ -4,19 +4,17 @@
 class Box3d
 {
 public:
-    Box3d (glm::vec3 pos, glm::vec3 extents)
-    {
-
-    }
-    ~Box3d()
-    {
-
-    }
-    glm::vec3 * GetPoint(uint8_t i)
-    {
-        if(i>8) throw new exception();
-        return m_points[i];
-    }
+	Box3d(glm::vec3 pos, glm::vec3 extents)
+	{
+	}
+	~Box3d()
+	{
+	}
+	glm::vec3 * GetPoint(uint8_t i)
+	{
+		if (i > 8) throw new exception();
+		return m_points[i];
+	}
 private:
 protected:
 };

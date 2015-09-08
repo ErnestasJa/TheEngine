@@ -15,7 +15,6 @@
 #include <condition_variable>
 #include <mutex>
 
-
 #include <string.h>
 #include <string>
 #include <stdarg.h>
@@ -44,6 +43,5 @@
 
 // BOOST INCLUDES
 // jk, don't include boost here. pch size too big.
-
 
 #endif

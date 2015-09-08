@@ -5,26 +5,26 @@
 #include "utility/Vector.h"
 
 template <class T>
-struct BufferObject: public IBufferObject
+struct BufferObject : public IBufferObject
 {
-    vector<T> data;
+	vector<T> data;
 
-    virtual ~BufferObject()
-    {
-        data.clear();
-    }
+	virtual ~BufferObject()
+	{
+		data.clear();
+	}
 
-    //void Init_buffers();
-    virtual void Init();
-    virtual void Upload();
-    virtual void UploadSubData(vector<T> subdata,uint32_t offset);
+	//void Init_buffers();
+	virtual void Init();
+	virtual void Upload();
+	virtual void UploadSubData(vector<T> subdata, uint32_t offset);
 
 	virtual IBufferObject::IBO_TYPE GetType()
 	{
 		return IBufferObject::DATA;
 	}
-    virtual uint32_t GetDataType();
-    virtual uint32_t GetComponentCount();
+	virtual uint32_t GetDataType();
+	virtual uint32_t GetComponentCount();
 	virtual uint32_t GetSize()
 	{
 		return data.size() > 0 ? data.size() : data.capacity();
@@ -32,25 +32,25 @@ struct BufferObject: public IBufferObject
 };
 
 template <class T>
-struct IndexBufferObject: public IBufferObject
+struct IndexBufferObject : public IBufferObject
 {
-    vector<T> data;
+	vector<T> data;
 
-    virtual ~IndexBufferObject()
-    {
-        data.clear();
-    }
+	virtual ~IndexBufferObject()
+	{
+		data.clear();
+	}
 
-    //void Init_buffers();
-    virtual void Init();
-    virtual void Upload();
+	//void Init_buffers();
+	virtual void Init();
+	virtual void Upload();
 
 	virtual IBufferObject::IBO_TYPE GetType()
 	{
 		return IBufferObject::INDEX;
 	}
-    virtual uint32_t GetDataType();
-    virtual uint32_t GetComponentCount();
+	virtual uint32_t GetDataType();
+	virtual uint32_t GetComponentCount();
 	virtual uint32_t GetSize()
 	{
 		return data.size() > 0 ? data.size() : data.capacity();

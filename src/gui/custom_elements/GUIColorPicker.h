@@ -15,36 +15,36 @@ class GUISlider;
 class image;
 class Texture;
 
-class GUIColorPicker:public GUIElement
+class GUIColorPicker :public GUIElement
 {
 private:
-    glm::vec4 colRGB;
-    glm::vec3 colHSV;
-    glm::vec2 cursorPos;
-    GUIImage *cursor,*picker;
-    GUIPane *bg;
-    GUIButton *btnSet;
-    GUIEditBox *ebR,*ebG,*ebB;
-    GUISlider *sat,*val;
-    std::shared_ptr<image> imgBuf;
-    std::shared_ptr<Texture> texBuf;
+	glm::vec4 colRGB;
+	glm::vec3 colHSV;
+	glm::vec2 cursorPos;
+	GUIImage *cursor, *picker;
+	GUIPane *bg;
+	GUIButton *btnSet;
+	GUIEditBox *ebR, *ebG, *ebB;
+	GUISlider *sat, *val;
+	std::shared_ptr<image> imgBuf;
+	std::shared_ptr<Texture> texBuf;
 
-    void UpdateValues();
+	void UpdateValues();
 public:
-    GUIColorPicker(GUIEnvironment* env, Rect2D<int> dimensions,bool drawbackground=true);
-    virtual ~GUIColorPicker();
+	GUIColorPicker(GUIEnvironment* env, Rect2D<int> dimensions, bool drawbackground = true);
+	virtual ~GUIColorPicker();
 
-    void Render();
+	void Render();
 
-    glm::vec4 GetColorRGB();
-    void SetColorRGB(uint8_t r, uint8_t g, uint8_t b);
+	glm::vec4 GetColorRGB();
+	void SetColorRGB(uint8_t r, uint8_t g, uint8_t b);
 
-//    glm::vec3 GetColorHSV();
-//    void SetColorHSV(uint32_t H, float S, float V);
+	//    glm::vec3 GetColorHSV();
+	//    void SetColorHSV(uint32_t H, float S, float V);
 
-    void GenerateHSVMap(float s);
+	void GenerateHSVMap(float s);
 
-    virtual bool OnEvent(const GUIEvent & e);
+	virtual bool OnEvent(const GUIEvent & e);
 protected:
 };
 
