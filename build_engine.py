@@ -15,7 +15,7 @@ class Helper:
         self.binPath = "bin"
         self.platform = ""
         self.libpath = "libs"
-        self.enginePath = "engine"
+        self.enginePath = "src"
         self.liboutputpath = ""
         self.fullLibPath = ""
         self.fullLibBuildPath = ""
@@ -69,9 +69,9 @@ class Helper:
         directories = [
             self.fullLibBuildPath,
             self.get_lib_path("python"),
-            self.get_lib_path("irrKlang-1.5.0"),
             self.get_lib_path("bullet"),
             self.get_lib_path("libccd"),
+            self.get_lib_path("boost"),
             os.path.join(self.fullEnginePath, self.buildPath)
         ]
         
