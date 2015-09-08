@@ -12,6 +12,8 @@ MakeFile
 build
 libs/boost/
 libs/windows/
+libs/win32*/
+libs/win64*/
 libs/linux/
 __pycache__/
 tests/bin/

@@ -137,7 +137,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>This function returns whether the specified <a class="el" href="context.html#context_glext">API extension</a> is supported by the current OpenGL or OpenGL ES context. It searches both for OpenGL and OpenGL ES extension and platform-specific context creation API extensions.</p>
+<p>This function returns whether the specified <a class="el" href="context.html#context_glext">client API extension</a> is supported by the current OpenGL or OpenGL ES context. It searches both for OpenGL and OpenGL ES extension and platform-specific context creation API extensions.</p>
 <p>A context must be current on the calling thread. Calling this function without a current context will cause a <a class="el" href="group__errors.html#gaa8290386e9528ccb9e42a3a4e16fc0d0">GLFW_NO_CURRENT_CONTEXT</a> error.</p>
 <p>As this functions retrieves and searches one or more extension strings each call, it is recommended that you cache its results if it is going to be used frequently. The extension strings will not change during the lifetime of a context, so there is no danger in doing this.</p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -191,7 +191,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>This function returns the address of the specified <a class="el" href="context.html#context_glext">client API or extension function</a>, if it is supported by the current context.</p>
+<p>This function returns the address of the specified <a class="el" href="context.html#context_glext">core or extension function</a>, if it is supported by the current context.</p>
 <p>A context must be current on the calling thread. Calling this function without a current context will cause a <a class="el" href="group__errors.html#gaa8290386e9528ccb9e42a3a4e16fc0d0">GLFW_NO_CURRENT_CONTEXT</a> error.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -200,7 +200,9 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The address of the function, or <code>NULL</code> if the function is unavailable or an <a class="el" href="intro.html#error_handling">error</a> occurred.</dd></dl>
-<dl class="section note"><dt>Note</dt><dd>The addresses of a given function is not guaranteed to be the same between contexts.</dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>The addresses of a given function is not guaranteed to be the same between contexts.</dd>
+<dd>
+This function may return a non-<code>NULL</code> address despite the associated version or extension not being available. Always check the context version or extension string presence first.</dd></dl>
 <dl class="section user"><dt>Pointer Lifetime</dt><dd>The returned function pointer is valid until the context is destroyed or the library is terminated.</dd></dl>
 <dl class="section user"><dt>Thread Safety</dt><dd>This function may be called from any thread.</dd></dl>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="context.html#context_glext">OpenGL and OpenGL ES extensions</a> </dd>
@@ -261,9 +263,9 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section note"><dt>Note</dt><dd>This function is not called during window creation, leaving the swap interval set to whatever is the default on that platform. This is done because some swap interval extensions used by GLFW do not allow the swap interval to be reset to zero once it has been set to a non-zero value.</dd>
+<dl class="section remark"><dt>Remarks</dt><dd>This function is not called during context creation, leaving the swap interval set to whatever is the default on that platform. This is done because some swap interval extensions used by GLFW do not allow the swap interval to be reset to zero once it has been set to a non-zero value.</dd>
 <dd>
-Some GPU drivers do not honor the requested swap interval, either because of user settings that override the request or due to bugs in the driver.</dd></dl>
+Some GPU drivers do not honor the requested swap interval, either because of a user setting that overrides the application's request or due to bugs in the driver.</dd></dl>
 <dl class="section user"><dt>Thread Safety</dt><dd>This function may be called from any thread.</dd></dl>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="window.html#buffer_swap">Buffer swapping</a> </dd>
 <dd>
@@ -275,7 +277,7 @@ Some GPU drivers do not honor the requested swap interval, either because of use
 </div><!-- contents -->
 <address class="footer">
 <p>
-Last update on Sun Jan 18 2015 for GLFW 3.1.0
+Last update on Thu Mar 19 2015 for GLFW 3.1.1
 </p>
 </address>
 </body>

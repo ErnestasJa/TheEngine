@@ -220,16 +220,21 @@ Compiling GLFW manually</h1>
 <li><code>_GLFW_HAS_GLXGETPROCADDRESSEXT</code> to use <code>glXGetProcAddressEXT</code> (legacy)</li>
 <li><code>_GLFW_HAS_DLOPEN</code> to do manual retrieval with <code>dlopen</code> (fallback)</li>
 </ul>
+<p>In addition, support for the following X11 extensions can be enabled:</p>
+<ul>
+<li><code>_GLFW_HAS_XINPUT</code> to use XInput2 for high-resolution cursor motion (recommended)</li>
+</ul>
 <p>If you are using the Cocoa window creation API, the following options are available:</p>
 <ul>
 <li><code>_GLFW_USE_CHDIR</code> to <code>chdir</code> to the <code>Resources</code> subdirectory of the application bundle during <a class="el" href="group__init.html#ga317aac130a235ab08c6db0834907d85e">glfwInit</a> (recommended)</li>
 <li><code>_GLFW_USE_MENUBAR</code> to create and populate the menu bar when the first window is created (recommended)</li>
-<li><code>_GLFW_USE_RETINA</code> to have windows use the full resolution of Retina displays (recommended) </li>
+<li><code>_GLFW_USE_RETINA</code> to have windows use the full resolution of Retina displays (recommended)</li>
 </ul>
+<dl class="section note"><dt>Note</dt><dd>None of the <a class="el" href="build.html#build_macros">GLFW header option macros</a> may be defined during the compilation of GLFW. If you define any of these in your build files, make sure they are not applied to the GLFW sources. </dd></dl>
 </div></div><!-- contents -->
 <address class="footer">
 <p>
-Last update on Sun Jan 18 2015 for GLFW 3.1.0
+Last update on Thu Mar 19 2015 for GLFW 3.1.1
 </p>
 </address>
 </body>

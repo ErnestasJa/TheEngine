@@ -105,7 +105,7 @@ Monitor objects</h1>
 <p>A monitor object represents a currently connected monitor and is represented as a pointer to the <a href="https://en.wikipedia.org/wiki/Opaque_data_type">opaque</a> type <a class="el" href="group__monitor.html#ga8d9efd1cde9426692c73fe40437d0ae3">GLFWmonitor</a>. Monitor objects cannot be created or destroyed by the application and retain their addresses until the monitors they represent are disconnected or until the library is <a class="el" href="intro.html#intro_init_terminate">terminated</a>.</p>
 <p>Each monitor has a current video mode, a list of supported video modes, a virtual position, a human-readable name, an estimated physical size and a gamma ramp. One of the monitors is the primary monitor.</p>
 <p>The virtual position of a monitor is in <a class="el" href="intro.html#coordinate_systems">screen coordinates</a> and, together with the current video mode, describes the viewports that the connected monitors provide into the virtual desktop that spans them.</p>
-<p>To see how GLFW views your monitor setup and its available video modes, run the <code>modes</code> test program.</p>
+<p>To see how GLFW views your monitor setup and its available video modes, run the <code>monitors</code> test program.</p>
 <h2><a class="anchor" id="monitor_monitors"></a>
 Retrieving monitors</h2>
 <p>The primary monitor is returned by <a class="el" href="group__monitor.html#ga721867d84c6d18d6790d64d2847ca0b1">glfwGetPrimaryMonitor</a>. It is the user's preferred monitor and is usually the one with global UI elements like task bar or menu bar.</p>
@@ -178,7 +178,7 @@ Gamma ramp</h2>
 </div><!-- fragment --> </div></div><!-- contents -->
 <address class="footer">
 <p>
-Last update on Sun Jan 18 2015 for GLFW 3.1.0
+Last update on Thu Mar 19 2015 for GLFW 3.1.1
 </p>
 </address>
 </body>

@@ -83,9 +83,11 @@ screen windows.
 
 @subsubsection window_windowed_full_screen "Windowed full screen" windows
 
-To create a so called _windowed full screen_ or _borderless full screen_ window,
-i.e. a full screen window that doesn't change the video mode of the monitor, you
-need to request the current video mode of the chosen monitor.
+If the closest match for the desired video mode is the current one, the video
+mode will not be changed, making window creation faster and application
+switching much smoother.  This is sometimes called _windowed full screen_ or
+_borderless full screen_ window and counts as a full screen window.  To create
+such a window, simply request the current video mode.
 
 @code
 const GLFWvidmode* mode = glfwGetVideoMode(monitor);
@@ -97,8 +99,6 @@ glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
 
 GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, "My Title", monitor, NULL);
 @endcode
-
-GLFW will detect this and will not perform any mode setting for that window.   
 
 
 @subsection window_destruction Window destruction
@@ -267,7 +267,7 @@ If OpenGL ES is requested, this hint is ignored.
 Possible values are one of `GLFW_OPENGL_CORE_PROFILE` or
 `GLFW_OPENGL_COMPAT_PROFILE`, or `GLFW_OPENGL_ANY_PROFILE` to not request
 a specific profile.  If requesting an OpenGL version below 3.2,
-`GLFW_OPENGL_ANY_PROFILE` must be used.  If another OpenGL ES is requested,
+`GLFW_OPENGL_ANY_PROFILE` must be used.  If OpenGL ES is requested,
 this hint is ignored.
 
 @par
@@ -538,7 +538,7 @@ As long as your source file is encoded as UTF-8, you can use any Unicode
 characters directly in the source.
 
 @code
-glfwSetWindowTitle(window, "ヒカルの碁");
+glfwSetWindowTitle(window, "おもひでぽろぽろ");
 @endcode
 
 

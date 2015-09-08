@@ -146,6 +146,7 @@ Error handling</h1>
 <div class="line">}</div>
 </div><!-- fragment --><p>The error code indicates the general category of the error. Some error codes, such as <a class="el" href="group__errors.html#ga2374ee02c177f12e1fa76ff3ed15e14a">GLFW_NOT_INITIALIZED</a> has only a single meaning, whereas others like <a class="el" href="group__errors.html#gad44162d78100ea5e87cdd38426b8c7a1">GLFW_PLATFORM_ERROR</a> are used for many different errors.</p>
 <p>The description string is only valid until the error callback returns, as it may have been generated specifically for that error. This lets GLFW provide much more specific error descriptions but means you must make a copy if you want to keep the description string.</p>
+<dl class="section note"><dt>Note</dt><dd>Relying on erroneous behavior is not forward compatible. In other words, do not rely on a currently invalid call to generate a specific error, as that same call may in future versions generate a different error or become valid.</dd></dl>
 <h1><a class="anchor" id="coordinate_systems"></a>
 Coordinate systems</h1>
 <p>GLFW has two primary coordinate systems: the <em>virtual screen</em> and the window <em>client area</em> or <em>content area</em>. Both use the same unit: <em>virtual screen coordinates</em>, or just <em>screen coordinates</em>, which don't necessarily correspond to pixels.</p>
@@ -263,7 +264,7 @@ Version string</h2>
 </div><!-- fragment --> </div></div><!-- contents -->
 <address class="footer">
 <p>
-Last update on Sun Jan 18 2015 for GLFW 3.1.0
+Last update on Thu Mar 19 2015 for GLFW 3.1.1
 </p>
 </address>
 </body>

@@ -124,7 +124,7 @@ Macros</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>GLFW could not find support for the requested client API on the system.</p>
+<p>GLFW could not find support for the requested client API on the system. If emitted by functions other than <a class="el" href="group__window.html#ga5c336fddf2cbb5b92f65f10fb6043344">glfwCreateWindow</a>, no supported client API was found.</p>
 <dl class="section user"><dt>Analysis</dt><dd>The installed graphics driver does not support the requested client API, or does not support it via the chosen context creation backend. Below are a few examples.</dd></dl>
 <dl class="section user"><dt></dt><dd>Some pre-installed Windows graphics drivers do not support OpenGL. AMD only supports OpenGL ES via EGL, while Nvidia and Intel only supports it via a WGL or GLX extension. OS X does not provide OpenGL ES at all. The Mesa EGL, OpenGL and OpenGL ES libraries do not interface with the Nvidia binary driver. </dd></dl>
 
@@ -227,7 +227,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>A platform-specific error occurred that does not match any of the more specific categories.</p>
-<dl class="section user"><dt>Analysis</dt><dd>A bug in GLFW or the underlying operating system. Report the bug to our <a href="https://github.com/glfw/glfw/issues">issue tracker</a>. </dd></dl>
+<dl class="section user"><dt>Analysis</dt><dd>A bug or configuration error in GLFW, the underlying operating system or its drivers, or a lack of required resources. Report the issue to our <a href="https://github.com/glfw/glfw/issues">issue tracker</a>. </dd></dl>
 
 </div>
 </div>
@@ -240,7 +240,7 @@ Macros</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>The requested OpenGL or OpenGL ES version (including any requested profile or context option) is not available on this machine.</p>
+<p>The requested OpenGL or OpenGL ES version (including any requested context or framebuffer hints) is not available on this machine.</p>
 <dl class="section user"><dt>Analysis</dt><dd>The machine does not support your requirements. If your application is sufficiently flexible, downgrade your requirements and try again. Otherwise, inform the user that their machine does not match your requirements.</dd></dl>
 <dl class="section user"><dt></dt><dd>Future invalid OpenGL and OpenGL ES versions, for example OpenGL 4.8 if 5.0 comes out before the 4.x series gets that far, also fail with this error and not <a class="el" href="group__errors.html#gaaf2ef9aa8202c2b82ac2d921e554c687">GLFW_INVALID_VALUE</a>, because GLFW cannot know what future versions will exist. </dd></dl>
 
@@ -249,7 +249,7 @@ Macros</h2></td></tr>
 </div><!-- contents -->
 <address class="footer">
 <p>
-Last update on Sun Jan 18 2015 for GLFW 3.1.0
+Last update on Thu Mar 19 2015 for GLFW 3.1.1
 </p>
 </address>
 </body>
