@@ -21,8 +21,14 @@ public:
     GUIButton(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring text=L"text", bool toggle=false, bool toggle_status=false);
     virtual ~GUIButton();
 
-    bool is_toggled(){return m_toggled;}
-    void set_toggled(bool b){m_toggled=b;}
+	bool is_toggled()
+	{
+		return m_toggled;
+	}
+	void set_toggled(bool b)
+	{
+		m_toggled = b;
+	}
 
     void Render();
 

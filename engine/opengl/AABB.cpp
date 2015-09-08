@@ -33,8 +33,12 @@ void AABB::AddPoint(const glm::vec3 &point)
     #define DOMIN(axis) mi.axis = point.axis < mi.axis ? (point.axis) : (mi.axis)
     #define DOMAX(axis) mx.axis = point.axis > mx.axis ? (point.axis) : (mx.axis)
 
-    DOMIN(x);DOMIN(y);DOMIN(z);
-    DOMAX(x);DOMAX(y);DOMAX(z);
+	DOMIN(x);
+	DOMIN(y);
+	DOMIN(z);
+	DOMAX(x);
+	DOMAX(y);
+	DOMAX(z);
 
     m_halfSize = glm::abs((mx-mi)*0.5f);
     m_center = (mi + mx) *0.5f;

@@ -22,7 +22,10 @@ image_loader::~image_loader()
 
 void image_loader::add_loader(iimage_loader * loader)
 {
-    auto it = std::find_if(m_loaders.begin(), m_loaders.end(), [&loader](iimage_loader * l){return l==loader;});
+	auto it = std::find_if(m_loaders.begin(), m_loaders.end(), [&loader](iimage_loader * l)
+	{
+		return l == loader;
+	});
 
     if(it==m_loaders.end())
         m_loaders.push_back(loader);
@@ -33,10 +36,10 @@ image_ptr image_loader::load(const std::string & file)
     resource<image> res;
     res = this->get_resource(file);
 
-    if(res.resource)
+	if (res._resource)
     {
         _logger->log(LOG_LOG, "Found image in cache, skipping loading.");
-        return res.resource;
+		return res._resource;
     }
 
     std::string ext = file.substr(file.find_last_of('.'));
@@ -54,10 +57,10 @@ image_ptr image_loader::load(const std::string & file)
             {
                 _logger->log(LOG_LOG, "Image file size: %u", len);
 
-                res.path = file;
-                res.resource = image_ptr(l->load(buf,len));
+					res._path = file;
+					res._resource = image_ptr(l->load(buf, len));
                 this->add_resource(res);
-                return res.resource;
+					return res._resource;
             }
         }
     }

@@ -4,8 +4,8 @@
 template <class T>
 struct resource
 {
-    std::string path;
-    std::shared_ptr<T> resource;
+	std::string _path;
+	std::shared_ptr<T> _resource;
 };
 
 template <class T>
@@ -20,7 +20,10 @@ public:
 
     resource<T> get_resource(const std::string & path)
     {
-        auto it = std::find_if(m_resources.begin(), m_resources.end(), [&path](resource<T> res){return res.path==path;});
+		auto it = std::find_if(m_resources.begin(), m_resources.end(), [&path](resource<T> res)
+		{
+			return res._path == path;
+		});
 
         if(it!=m_resources.end())
         {

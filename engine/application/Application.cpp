@@ -181,6 +181,23 @@ bool Application::Init(const std::string  &title, uint32_t width, uint32_t heigh
         return false;
     }
 
+#ifdef _DEBUG_OGL
+	if (glDebugMessageCallback) {
+	std::cout << "Register OpenGL debug callback " << std::endl;
+	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+	glDebugMessageCallback(openglCallbackFunction, nullptr);
+	GLuint unusedIds = 0;
+	glDebugMessageControl(GL_DONT_CARE,
+		GL_DONT_CARE,
+		GL_DONT_CARE,
+		0,
+		&unusedIds,
+		true);
+	}
+	else
+		std::cout << "glDebugMessageCallback not available" << std::endl;
+#endif
+
     _appContext->_logger->log(LOG_CRITICAL, "Shading language: %s", (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
 
     if(!_appContext->IsInitialized())

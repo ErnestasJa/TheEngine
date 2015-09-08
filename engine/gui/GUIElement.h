@@ -26,7 +26,10 @@ public:
 
     ~GUIElement();
 
-    GUIElementType GetElementType(){return this->Type;}
+	GUIElementType GetElementType()
+	{
+		return this->Type;
+	}
 
     void DestroyChildren();
 

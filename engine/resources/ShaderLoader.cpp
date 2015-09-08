@@ -21,10 +21,10 @@ ShaderPtr shader_loader::load(const std::string & vertex_file, const std::string
 
     res = this->get_resource(res_name);
 
-    if(res.resource)
+	if (res._resource)
     {
         _logger->log(LOG_LOG, "Found shader in cache, skipping loading.");
-        return res.resource;
+		return res._resource;
     }
 
     char * vsh=NULL;
@@ -40,18 +40,18 @@ ShaderPtr shader_loader::load(const std::string & vertex_file, const std::string
 
 	if(sh->program)
     {
-        res.resource = ShaderPtr(sh);
-        res.path = res_name;
+		res._resource = ShaderPtr(sh);
+		res._path = res_name;
         this->add_resource(res);
     }
 
 	delete [] vsh;
 	delete [] fsh;
 
-	if(res.resource)
+	if (res._resource)
         _logger->log(LOG_LOG, "Shader '%s' loaded.",res_name.c_str());
 
-    return res.resource;
+	return res._resource;
 }
 
 ShaderPtr shader_loader::load(const std::string & file)
@@ -60,10 +60,10 @@ ShaderPtr shader_loader::load(const std::string & file)
 
     res = this->get_resource(file);
 
-    if(res.resource)
+	if (res._resource)
     {
         _logger->log(LOG_LOG, "Found shader in cache, skipping loading.");
-        return res.resource;
+		return res._resource;
     }
 
     char * vsh=NULL;
@@ -90,8 +90,8 @@ ShaderPtr shader_loader::load(const std::string & file)
 
 	if(sh->program)
     {
-        res.resource = ShaderPtr(sh);
-        res.path = file;
+		res._resource = ShaderPtr(sh);
+		res._path = file;
         this->add_resource(res);
     }
 
@@ -100,18 +100,18 @@ ShaderPtr shader_loader::load(const std::string & file)
 	if(geom)
         delete [] gsh;
 
-	if(res.resource)
+	if (res._resource)
         _logger->log(LOG_LOG, "Shader '%s' loaded.",file.c_str());
 
-    return res.resource;
+	return res._resource;
 }
 
 ShaderPtr shader_loader::get_shader_by_name(const std::string & name)
 {
     for(resource<Shader> & res: m_resources)
     {
-        if(res.resource->name == name)
-            return res.resource;
+		if (res._resource->name == name)
+			return res._resource;
     }
 
     return ShaderPtr();

@@ -1,7 +1,7 @@
 #include "Precomp.h"
-#include "GUIColorPicker.h"
 #include "gui/GUI.h"
 #include "resources/Image.h"
+#include "GUIColorPicker.h"
 #include "resources/ImageLoader.h"
 #include "opengl/Texture.h"
 #include "application/AppContext.h"

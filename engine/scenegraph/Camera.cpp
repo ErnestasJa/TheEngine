@@ -101,6 +101,8 @@ INTERSECT_RESULT Camera::BoxInFrustum(const AABB &box)
             res = IR_INTERSECT;
     }
     return res;*/
+
+	return IR_INTERSECT;
 }
 
 glm::mat4 & Camera::GetProjectionMat()

@@ -3,8 +3,7 @@
 #include "OpenGLUtil.h"
 #include "utility/Logger.h"
 
-
-#ifdef __MINGW32__
+#if defined(__MINGW32__) || defined(_WIN32)
 #include <GLXW/glxw_wgl.h>
 #include <GL/wglext.h>
 #else

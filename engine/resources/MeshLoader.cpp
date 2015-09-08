@@ -18,7 +18,10 @@ mesh_loader::~mesh_loader()
 
 void mesh_loader::add_loader(imesh_loader * loader)
 {
-    auto it = std::find_if(m_loaders.begin(), m_loaders.end(), [&loader](imesh_loader * l){return l==loader;});
+	auto it = std::find_if(m_loaders.begin(), m_loaders.end(), [&loader](imesh_loader * l)
+	{
+		return l == loader;
+	});
 
     if(it==m_loaders.end())
         m_loaders.push_back(loader);
@@ -30,10 +33,10 @@ MeshPtr mesh_loader::load(const std::string & file)
     resource<Mesh> res;
     res = this->get_resource(file);
 
-    if(res.resource)
+	if (res._resource)
     {
         _logger->log(LOG_LOG, "Found mesh in cache, skipping loading.");
-        return res.resource;
+		return res._resource;
     }
 
     std::string ext = file.substr(file.find_last_of('.'));
@@ -52,11 +55,11 @@ MeshPtr mesh_loader::load(const std::string & file)
             {
                 _logger->log(LOG_LOG, "Mesh file size: %u", len);
 
-                res.path = file;
-                res.resource = MeshPtr(l->load(buf,len));
+					res._path = file;
+					res._resource = MeshPtr(l->load(buf, len));
                 this->add_resource(res);
-                res.resource->Init();
-                return res.resource;
+					res._resource->Init();
+					return res._resource;
             }
             else
             {

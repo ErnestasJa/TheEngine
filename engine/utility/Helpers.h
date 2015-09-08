@@ -44,15 +44,98 @@ inline std::shared_ptr<T> share(T* t)
     return std::shared_ptr<T>(t);
 }
 
-///TO IMPLEMENT!
-const char* getErr(uint32_t err);
-void CheckOpenGLError(const char* stmt, const char* fname, int line);
+#define _DEBUG_OGL
+#ifdef _DEBUG_OGL
 
-#ifdef _DEBUG
+inline void CheckOpenGLError(const char* stmt, const char* fname, int line)
+{
+	GLenum err = glGetError();
+	if (err != GL_NO_ERROR)
+	{
+		std::string errorName = "";
+		switch (err)
+		{
+		case GL_INVALID_ENUM:
+			errorName = "InvalidEnum";
+			break;
+		case GL_INVALID_VALUE:
+			errorName = "InvalidValue";
+			break;
+		case GL_INVALID_OPERATION:
+			errorName = "InvalidOperation";
+			break;
+		case GL_STACK_OVERFLOW:
+			errorName = "StackOverflow";
+			break;
+		case GL_STACK_UNDERFLOW:
+			errorName = "StackUnderflow";
+			break;
+		case GL_OUT_OF_MEMORY:
+			errorName = "OutOfMemory";
+			break;
+		case GL_INVALID_FRAMEBUFFER_OPERATION:
+			errorName = "InvalidFramebufferOperation";
+			break;
+		default:
+			errorName = "UnspecifiedError";
+			break;
+		}
+		printf("OpenGL error %s(%x), at %s:%i - for %s\n", errorName.c_str(), err, fname, line, stmt);
+		abort();
+	}
+}
+
 #define GL_CHECK(stmt) do { \
             stmt; \
             CheckOpenGLError(#stmt, __FILE__, __LINE__); \
         } while (0)
+
+inline void APIENTRY openglCallbackFunction(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, void* userParam)
+{
+	if (severity == GL_DEBUG_SEVERITY_LOW || severity == GL_DEBUG_SEVERITY_MEDIUM || severity == GL_DEBUG_SEVERITY_HIGH)
+	{
+		std::cout << "---------------------opengl-callback-start------------" << std::endl;
+		std::cout << "message: " << message << std::endl;
+		std::cout << "type: ";
+		switch (type) {
+		case GL_DEBUG_TYPE_ERROR:
+			std::cout << "ERROR";
+			break;
+		case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+			std::cout << "DEPRECATED_BEHAVIOR";
+			break;
+		case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+			std::cout << "UNDEFINED_BEHAVIOR";
+			break;
+		case GL_DEBUG_TYPE_PORTABILITY:
+			std::cout << "PORTABILITY";
+			break;
+		case GL_DEBUG_TYPE_PERFORMANCE:
+			std::cout << "PERFORMANCE";
+			break;
+		case GL_DEBUG_TYPE_OTHER:
+			std::cout << "OTHER";
+			break;
+		}
+		std::cout << std::endl;
+
+		std::cout << "id: " << id << std::endl;
+		std::cout << "severity: ";
+		switch (severity) {
+		case GL_DEBUG_SEVERITY_LOW:
+			std::cout << "LOW";
+			break;
+		case GL_DEBUG_SEVERITY_MEDIUM:
+			std::cout << "MEDIUM";
+			break;
+		case GL_DEBUG_SEVERITY_HIGH:
+			std::cout << "HIGH";
+			break;
+		}
+		std::cout << std::endl;
+		std::cout << "---------------------opengl-callback-end--------------" << std::endl;
+	}
+}
 #else
 #define GL_CHECK(stmt) stmt
 #endif

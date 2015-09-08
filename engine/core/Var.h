@@ -48,7 +48,8 @@ private:
 	uint8_t m_count;
 	uint8_t m_type;
 
-	union {
+	union
+	{
 		char *    m_datas;
 		float *   m_datafv;
 		int32_t * m_dataiv;

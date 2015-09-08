@@ -12,7 +12,10 @@ private:
     bool m_vertical;
     glm::vec2 m_mouse_pos;
     void handle_mouse();
-    float range(){return m_max-m_min;};
+	float range()
+	{
+		return m_max - m_min;
+	};
 public:
     GUISlider(GUIEnvironment* env, Rect2D<int> dimensions, float min, float max, float pos, bool vertical=false);
     virtual ~GUISlider();

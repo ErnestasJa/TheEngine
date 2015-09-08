@@ -239,7 +239,8 @@ void iqmloader::loadiqmanims(std::shared_ptr<Mesh> m, const char* data, iqmheade
         animation_info & ai = m->anim->info[i];
         iqmanim &a = anims[i];
         ai.name = &texts[a.name];
-        ai.start = a.first_frame; ai.num = a.num_frames;
+		ai.start = a.first_frame;
+		ai.num = a.num_frames;
         ai.loop = CheckBit(a.flags,IQM_LOOP);
 
         _logger->log(LOG_DEBUG,"Loaded anim: %s.", ai.name.c_str());

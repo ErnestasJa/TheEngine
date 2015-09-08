@@ -28,16 +28,16 @@ Font::Font(FT_Face face, int height, std::string name)
         }
         if (roww + g->bitmap.width + 1 >= MAX_FONT_ATLAS_WIDTH)
         {
-            w = std::max(w, roww);
+			w = glm::max(w, roww);
             h += rowh;
             roww = 0;
             rowh = 0;
         }
         roww += g->bitmap.width + 1;
-        rowh = std::max(rowh, g->bitmap.rows);
+		rowh = glm::max(rowh, g->bitmap.rows);
     }
 
-    w = std::max(w, roww);
+	w = glm::max(w, roww);
     h += rowh;
 
     /* Create a Texture that will be used to hold all ASCII glyphs */
@@ -95,7 +95,7 @@ Font::Font(FT_Face face, int height, std::string name)
         c[i].tx = ox / (float)w;
         c[i].ty = oy / (float)h;
 
-        rowh = std::max(rowh, g->bitmap.rows);
+		rowh = glm::max(rowh, g->bitmap.rows);
         ox += g->bitmap.width + 1;
     }
     avgheight=avgheight/(float)cnth;

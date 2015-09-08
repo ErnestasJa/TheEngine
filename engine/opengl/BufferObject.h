@@ -19,10 +19,16 @@ struct BufferObject: public IBufferObject
     virtual void Upload();
     virtual void UploadSubData(vector<T> subdata,uint32_t offset);
 
-    virtual IBufferObject::IBO_TYPE GetType(){return IBufferObject::DATA;}
+	virtual IBufferObject::IBO_TYPE GetType()
+	{
+		return IBufferObject::DATA;
+	}
     virtual uint32_t GetDataType();
     virtual uint32_t GetComponentCount();
-    virtual uint32_t GetSize(){return data.size();}
+	virtual uint32_t GetSize()
+	{
+		return data.size() > 0 ? data.size() : data.capacity();
+	}
 };
 
 template <class T>
@@ -39,10 +45,16 @@ struct IndexBufferObject: public IBufferObject
     virtual void Init();
     virtual void Upload();
 
-    virtual IBufferObject::IBO_TYPE GetType(){return IBufferObject::INDEX;}
+	virtual IBufferObject::IBO_TYPE GetType()
+	{
+		return IBufferObject::INDEX;
+	}
     virtual uint32_t GetDataType();
     virtual uint32_t GetComponentCount();
-    virtual uint32_t GetSize(){return data.size();}
+	virtual uint32_t GetSize()
+	{
+		return data.size() > 0 ? data.size() : data.capacity();
+	}
 };
 
 #endif // BUFFER_OBJECT_H

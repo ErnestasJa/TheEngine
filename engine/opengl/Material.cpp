@@ -125,7 +125,11 @@ void Material::SetInt(const std::string & name, int32_t value)
 {
     for(MVar<int32_t> & attr: int_attr)
     {
-        if(attr.name==name) { attr.value = value; return;}
+		if (attr.name == name)
+		{
+			attr.value = value;
+			return;
+		}
     }
     assert(false);
 }

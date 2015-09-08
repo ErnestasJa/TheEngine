@@ -9,7 +9,8 @@ protected:
     #pragma pack(push)  /* push current alignment to stack */
     #pragma pack(1)     /* set alignment to 1 byte boundary */
 
-    typedef struct {
+	typedef struct
+	{
         int8_t  idlength;
         int8_t  colourmaptype;
         int8_t  datatypecode;
