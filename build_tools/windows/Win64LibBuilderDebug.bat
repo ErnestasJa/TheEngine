@@ -6,7 +6,7 @@ mkdir "build"
 mkdir "libs/win64debug"
 cd "build"
 call ../build_tools/windows/vcvars64.bat
-cmake ../ -DCMAKE_BUILD_TYPE=DEBUG -G "NMake Makefiles"
+cmake ../libs/ -DCMAKE_BUILD_TYPE=DEBUG -G "NMake Makefiles"
 nmake
 cd "../libs/boost/"
 start /wait b2 -j8 --without-python --build-dir="../../build" toolset=msvc architecture=x86 address-model=64 link=static threading=multi debug

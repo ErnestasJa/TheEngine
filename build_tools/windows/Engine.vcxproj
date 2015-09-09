@@ -109,6 +109,7 @@
       <AdditionalIncludeDirectories>..\..\src;..\..\libs\boost;..\..\libs\freetype2\include;..\..\libs\glfw\include;..\..\libs\glm;..\..\libs\glxw\include;..\..\libs\jsoncpp\include;..\..\libs\libsigc++;..\..\libs\physfs;..\..\libs\stb_image;..\..\libs\tinyxml2\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeaderFile>Precomp.h</PrecompiledHeaderFile>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
