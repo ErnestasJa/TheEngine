@@ -7,6 +7,7 @@
 template <class T>
 struct BufferObject : public IBufferObject
 {
+	uint32_t preallocatedSize;
 	vector<T> data;
 
 	virtual ~BufferObject()
@@ -27,13 +28,14 @@ struct BufferObject : public IBufferObject
 	virtual uint32_t GetComponentCount();
 	virtual uint32_t GetSize()
 	{
-		return data.size() > 0 ? data.size() : data.capacity();
+		return data.size() > 0 ? data.size() : (data.capacity() > 0 ? data.capacity() : preallocatedSize);
 	}
 };
 
 template <class T>
 struct IndexBufferObject : public IBufferObject
 {
+	uint32_t preallocatedSize;
 	vector<T> data;
 
 	virtual ~IndexBufferObject()
@@ -53,7 +55,7 @@ struct IndexBufferObject : public IBufferObject
 	virtual uint32_t GetComponentCount();
 	virtual uint32_t GetSize()
 	{
-		return data.size() > 0 ? data.size() : data.capacity();
+		return data.size() > 0 ? data.size() : (data.capacity() > 0 ? data.capacity() : preallocatedSize);
 	}
 };
 
