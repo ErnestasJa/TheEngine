@@ -3,32 +3,33 @@
 import argparse
 import os
 import re
-import urllib.request
+import sys
+if sys.version_info < (3, 0):
+    from urllib import urlretrieve
+else:
+    from urllib.request import urlretrieve
+
 
 def download(output_dir, include_dir, source_url, filename):
     full_filename = os.path.join(output_dir, filename)
     if os.path.exists(full_filename):
         return
-    lines = []
 
     include_file = os.path.join(include_dir, filename) if include_dir is not None else None
     if include_dir is not None and os.path.exists(include_file):
-        print(('Copying %s to %s' % (include_file, full_filename)))
-        with open(include_file, 'r') as f:
-            lines = f.readlines()
+        print('Copying %s to %s' % (include_file, full_filename))
+        source = 'file://' + os.path.abspath(include_file) # file:// is required for python 3
     else:
-        print(('Downloading %s from %s to %s' % (filename, source_url, full_filename)))
-        lines = urllib.request.urlopen(source_url).readlines()
+        print('Downloading %s from %s to %s' % (filename, source_url, full_filename))
+        source = source_url
 
     dirname = os.path.dirname(full_filename)
     if not os.path.exists(dirname):
         os.makedirs(dirname)
-    with open(full_filename, 'w') as f:
-        #lines = [line for line in lines]
-        f.writelines(lines)
+    urlretrieve(source, full_filename)
 
 def parse_funcs(filename, regex_string, blacklist):
-    print(('Parsing header %s' % os.path.basename(filename)))
+    print('Parsing header %s' % os.path.basename(filename))
     regex = re.compile(regex_string)
     group_re = re.compile(r'^#ifndef ((GL|WGL|GLX|EGL)_\w+)')
     with open(filename) as f:
@@ -45,7 +46,7 @@ def parse_funcs(filename, regex_string, blacklist):
         return funcs
 
 def generate_header(api, funcs, api_includes, prefix, suffix, filename):
-    print(('Generating header %s' % filename))
+    print('Generating header %s' % filename)
 
     header = '''
 #ifndef glxw%(suffix)s_h
@@ -109,7 +110,7 @@ int glxwInit%(upper_suffix)sCtx(struct glxw%(suffix)s *ctx);
 
 
 def generate_library(api, funcs, api_includes, prefix, suffix, filename, use_egl):
-    print(('Generating library source %s' % filename))
+    print('Generating library source %s' % filename)
 
     eglcommon = '''
 #include <EGL/egl.h>
@@ -277,19 +278,19 @@ official sources and generates an extension loading library.
         os.getcwd()
 
     apis = [
-        ('opengl', 'gl', '', 'GL', r'GLAPI.*APIENTRY\s+(\w+)',
+        ('opengl', 'gl', '', 'GL', r'GLAPI.*APIENTRY\s+(gl\w+)',
             [],
-            [(True, 'glcorearb.h', 'http://www.opengl.org/registry/api/glcorearb.h')]),
-        ('wgl', 'wgl', '_wgl', 'GL', r'extern.*WINAPI\s+(\w+)',
+            [(True, 'glcorearb.h', 'http://www.opengl.org/registry/api/GL/glcorearb.h')]),
+        ('wgl', 'wgl', '_wgl', 'GL', r'.*WINAPI\s+(wgl\w+)',
             [],
-            [(True, 'wglext.h', 'http://www.opengl.org/registry/api/wglext.h')]),
-        ('glx', 'glX', '_glx', 'GL', r'extern\s*\S*\s+(\w+)\s*\(',
+            [(True, 'wglext.h', 'http://www.opengl.org/registry/api/GL/wglext.h')]),
+        ('glx', 'glX', '_glx', 'GL', r'.*(glX\w+)\s*\(',
             ['GLX_SGIX_video_source',
                 'GLX_SGIX_fbconfig',
                 'GLX_SGIX_dmbuffer',
                 'GLX_VERSION_1_4',
                 'GLX_ARB_get_proc_address'],
-            [(True, 'glxext.h', 'http://www.opengl.org/registry/api/glxext.h')]),
+            [(True, 'glxext.h', 'http://www.opengl.org/registry/api/GL/glxext.h')]),
         ('gles2', 'gl', '_es2', 'GLES2', r'GL_APICALL.*GL_APIENTRY\s+(\w+)',
             [],
             [(False, 'gl2.h', 'http://www.khronos.org/registry/gles/api/GLES2/gl2.h'),
@@ -343,6 +344,5 @@ official sources and generates an extension loading library.
 
                 generate_header(api, funcs, api_includes, prefix, suffix, include_file)
                 generate_library(api, funcs, api_includes, prefix, suffix, source_file, args.use_egl)
-
 
 
