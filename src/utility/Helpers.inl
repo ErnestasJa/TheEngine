@@ -169,3 +169,12 @@ inline glm::vec3 rgb2hsv(float r, float g, float b)
 
 	return glm::vec3(h, s, v);
 }
+
+inline glm::vec3 VectorMin(const glm::vec3 &vec1, const glm::vec3 &vec2)
+{
+	return glm::vec3(glm::min(vec1.x, vec2.x), glm::min(vec1.y, vec2.y), glm::min(vec1.z, vec2.z));
+}
+inline glm::vec3 VectorMax(const glm::vec3 &vec1, const glm::vec3 &vec2)
+{
+	return glm::vec3(glm::max(vec1.x, vec2.x), glm::max(vec1.y, vec2.y), glm::max(vec1.z, vec2.z));
+}

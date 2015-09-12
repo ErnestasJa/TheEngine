@@ -49,7 +49,7 @@ void GUIButton::Render()
 	this->RenderChildren();
 }
 
-void GUIButton::set_text(const std::wstring &text)
+void GUIButton::SetText(const std::wstring &text)
 {
 	this->m_text = text;
 }

@@ -68,6 +68,9 @@ void MVar<glm::mat3x3>::Set() const;
 template <>
 void MVar<glm::vec3>::Set() const;
 
+template <>
+void MVar<glm::vec4>::Set() const;
+
 template <class T>
 MVar<T> & MVar<T>::operator = (const T & val)
 {

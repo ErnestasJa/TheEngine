@@ -14,13 +14,15 @@ private:
 	bool m_draw_background;
 
 	bool draw_shadow;
+	std::string _font;
 public:
 	GUIStaticText(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring text = L"text", glm::vec4 text_color = glm::vec4(1, 1, 1, 1), bool drawbackground = false, bool drawshadow = false);
 	virtual ~GUIStaticText();
 
 	void Render();
 
-	void set_text(const std::wstring &text);
+	void SetText(const std::wstring &text);
+	void SetFont(const std::string &fontName);
 
 	const std::wstring &get_text()
 	{
@@ -34,3 +36,4 @@ public:
 	}
 protected:
 };
+typedef std::shared_ptr<GUIStaticText> GUIStaticTextPtr;

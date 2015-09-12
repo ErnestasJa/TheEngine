@@ -7,6 +7,8 @@
 #define loopi(count) for(int32_t i = 0; i < (count); i++)
 #define loopr(var,start,count) for(uint32_t (var) = (start); (var) < (count); (var)++)
 #define loopxyz(cx,cy,cz) loop(z,(cz)) loop(y,(cy)) loop(x,(cx))
+#define loopxyzr(cx,sx,ex,cy,sy,ey,cz,sz,ez) loopr((cz),sz,ez) loopr((cy),sy,ey) loopr((cx),sx,ex)
+#define loopxyzrv(cx,cy,cz,sv,ev) loopr((cz),sv.z,ev.z) loopr((cy),sv.y,ev.y) loopr((cx),sv.x,ev.x)
 #define comp(vec) (vec).x, (vec).y, (vec).z
 #define ROUNDING_ERROR 0.00001f
 
@@ -29,6 +31,9 @@ namespace helpers
 	inline glm::vec3 hsv2rgb(float h, float s, float v);
 
 	inline glm::vec3 rgb2hsv(float r, float g, float b);
+
+	inline glm::vec3 VectorMin(const glm::vec3 &vec1, const glm::vec3 &vec2);
+	inline glm::vec3 VectorMax(const glm::vec3 &vec1, const glm::vec3 &vec2);
 
 	inline int wtoi(const wchar_t *str)
 	{

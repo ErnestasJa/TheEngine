@@ -51,10 +51,10 @@ void InputHandler::OnMouseButton(int32_t button, int32_t action, int32_t mod)
 	switch (action)
 	{
 	case GLFW_PRESS:
-		keys[button] = true;
+		mouseKeys[button] = true;
 		break;
 	case GLFW_RELEASE:
-		keys[button] = false;
+		mouseKeys[button] = false;
 		break;
 	default:
 		mouseKeys[button] = false;

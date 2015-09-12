@@ -47,6 +47,15 @@ void MVar<glm::vec3>::Set() const
 		throw binding_index;
 }
 
+template <>
+void MVar<glm::vec4>::Set() const
+{
+	glUniform4fv(binding_index, 1, glm::value_ptr(value));
+
+	if (binding_index == -1)
+		throw binding_index;
+}
+
 ///binding index as param
 template <>
 void MVar<int32_t>::Set(int32_t bindex) const
@@ -76,4 +85,10 @@ template <>
 void MVar<glm::vec3>::Set(int32_t bindex) const
 {
 	glUniform3fv(bindex, 1, glm::value_ptr(value));
+}
+
+template <>
+void MVar<glm::vec4>::Set(int32_t bindex) const
+{
+	glUniform4fv(bindex, 1, glm::value_ptr(value));
 }

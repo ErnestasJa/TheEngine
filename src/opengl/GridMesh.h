@@ -19,35 +19,35 @@ public:
 		/// XAxis
 		pos->data.push_back(glm::vec3(-halfsize, 0, 0));
 		pos->data.push_back(glm::vec3(0, 0, 0));
-		col->data.push_back(glm::vec4(1, 0, 0, 1));
-		col->data.push_back(glm::vec4(1, 0, 0, 1));
+		col->data.push_back(glm::vec4(1, 0.5, 0.5, 1));
+		col->data.push_back(glm::vec4(1, 0.5, 0.5, 1));
 
 		pos->data.push_back(glm::vec3(0, 0, 0));
 		pos->data.push_back(glm::vec3(halfsize, 0, 0));
-		col->data.push_back(glm::vec4(1, 0.5, 0.5, 1));
-		col->data.push_back(glm::vec4(1, 0.5, 0.5, 1));
+		col->data.push_back(glm::vec4(1, 0, 0, 1));
+		col->data.push_back(glm::vec4(1, 0, 0, 1));
 
 		/// YAxis
 		pos->data.push_back(glm::vec3(0, -halfsize, 0));
 		pos->data.push_back(glm::vec3(0, 0, 0));
-		col->data.push_back(glm::vec4(0, 1, 0, 1));
-		col->data.push_back(glm::vec4(0, 1, 0, 1));
+		col->data.push_back(glm::vec4(0.5, 1, 0.5, 1));
+		col->data.push_back(glm::vec4(0.5, 1, 0.5, 1));
 
 		pos->data.push_back(glm::vec3(0, 0, 0));
 		pos->data.push_back(glm::vec3(0, halfsize, 0));
-		col->data.push_back(glm::vec4(0.5, 1, 0.5, 1));
-		col->data.push_back(glm::vec4(0.5, 1, 0.5, 1));
+		col->data.push_back(glm::vec4(0, 1, 0, 1));
+		col->data.push_back(glm::vec4(0, 1, 0, 1));
 
 		/// ZAxis
 		pos->data.push_back(glm::vec3(0, 0, -halfsize));
 		pos->data.push_back(glm::vec3(0, 0, 0));
-		col->data.push_back(glm::vec4(0, 0, 1, 1));
-		col->data.push_back(glm::vec4(0, 0, 1, 1));
+		col->data.push_back(glm::vec4(0.5, 0.5, 1, 1));
+		col->data.push_back(glm::vec4(0.5, 0.5, 1, 1));
 
 		pos->data.push_back(glm::vec3(0, 0, 0));
 		pos->data.push_back(glm::vec3(0, 0, halfsize));
-		col->data.push_back(glm::vec4(0.5, 0.5, 1, 1));
-		col->data.push_back(glm::vec4(0.5, 0.5, 1, 1));
+		col->data.push_back(glm::vec4(0, 0, 1, 1));
+		col->data.push_back(glm::vec4(0, 0, 1, 1));
 
 		for (uint32_t i = 0; i <= size; i++)
 		{

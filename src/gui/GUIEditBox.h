@@ -23,7 +23,7 @@ public:
 
 	void Render();
 
-	void set_text(const std::wstring &text);
+	void SetText(const std::wstring &text);
 
 	const std::wstring &get_text()
 	{
@@ -35,3 +35,4 @@ public:
 	bool OnEvent(const GUIEvent & e);
 protected:
 };
+typedef std::shared_ptr<GUIEditBox> GUIEditBoxPtr;

@@ -32,10 +32,11 @@ public:
 
 	void Render();
 
-	void set_text(const std::wstring &text);
+	void SetText(const std::wstring &text);
 	void set_image(GUIImage *image);
 	void remove_image();
 
 	virtual bool OnEvent(const GUIEvent & e);
 protected:
 };
+typedef std::shared_ptr<GUIButton> GUIButtonPtr;

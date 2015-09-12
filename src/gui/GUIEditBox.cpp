@@ -83,7 +83,7 @@ void GUIEditBox::Render()
 	this->RenderChildren();
 }
 
-void GUIEditBox::set_text(const std::wstring &text)
+void GUIEditBox::SetText(const std::wstring &text)
 {
 	this->m_text = text;
 	curspos = text.length();

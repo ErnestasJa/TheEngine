@@ -137,9 +137,9 @@ void GUIColorPicker::UpdateValues()
 {
 	colRGB = imgBuf->GetPixel(cursorPos.x + 4, imgBuf->height - 1 - cursorPos.y - 4);
 
-	ebR->set_text(helpers::to_wstr(colRGB.x));
-	ebG->set_text(helpers::to_wstr(colRGB.y));
-	ebB->set_text(helpers::to_wstr(colRGB.z));
+	ebR->SetText(helpers::to_wstr(colRGB.x));
+	ebG->SetText(helpers::to_wstr(colRGB.y));
+	ebB->SetText(helpers::to_wstr(colRGB.z));
 }
 
 glm::vec4 GUIColorPicker::GetColorRGB()

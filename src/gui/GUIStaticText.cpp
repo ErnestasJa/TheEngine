@@ -20,6 +20,7 @@ GUIStaticText::GUIStaticText(GUIEnvironment* env, Rect2D<int> dimensions, std::w
 
 	m_text = text;
 	m_text_color = text_color;
+	_font = "default";
 
 	this->SetParent(env);
 }
@@ -35,12 +36,17 @@ void GUIStaticText::Render()
 		glBindTexture(GL_TEXTURE_2D, 0);
 		environment->draw_gui_quad(absolute_rect, gui_skin_background);
 	}
-	this->environment->get_font_renderer()->RenderString(this->m_text, glm::ivec2(this->absolute_rect.x + 1, this->absolute_rect.y + 2));
+	this->environment->get_font_renderer()->RenderString(this->m_text, glm::ivec2(this->absolute_rect.x + 1, this->absolute_rect.y + 2), 0, _font);
 
 	this->RenderChildren();
 }
 
-void GUIStaticText::set_text(const std::wstring &text)
+void GUIStaticText::SetText(const std::wstring &text)
 {
 	this->m_text = text;
+}
+
+void GUIStaticText::SetFont(const std::string &font)
+{
+	_font = font;
 }
