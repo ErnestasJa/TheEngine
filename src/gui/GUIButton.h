@@ -12,29 +12,29 @@ class GUIImage;
 class GUIButton :public GUIElement
 {
 private:
-	std::wstring m_text;
-	uint32_t cur_style;
-	glm::vec4 col_active, col_hover, col_clicked, col_disabled, col_text, cur_col;
-	bool m_toggled, m_toggle;
-	GUIImage* m_overlay_image;
+	uint32_t _style;
+	glm::vec4 _colorActive, _colorHover, _colorClicked, _colorDisabled, _colorText, _colorCurrent;
+	bool _colored, _toggled, _toggling;
+
+	GUIImage* _imageOverlay;
+	GUIStaticText* _textOverlay;
 public:
-	GUIButton(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring text = L"text", bool toggle = false, bool toggle_status = false);
+	GUIButton(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring text = L"text", bool colored=false, bool toggling = false, bool toggleStatus = false);
 	virtual ~GUIButton();
 
-	bool is_toggled()
-	{
-		return m_toggled;
-	}
-	void set_toggled(bool b)
-	{
-		m_toggled = b;
-	}
+	bool IsToggled();
+	void SetToggled(bool toggleStatus);
+	void SetToggleable(bool toggling);
 
 	void Render();
 
 	void SetText(const std::wstring &text);
-	void set_image(GUIImage *image);
-	void remove_image();
+
+	void SetImage(GUIImage *image);
+	void RemoveImage();
+
+	void SetColor(const glm::vec4 & colorActive);
+	void SetColors(const glm::vec4 & colorActive, const glm::vec4 & colorHover, const glm::vec4 & colorClicked, const glm::vec4 & colorDisabled);
 
 	virtual bool OnEvent(const GUIEvent & e);
 protected:

@@ -13,6 +13,30 @@ class GUISkin;
 class Logger;
 class AppContext;
 
+class GUIPane;
+typedef std::shared_ptr<GUIPane> GUIPanePtr;
+
+class GUIWindow;
+typedef std::shared_ptr<GUIWindow> GUIWindowPtr;
+
+class GUIStaticText;
+typedef std::shared_ptr<GUIStaticText> GUIStaticTextPtr;
+
+class GUIButton;
+typedef std::shared_ptr<GUIButton> GUIButtonPtr;
+
+class GUIEditBox;
+typedef std::shared_ptr<GUIEditBox> GUIEditBoxPtr;
+
+class GUICheckbox;
+typedef std::shared_ptr<GUICheckbox> GUICheckboxPtr;
+
+class GUISlider;
+typedef std::shared_ptr<GUISlider> GUISliderPtr;
+
+class GUIImage;
+typedef std::shared_ptr<GUIImage> GUIImagePtr;
+
 class GUIEnvironment : public GUIElement
 {
 public:
@@ -50,23 +74,23 @@ public:
 		return m_context;
 	}
 
-	const std::wstring &get_clipboard()
+	const std::wstring &GetClipboard()
 	{
 		return clipboard_string;
 	}
 
-	wchar_t get_last_char()
+	wchar_t GetLastChar()
 	{
 		return last_char;
 	}
 
-	int32_t get_last_key()
+	int32_t GetLastKey()
 	{
 		return last_key;
 	}
 
 	template <typename T>
-	Rect2D<T> scale_gui_rect(Rect2D<T> unscaled)
+	Rect2D<T> ScaleGUIRect(Rect2D<T> unscaled)
 	{
 		T gsx = get_gui_scale().x;
 		T gsy = get_gui_scale().y;
@@ -80,15 +104,16 @@ public:
 		return ret;
 	}
 
-	FontRenderer *get_font_renderer();
+	FontRenderer *GetFontRenderer();
 
-	//    GUIStaticText *add_gui_static_text();
-	//    GUIButton *add_GUIButton();
-	//    GUICheckbox *add_GUICheckbox();
-	//    GUIEditBox *add_GUIEditBox();
-	//
-	//    GUIWindow *add_GUIWindow();
-	//    GUIPane* add_GUIPane();
+	GUIStaticTextPtr AddGUIStaticText();
+	GUIButtonPtr AddGUIButton();
+	GUICheckboxPtr AddGUICheckbox();
+	GUIEditBoxPtr AddGUIEditBox();
+	GUISliderPtr AddGUISlider();
+	GUIImagePtr AddGUIImage();
+	GUIWindowPtr AddGUIWindow();
+	GUIPanePtr AddGUIPane();
 private:
 	AppContext* m_context;
 	GUISkin* skin;

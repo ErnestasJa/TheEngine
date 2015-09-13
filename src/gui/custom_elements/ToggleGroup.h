@@ -1,66 +1,25 @@
 #pragma once
 
-#include "../GUIButton.h"
+class GUIButton;
 
-class toggle_group
+class ToggleGroup
 {
-	vector<GUIButton*> elements;
-	bool multitoggle;
-	int m_current_toggle;
+private:
+	std::map<std::string, GUIButton*> _elements;
+	bool _multiToggle;
+	std::string _currentToggle;
 
-	bool toggle(GUIButton* btn)
-	{
-		bool success = false;
-		for (GUIButton* el : elements)
-		{
-			if (this->multitoggle)
-			{
-				if (el == btn)
-				{
-					el->set_toggled(!el->is_toggled());
-					return true;
-				}
-			}
-			else
-			{
-				if (el == btn)
-				{
-					el->set_toggled(true);
-					success = true;
-				}
-				else
-					el->set_toggled(false);
-			}
-		}
-		return success;
-	}
+	bool Toggle(GUIButton* btn);
 public:
-	toggle_group(bool multitoggle = false, int deftoggle = 0)
-	{
-		this->multitoggle = multitoggle;
-	}
+	ToggleGroup(bool multitoggle = false);
 
-	toggle_group(vector<GUIButton*> predef, bool multitoggle = false, int deftoggle = 0)
-	{
-		this->multitoggle = multitoggle;
-		elements = predef;
-	}
+	ToggleGroup(vector<GUIButton*> predef, bool multitoggle = false);
 
-	void add(GUIButton* btn)
-	{
-		elements.push_back(btn);
-	}
+	void AddButton(GUIButton* btn);
 
-	GUIButton* get_toggle()
-	{
-		return elements[m_current_toggle];
-	}
+	GUIButton* GetToggledButton();
 
-	void set_toggle(int elem)
-	{
-		if (toggle(elements[elem]))
-		{
-			m_current_toggle = elem;
-		}
-	}
+	void SetToggledButton(const std::string &elem);
+
+	bool ContainsButton(const std::string &elem);
 };

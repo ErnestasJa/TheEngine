@@ -37,7 +37,7 @@ GUIWindow::GUIWindow(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring t
 
 	if (showclose)
 	{
-		close_btn = new GUIButton(env, Rect2D<int>(tbr.w - 17, 4, 14, 14), L"X");
+		close_btn = new GUIButton(env, Rect2D<int>(tbr.w - 17, 4, 14, 14), L"['s]x[s']");
 		close_btn->SetParent(this);
 		close_btn->SetEventListener(this);
 	}
@@ -55,7 +55,7 @@ void GUIWindow::Render()
 
 	environment->draw_sliced_gui_quad(tbr, gui_skin_titlebar);
 	environment->draw_sliced_gui_quad(bgr, gui_skin_background);
-	environment->get_font_renderer()->RenderString(L"['s]" + titlebar_text + L"[s']", glm::ivec2(tbr.x + 6, tbr.y + 6));
+	environment->GetFontRenderer()->RenderString(L"['s]" + titlebar_text + L"[s']", glm::ivec2(tbr.x + 6, tbr.y + 6));
 
 	this->absolute_rect.move(0, 20);
 	UpdateAbsolutePos();

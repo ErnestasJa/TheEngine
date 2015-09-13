@@ -16,6 +16,15 @@
     <Filter Include="Header Files\GUI">
       <UniqueIdentifier>{21d1d45d-bb54-4c3e-b295-a1eb0a5c63f6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\GUI">
+      <UniqueIdentifier>{e5859234-da16-43cf-91ba-8f1139c93bf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GUI\Font">
+      <UniqueIdentifier>{674f1557-8453-4689-97e3-d390cf0a5264}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GUI\Font">
+      <UniqueIdentifier>{641a8b68-10b7-4675-877e-7b878d828f24}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\application\AppContext.h">
@@ -40,18 +49,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\core\VarJsonReader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\gui\custom_elements\ToggleGroup.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\gui\font_rendering\Font.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\gui\font_rendering\FontFamily.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\gui\font_rendering\FontRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\opengl\AABB.h">
@@ -94,9 +91,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\opengl\Shader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\opengl\SlicedGUIQuad.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\opengl\Texture.h">
@@ -231,6 +225,21 @@
     <ClInclude Include="..\..\src\gui\GUIWindow.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\opengl\SlicedGUIQuad.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\gui\font_rendering\Font.h">
+      <Filter>Header Files\GUI\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\gui\font_rendering\FontFamily.h">
+      <Filter>Header Files\GUI\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\gui\font_rendering\FontRenderer.h">
+      <Filter>Header Files\GUI\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\gui\custom_elements\ToggleGroup.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\application\Application.cpp">
@@ -252,51 +261,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\core\VarJsonReader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\gui\custom_elements\GUIColorPicker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\gui\font_rendering\Font.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\gui\font_rendering\FontFamily.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\gui\font_rendering\FontRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\gui\GUIButton.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\gui\GUICheckbox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\gui\GUIEditBox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\gui\GUIElement.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\gui\GUIEnvironment.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\gui\GUIImage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\gui\GUIPane.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\gui\GUISkin.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\gui\GUISlider.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\gui\GUIStaticText.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\gui\GUIWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\opengl\AABB.cpp">
@@ -382,6 +346,54 @@
     </ClCompile>
     <ClCompile Include="..\..\src\Precomp.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\gui\GUIButton.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\gui\GUICheckbox.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\gui\custom_elements\GUIColorPicker.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\gui\GUIEditBox.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\gui\GUIElement.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\gui\GUIEnvironment.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\gui\GUIImage.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\gui\GUIPane.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\gui\GUISkin.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\gui\GUISlider.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\gui\GUIStaticText.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\gui\GUIWindow.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\gui\font_rendering\Font.cpp">
+      <Filter>Source Files\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\gui\font_rendering\FontFamily.cpp">
+      <Filter>Source Files\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\gui\font_rendering\FontRenderer.cpp">
+      <Filter>Source Files\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\gui\custom_elements\ToggleGroup.cpp">
+      <Filter>Source Files\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

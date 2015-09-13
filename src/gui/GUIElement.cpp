@@ -14,6 +14,7 @@ GUIElement::GUIElement(GUIEnvironment* env, Rect2D<int> dimensions)
 	visible = true;
 	focused = false;
 	enabled = true;
+	modal = false;
 	accept_events = true;
 
 	this->parent = nullptr;

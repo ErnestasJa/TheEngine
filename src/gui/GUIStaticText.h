@@ -10,13 +10,11 @@ class GUIStaticText :public GUIElement
 {
 private:
 	std::wstring m_text;
-	glm::vec4 m_text_color;
 	bool m_draw_background;
 
-	bool draw_shadow;
 	std::string _font;
 public:
-	GUIStaticText(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring text = L"text", glm::vec4 text_color = glm::vec4(1, 1, 1, 1), bool drawbackground = false, bool drawshadow = false);
+	GUIStaticText(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring text = L"text", bool drawbackground = false);
 	virtual ~GUIStaticText();
 
 	void Render();

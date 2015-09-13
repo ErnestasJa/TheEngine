@@ -231,7 +231,7 @@ void FontRenderer::_FormatTags(TextLine &tl, std::wstring in, SubLineInfo inf)
 	{
 		std::vector<std::wstring> tagvals;
 		std::wstring tagvalsubstr = in.substr(firsttag + 4, tagclose - 4);
-		boost::split(tagvals, tagvalsubstr, boost::is_any_of(L","));
+		boost::split(tagvals, tagvalsubstr, boost::is_any_of(L" "));
 
 		float r, g, b, a;
 		r = 1.f / 255.f*helpers::wtoi(tagvals[0].c_str());
@@ -432,10 +432,51 @@ void FontRenderer::_SetFontColor(const glm::vec4 &color)
 
 glm::vec2 FontRenderer::GetTextDimensions(const std::wstring & text)
 {
+	TextLine lineToDraw;
+
+	SubLineInfo inf;
+
+	_FormatTags(lineToDraw, text, inf);
+
 	int len = 0;
-	for (wchar_t gl : text)
+	int height = 0;
+
+	FONT_FAMILY_TYPE currentStyle = _currentFamily->currentType;
+	bool canbold = _currentFamily->Has(FFT_BOLD);
+	bool canitalic = _currentFamily->Has(FFT_ITALIC);
+	bool canbolditalic = _currentFamily->Has(FFT_BOLD_ITALIC);
+
+	for (auto &content : lineToDraw.content)
 	{
-		len += _currentFont->c[(int)gl].ax;
+		if (content.bold&&canbold&&!content.italic)
+		{
+			currentStyle = _currentFamily->currentType;
+			UseFont(FFT_BOLD);
+		}
+		else if (content.italic&&canitalic&&!content.bold)
+		{
+			currentStyle = _currentFamily->currentType;
+			UseFont(FFT_ITALIC);
+		}
+		else if (content.bold&&content.italic&&canbolditalic)
+		{
+			currentStyle = _currentFamily->currentType;
+			UseFont(FFT_BOLD_ITALIC);
+		}
+		for (wchar_t &glyph : content.text)
+		{
+
+			auto &glyphData = _currentFont->c[(int)glyph];
+			len += glyphData.ax;
+		}
+
+		height = _currentFont->avgheight;
+
+		if (content.bold || content.italic)
+		{
+			UseFont(currentStyle);
+		}
 	}
-	return glm::vec2(len, _currentFont->avgheight);
+
+	return glm::vec2(len, height);
 }

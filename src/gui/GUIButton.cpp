@@ -13,22 +13,28 @@
 
 #include "GUIImage.h"
 
-GUIButton::GUIButton(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring text, bool toggle, bool toggle_status) :GUIElement(env, dimensions)
+GUIButton::GUIButton(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring text, bool colored, bool toggle, bool toggleStatus) : GUIElement(env, dimensions)
 {
 	this->Type = GUIET_BUTTON;
 	environment = env;
 
-	m_text = text;
-
 	absolute_rect = dimensions;
 	relative_rect = absolute_rect;
 
-	cur_style = gui_skin_button_active;
+	_style = gui_skin_button_active;
 
-	m_toggled = toggle_status;
-	m_toggle = toggle;
+	_colored = colored;
+	_toggled = toggleStatus;
+	_toggling = toggle;
 
-	m_overlay_image = nullptr;
+	_imageOverlay = nullptr;
+
+	glm::vec2 textDim = this->environment->GetFontRenderer()->GetTextDimensions(text);
+	printf("Text dim Y: %f\n", textDim.y);
+	_textOverlay = new GUIStaticText(environment, Rect2D<int>((int)(dimensions.w / 2.f - textDim.x / 2.f), (int)(dimensions.h / 2.f - textDim.y), dimensions.w, dimensions.h), text, false);
+	_textOverlay->SetListening(false);
+	_textOverlay->SetParent(this);
+
 	this->SetParent(env);
 }
 
@@ -38,39 +44,41 @@ GUIButton::~GUIButton()
 
 void GUIButton::Render()
 {
-	if (!enabled)
-		cur_col = col_disabled;
+	if (_colored)
+	{
+		environment->draw_sliced_gui_quad(absolute_rect, _colorCurrent);
+	}
+	else
+	{
+		environment->draw_sliced_gui_quad(absolute_rect, _toggled&&_toggling ? gui_skin_button_click : enabled ? _style : gui_skin_button_disabled);
+	}
 
-	environment->draw_sliced_gui_quad(absolute_rect, m_toggled&&m_toggle ? gui_skin_button_click : enabled ? cur_style : gui_skin_button_disabled);
-
-	glm::vec2 dm = this->environment->get_font_renderer()->GetTextDimensions(this->m_text);
-	this->environment->get_font_renderer()->RenderString(L"['s]" + this->m_text + L"[s']", glm::ivec2(this->absolute_rect.x + absolute_rect.w / 2.f - dm.x / 2.f, this->absolute_rect.y + ((this->absolute_rect.h - dm.y) / 2.f)));
-
-	this->RenderChildren();
+	RenderChildren();
 }
 
 void GUIButton::SetText(const std::wstring &text)
 {
-	this->m_text = text;
+	_textOverlay->SetText(text);
+	_textOverlay->UpdateAbsolutePos();
 }
 
-void GUIButton::set_image(GUIImage* img)
+void GUIButton::SetImage(GUIImage* img)
 {
-	if (m_overlay_image != nullptr)
+	if (_imageOverlay != nullptr)
 	{
-		remove_image();
+		RemoveImage();
 	}
 	else
 	{
-		this->m_overlay_image = img;
-		this->AddChild(img);
+		_imageOverlay = img;
+		AddChild(img);
 	}
 }
 
-void GUIButton::remove_image()
+void GUIButton::RemoveImage()
 {
-	this->RemoveChild(m_overlay_image);
-	m_overlay_image = nullptr;
+	this->RemoveChild(_imageOverlay);
+	_imageOverlay = nullptr;
 }
 
 bool GUIButton::OnEvent(const GUIEvent & e)
@@ -79,24 +87,24 @@ bool GUIButton::OnEvent(const GUIEvent & e)
 		switch (e.GetType())
 		{
 		case gui_event_type::element_hovered:
-			cur_style = gui_skin_button_hover;
+			_style = gui_skin_button_hover;
 			GUI_FIRE_EVENT(GUIEvent(element_hovered, this, this))
 				break;
 
 		case gui_event_type::element_exitted:
-			cur_style = this->enabled ? gui_skin_button_active : gui_skin_button_disabled;
+			_style = this->enabled ? gui_skin_button_active : gui_skin_button_disabled;
 			GUI_FIRE_EVENT(GUIEvent(element_exitted, this, this))
 				break;
 
 		case gui_event_type::mouse_pressed:
-			cur_style = gui_skin_button_click;
+			_style = gui_skin_button_click;
 			GUI_FIRE_EVENT(GUIEvent(button_pressed, this, this))
 				break;
 
 		case gui_event_type::mouse_released:
-			if (m_toggle)
-				m_toggled = !m_toggled;
-			cur_style = hovered ? gui_skin_button_hover : gui_skin_button_active;
+			if (_toggling)
+				_toggled = !_toggled;
+			_style = hovered ? gui_skin_button_hover : gui_skin_button_active;
 			GUI_FIRE_EVENT(GUIEvent(button_released, this, this))
 				break;
 
@@ -104,4 +112,31 @@ bool GUIButton::OnEvent(const GUIEvent & e)
 			break;
 		}
 	GUI_END_ON_EVENT(e)
+}
+
+bool GUIButton::IsToggled()
+{
+	return _toggled;
+}
+
+void GUIButton::SetToggled(bool toggleStatus)
+{
+	_toggled = toggleStatus;
+}
+
+void GUIButton::SetToggleable(bool toggling)
+{
+	_toggling = toggling;
+}
+
+void GUIButton::SetColor(const glm::vec4 & colorActive)
+{
+	_colorCurrent = colorActive;
+}
+void GUIButton::SetColors(const glm::vec4 & colorActive, const glm::vec4 & colorHover, const glm::vec4 & colorClicked, const glm::vec4 & colorDisabled)
+{
+	_colorActive = colorActive;
+	_colorHover = colorHover;
+	_colorClicked = colorClicked;
+	_colorDisabled = colorDisabled;
 }
