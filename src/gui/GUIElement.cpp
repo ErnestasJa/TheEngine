@@ -146,7 +146,7 @@ void GUIElement::SetEnabled(bool b)
 	this->enabled = b;
 	if (children.size() > 0)
 		for (GUIElement *e : children)
-			e->SetEnabled(true);
+			e->SetEnabled(b);
 }
 
 void GUIElement::SetFocused(bool b)

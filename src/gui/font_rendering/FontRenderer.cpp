@@ -231,7 +231,7 @@ void FontRenderer::_FormatTags(TextLine &tl, std::wstring in, SubLineInfo inf)
 	{
 		std::vector<std::wstring> tagvals;
 		std::wstring tagvalsubstr = in.substr(firsttag + 4, tagclose - 4);
-		boost::split(tagvals, tagvalsubstr, boost::is_any_of(L" "));
+		boost::split(tagvals, tagvalsubstr, boost::is_any_of(L", "));
 
 		float r, g, b, a;
 		r = 1.f / 255.f*helpers::wtoi(tagvals[0].c_str());
