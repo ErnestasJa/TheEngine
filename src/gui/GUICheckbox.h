@@ -29,4 +29,3 @@ public:
 	}
 protected:
 };
-typedef std::shared_ptr<GUICheckbox> GUICheckboxPtr;

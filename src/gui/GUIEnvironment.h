@@ -82,13 +82,14 @@ public:
 
 	FontRenderer *get_font_renderer();
 
-	//    GUIStaticText *add_gui_static_text();
-	//    GUIButton *add_GUIButton();
-	//    GUICheckbox *add_GUICheckbox();
-	//    GUIEditBox *add_GUIEditBox();
-	//
-	//    GUIWindow *add_GUIWindow();
-	//    GUIPane* add_GUIPane();
+	GUIStaticText* AddGUIStaticText();
+	GUIButton*  AddGUIButton();
+	GUICheckbox* AddGUICheckbox();
+	GUIEditBox* AddGUIEditBox();
+	GUISlider* AddGUISlider();
+	GUIImage* AddGUIImage();
+	GUIWindow* AddGUIWindow();
+	GUIPane* AddGUIPane();
 private:
 	AppContext* m_context;
 	GUISkin* skin;

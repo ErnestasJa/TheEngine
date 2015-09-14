@@ -39,4 +39,3 @@ public:
 	virtual bool OnEvent(const GUIEvent & e);
 protected:
 };
-typedef std::shared_ptr<GUIButton> GUIButtonPtr;
