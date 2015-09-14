@@ -12,13 +12,16 @@ else:
 
 def download(output_dir, include_dir, source_url, filename):
     full_filename = os.path.join(output_dir, filename)
+    full_filename = full_filename.replace("\\","/") # making paths consistent on windows
     if os.path.exists(full_filename):
         return
 
     include_file = os.path.join(include_dir, filename) if include_dir is not None else None
+    include_file = include_file.replace("\\","/") # making paths consistent on windows
+    
     if include_dir is not None and os.path.exists(include_file):
         print('Copying %s to %s' % (include_file, full_filename))
-        source = 'file://' + os.path.abspath(include_file) # file:// is required for python 3
+        source = 'file:///' + os.path.abspath(include_file) # file:// is required for python 3, file:/// seems to fix windows issues
     else:
         print('Downloading %s from %s to %s' % (filename, source_url, full_filename))
         source = source_url
@@ -26,6 +29,8 @@ def download(output_dir, include_dir, source_url, filename):
     dirname = os.path.dirname(full_filename)
     if not os.path.exists(dirname):
         os.makedirs(dirname)
+    
+    source=source.replace("\\","/") # making paths consistent on windows
     urlretrieve(source, full_filename)
 
 def parse_funcs(filename, regex_string, blacklist):
