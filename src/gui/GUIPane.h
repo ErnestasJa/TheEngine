@@ -27,4 +27,3 @@ public:
 	}
 protected:
 };
-typedef std::shared_ptr<GUIPane> GUIPanePtr;

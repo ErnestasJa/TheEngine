@@ -14,28 +14,13 @@ class Logger;
 class AppContext;
 
 class GUIPane;
-typedef std::shared_ptr<GUIPane> GUIPanePtr;
-
 class GUIWindow;
-typedef std::shared_ptr<GUIWindow> GUIWindowPtr;
-
 class GUIStaticText;
-typedef std::shared_ptr<GUIStaticText> GUIStaticTextPtr;
-
 class GUIButton;
-typedef std::shared_ptr<GUIButton> GUIButtonPtr;
-
 class GUIEditBox;
-typedef std::shared_ptr<GUIEditBox> GUIEditBoxPtr;
-
 class GUICheckbox;
-typedef std::shared_ptr<GUICheckbox> GUICheckboxPtr;
-
 class GUISlider;
-typedef std::shared_ptr<GUISlider> GUISliderPtr;
-
 class GUIImage;
-typedef std::shared_ptr<GUIImage> GUIImagePtr;
 
 class GUIEnvironment : public GUIElement
 {
@@ -106,14 +91,14 @@ public:
 
 	FontRenderer *GetFontRenderer();
 
-	GUIStaticTextPtr AddGUIStaticText();
-	GUIButtonPtr AddGUIButton();
-	GUICheckboxPtr AddGUICheckbox();
-	GUIEditBoxPtr AddGUIEditBox();
-	GUISliderPtr AddGUISlider();
-	GUIImagePtr AddGUIImage();
-	GUIWindowPtr AddGUIWindow();
-	GUIPanePtr AddGUIPane();
+	GUIStaticText* AddGUIStaticText();
+	GUIButton*  AddGUIButton();
+	GUICheckbox* AddGUICheckbox();
+	GUIEditBox* AddGUIEditBox();
+	GUISlider* AddGUISlider();
+	GUIImage* AddGUIImage();
+	GUIWindow* AddGUIWindow();
+	GUIPane* AddGUIPane();
 private:
 	AppContext* m_context;
 	GUISkin* skin;

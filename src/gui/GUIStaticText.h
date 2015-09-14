@@ -34,4 +34,3 @@ public:
 	}
 protected:
 };
-typedef std::shared_ptr<GUIStaticText> GUIStaticTextPtr;

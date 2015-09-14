@@ -28,4 +28,3 @@ public:
 	void set_value(float value);
 protected:
 };
-typedef std::shared_ptr<GUISlider> GUISliderPtr;
