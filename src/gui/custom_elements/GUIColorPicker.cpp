@@ -53,14 +53,13 @@ GUIColorPicker::GUIColorPicker(GUIEnvironment* env, Rect2D<int> dimensions, bool
 	ebB->SetParent(picker);
 	ebB->SetMaxLength(3);
 
-	btnSet = new GUIButton(env, Rect2D<int>(picker->GetRelativeRect().w + 16, picker->GetRelativeRect().y + 104, 32, 16), L"Set");
+	btnSet = new GUIButton(env, Rect2D<int>(picker->GetRelativeRect().w + 16, picker->GetRelativeRect().y + 104, 32, 16), L"['s]Set[s']");
 	btnSet->SetParent(picker);
 
 	GenerateHSVMap(sat->get_value());
 	UpdateValues();
 	UpdateAbsolutePos();
 	this->SetListening(false);
-	this->SetParent(env);
 }
 
 GUIColorPicker::~GUIColorPicker()

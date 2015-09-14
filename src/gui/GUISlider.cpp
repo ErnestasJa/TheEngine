@@ -31,8 +31,6 @@ GUISlider::GUISlider(GUIEnvironment* env, Rect2D<int> dimensions, float min, flo
 		m_slider_pos = (m_cur_value - m_min)*f + absolute_rect.h / 2;
 	}
 	m_vertical = vertical;
-
-	this->SetParent(env);
 }
 
 GUISlider::~GUISlider()

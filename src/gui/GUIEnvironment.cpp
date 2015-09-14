@@ -1,6 +1,6 @@
 #include "Precomp.h"
 
-#include "GUIEnvironment.h"
+#include "GUI.h"
 #include "opengl/Shader.h"
 #include "opengl/GUIQuad.h"
 #include "opengl/SlicedGUIQuad.h"
@@ -38,7 +38,7 @@ GUIEnvironment::GUIEnvironment(AppContext* ctx) :GUIElement(nullptr, Rect2D<int>
 	this->SetName("GUI_ENVIRONMENT");
 	last_char = ' ';
 
-	gui_shader = Shader::LoadShader("res/engine/shaders/gui_quad");
+	gui_shader = Shader::LoadShader("engine/shaders/gui_quad");
 	gui_quad = new GUIQuad();
 	gui_quad->Init();
 
@@ -47,13 +47,12 @@ GUIEnvironment::GUIEnvironment(AppContext* ctx) :GUIElement(nullptr, Rect2D<int>
 
 	skin = new GUISkin();
 
-	skin->load("res/gui/skins/skin_default.xml");
+	skin->load("gui/skins/skin_default.xml");
 
 	skin_atlas = new Texture();
 	image_loader* imgl = new image_loader(m_context->_logger);
-	std::shared_ptr<image> img = std::shared_ptr<image>(imgl->load("res/gui/skins/skin_default2.png"));
+	std::shared_ptr<image> img = std::shared_ptr<image>(imgl->load("gui/skins/skin_default2.png"));
 	skin_atlas->Init(img);
-
 	delete imgl;
 
 	m_font_renderer = new FontRenderer(ctx);
@@ -69,6 +68,62 @@ GUIEnvironment::~GUIEnvironment()
 	delete m_font_renderer;
 	delete gui_shader;
 	delete gui_quad;
+}
+
+GUIStaticText* GUIEnvironment::AddGUIStaticText(Rect2D<int> dimensions, std::wstring text, bool drawbackground)
+{
+	auto ret = new GUIStaticText(this, dimensions, text, drawbackground);
+	ret->SetParent(this);
+	return ret;
+}
+
+GUIButton*  GUIEnvironment::AddGUIButton(Rect2D<int> dimensions, std::wstring text, bool colored, bool toggling, bool toggleStatus)
+{
+	auto ret = new GUIButton(this, dimensions, text, colored, toggling, toggleStatus);
+	ret->SetParent(this);
+	return ret;
+}
+
+GUICheckbox* GUIEnvironment::AddGUICheckbox(Rect2D<int> dimensions, bool checked)
+{
+	auto ret = new GUICheckbox(this, dimensions, checked);
+	ret->SetParent(this);
+	return ret;
+}
+
+GUIEditBox* GUIEnvironment::AddGUIEditBox(Rect2D<int> dimensions, std::wstring text, glm::vec4 text_color, bool drawbackground, bool drawshadow, bool clearonsubmit)
+{
+	auto ret = new GUIEditBox(this, dimensions, text, text_color, drawbackground, drawshadow, clearonsubmit);
+	ret->SetParent(this);
+	return ret;
+}
+
+GUISlider* GUIEnvironment::AddGUISlider(Rect2D<int> dimensions, float min, float max, float pos, bool vertical)
+{
+	auto ret = new GUISlider(this, dimensions, min, max, pos, vertical);
+	ret->SetParent(this);
+	return ret;
+}
+
+GUIImage* GUIEnvironment::AddGUIImage(Rect2D<int> dimensions, std::shared_ptr<Texture> tex, bool multichannel)
+{
+	auto ret = new GUIImage(this, dimensions, tex, multichannel);
+	ret->SetParent(this);
+	return ret;
+}
+
+GUIWindow* GUIEnvironment::AddGUIWindow(Rect2D<int> dimensions, std::wstring titlebar_text, bool clip, bool showclose, bool modal, bool movable)
+{
+	auto ret = new GUIWindow(this, dimensions, titlebar_text, clip, showclose, modal, movable);
+	ret->SetParent(this);
+	return ret;
+}
+
+GUIPane* GUIEnvironment::AddGUIPane(Rect2D<int> dimensions, bool draw)
+{
+	auto ret = new GUIPane(this, dimensions, draw);
+	ret->SetParent(this);
+	return ret;
 }
 
 void GUIEnvironment::update(float delta)
@@ -253,14 +308,14 @@ glm::vec2 GUIEnvironment::get_gui_scale()
 	return gui_scale;
 }
 
-FontRenderer* GUIEnvironment::get_font_renderer()
+FontRenderer* GUIEnvironment::GetFontRenderer()
 {
 	return m_font_renderer;
 }
 
 void GUIEnvironment::draw_gui_quad(Rect2D<int> dims, std::shared_ptr<Texture> tex, bool tile, bool multichannel)
 {
-	Rect2D<float> scaled_dims = scale_gui_rect(dims.as<float>());
+	Rect2D<float> scaled_dims = ScaleGUIRect(dims.as<float>());
 
 	gui_shader->Set();
 	tex->Set(0);
@@ -287,7 +342,7 @@ void GUIEnvironment::draw_gui_quad(Rect2D<int> dims, std::shared_ptr<Texture> te
 
 void GUIEnvironment::draw_gui_quad(Rect2D<int> dims, uint32_t style, bool tile)
 {
-	Rect2D<float> scaled_dims = scale_gui_rect(dims.as<float>());
+	Rect2D<float> scaled_dims = ScaleGUIRect(dims.as<float>());
 
 	gui_shader->Set();
 	skin_atlas->Set(0);
@@ -309,7 +364,7 @@ void GUIEnvironment::draw_gui_quad(Rect2D<int> dims, uint32_t style, bool tile)
 
 void GUIEnvironment::draw_gui_quad(Rect2D<int> dims, glm::vec4 col)
 {
-	Rect2D<float> scaled_dims = scale_gui_rect(dims.as<float>());
+	Rect2D<float> scaled_dims = ScaleGUIRect(dims.as<float>());
 
 	gui_shader->Set();
 
@@ -327,7 +382,7 @@ void GUIEnvironment::draw_gui_quad(Rect2D<int> dims, glm::vec4 col)
 
 void GUIEnvironment::draw_sliced_gui_quad(Rect2D<int> size, std::shared_ptr<Texture> tex, bool tile)
 {
-	Rect2D<float> scaled_dims = scale_gui_rect(size.as<float>());
+	Rect2D<float> scaled_dims = ScaleGUIRect(size.as<float>());
 
 	gui_shader->Set();
 	tex->Set(0);
@@ -347,7 +402,7 @@ void GUIEnvironment::draw_sliced_gui_quad(Rect2D<int> size, std::shared_ptr<Text
 
 void GUIEnvironment::draw_sliced_gui_quad(Rect2D<int> size, uint32_t style)
 {
-	Rect2D<float> scaled_dims = scale_gui_rect(size.as<float>());
+	Rect2D<float> scaled_dims = ScaleGUIRect(size.as<float>());
 
 	gui_shader->Set();
 	skin_atlas->Set(0);
@@ -370,7 +425,7 @@ void GUIEnvironment::draw_sliced_gui_quad(Rect2D<int> size, uint32_t style)
 
 void GUIEnvironment::draw_sliced_gui_quad(Rect2D<int> size, glm::vec4 col)
 {
-	Rect2D<float> scaled_dims = scale_gui_rect(size.as<float>());
+	Rect2D<float> scaled_dims = ScaleGUIRect(size.as<float>());
 
 	gui_shader->Set();
 

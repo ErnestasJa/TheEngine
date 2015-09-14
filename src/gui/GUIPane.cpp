@@ -16,8 +16,6 @@ GUIPane::GUIPane(GUIEnvironment* env, Rect2D<int> dimensions, bool draw) :GUIEle
 
 	absolute_rect = dimensions;
 	relative_rect = absolute_rect;
-
-	this->SetParent(env);
 }
 
 GUIPane::~GUIPane()

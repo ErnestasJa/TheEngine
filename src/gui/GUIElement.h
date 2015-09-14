@@ -18,6 +18,21 @@ enum GUIElementType
 
 	GUIET_COUNT
 };
+
+enum GUIElementHAlignment
+{
+	HALIGN_LEFT,
+	HALIGN_RIGHT,
+	HALIGN_CENTER
+};
+
+enum GUIElementVAlignment
+{
+	VALIGN_TOP,
+	VALIGN_BOTTOM,
+	VALIGN_CENTER
+};
+
 class GUIEnvironment;
 class GUIElement :public GUIEventListener
 {
@@ -104,6 +119,7 @@ public:
 	Rect2D<int> &GetRelativeRect();
 private:
 	GUIElement * search_elements(GUIElement * el, const std::string & name);
+
 protected:
 	GUIElementType Type;
 	uint32_t Id;
@@ -114,5 +130,5 @@ protected:
 	GUIEnvironment *environment;
 	GUIEventListener *event_listener;
 	Rect2D<int> absolute_rect, relative_rect;
-	bool visible, enabled, accept_events, focused, hovered;
+	bool visible, enabled, accept_events, focused, hovered, modal;
 };

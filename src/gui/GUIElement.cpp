@@ -2,6 +2,8 @@
 
 #include "gui/GUIElement.h"
 
+static uint32_t _elementIdCounter = 0;
+
 GUIElement::GUIElement(GUIEnvironment* env, Rect2D<int> dimensions)
 {
 	this->Type = GUIET_ELEMENT;
@@ -14,12 +16,13 @@ GUIElement::GUIElement(GUIEnvironment* env, Rect2D<int> dimensions)
 	visible = true;
 	focused = false;
 	enabled = true;
+	modal = false;
 	accept_events = true;
 
 	this->parent = nullptr;
 	this->event_listener = nullptr;
 	this->environment = env;
-	SetName("gui_element_" + helpers::to_str(rand() % 65535));
+	SetName("gui_element_" + _elementIdCounter++);
 }
 
 GUIElement::~GUIElement()

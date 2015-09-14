@@ -12,7 +12,7 @@ GUIEditBox::GUIEditBox(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring
 	environment = env;
 
 	blinktimer = curspos = lastkey = reptimer = sx = maxlength = 0;
-	font_size = env->get_font_renderer()->GetCurrentFont()->avgheight;
+	font_size = env->GetFontRenderer()->GetCurrentFont()->avgheight;
 
 	absolute_rect = dimensions;
 	relative_rect = absolute_rect;
@@ -27,8 +27,6 @@ GUIEditBox::GUIEditBox(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring
 	_my = absolute_rect.y + (absolute_rect.h - font_size) / 2;
 
 	this->clearonsubmit = clearonsubmit;
-
-	this->SetParent(env);
 }
 
 GUIEditBox::~GUIEditBox()
@@ -51,11 +49,11 @@ void GUIEditBox::Render()
 	_mw = absolute_rect.w - 5;
 	_my = absolute_rect.y + (absolute_rect.h - font_size) / 2;
 
-	sx = _mw - 8 - environment->get_font_renderer()->GetTextDimensions(m_text.substr(0, curspos)).x;
+	sx = _mw - 8 - environment->GetFontRenderer()->GetTextDimensions(m_text.substr(0, curspos)).x;
 	if (sx > 0)
 		sx = 0;
 
-	FontRenderer* fr = this->environment->get_font_renderer();
+	FontRenderer* fr = this->environment->GetFontRenderer();
 
 	// RECT
 	if (this->IsFocused())
@@ -112,7 +110,7 @@ bool GUIEditBox::OnEvent(const GUIEvent & e)
 	case key_typed:
 		if (maxlength == 0 || m_text.length() < maxlength)
 		{
-			lastkey = environment->get_last_char();
+			lastkey = environment->GetLastChar();
 			//printf("lastchar:%lc %lc\n",lastkey,'è');
 			temp = L"";
 			temp += lastkey;
@@ -121,7 +119,7 @@ bool GUIEditBox::OnEvent(const GUIEvent & e)
 		break;
 
 	case key_pressed:
-		switch (environment->get_last_key())
+		switch (environment->GetLastKey())
 		{
 		case GLFW_KEY_ENTER:
 			if (clearonsubmit)
@@ -157,7 +155,7 @@ bool GUIEditBox::OnEvent(const GUIEvent & e)
 		break;
 
 	case text_paste:
-		add_text(curspos, environment->get_clipboard());
+		add_text(curspos, environment->GetClipboard());
 		break;
 
 	default:
