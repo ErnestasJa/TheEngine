@@ -70,6 +70,62 @@ GUIEnvironment::~GUIEnvironment()
 	delete gui_quad;
 }
 
+GUIStaticText* GUIEnvironment::AddGUIStaticText(Rect2D<int> dimensions, std::wstring text = L"text", bool drawbackground = false)
+{
+	auto ret = new GUIStaticText(this, dimensions, text, drawbackground);
+	ret->SetParent(this);
+	return ret;
+}
+
+GUIButton*  GUIEnvironment::AddGUIButton(Rect2D<int> dimensions, std::wstring text = L"text", bool colored = false, bool toggling = false, bool toggleStatus = false)
+{
+	auto ret = new GUIButton(this, dimensions, text, colored, toggling, toggleStatus);
+	ret->SetParent(this);
+	return ret;
+}
+
+GUICheckbox* GUIEnvironment::AddGUICheckbox(Rect2D<int> dimensions, bool checked)
+{
+	auto ret = new GUICheckbox(this, dimensions, checked);
+	ret->SetParent(this);
+	return ret;
+}
+
+GUIEditBox* GUIEnvironment::AddGUIEditBox(Rect2D<int> dimensions, std::wstring text = L"text", glm::vec4 text_color = glm::vec4(1, 1, 1, 1), bool drawbackground = false, bool drawshadow = false, bool clearonsubmit = false)
+{
+	auto ret = new GUIEditBox(this, dimensions, text, text_color, drawbackground, drawshadow, clearonsubmit);
+	ret->SetParent(this);
+	return ret;
+}
+
+GUISlider* GUIEnvironment::AddGUISlider(Rect2D<int> dimensions, float min, float max, float pos, bool vertical = false)
+{
+	auto ret = new GUISlider(this, dimensions, min, max, pos, vertical);
+	ret->SetParent(this);
+	return ret;
+}
+
+GUIImage* GUIEnvironment::AddGUIImage(Rect2D<int> dimensions, std::shared_ptr<Texture> tex, bool multichannel = true)
+{
+	auto ret = new GUIImage(this, dimensions, tex, multichannel);
+	ret->SetParent(this);
+	return ret;
+}
+
+GUIWindow* GUIEnvironment::AddGUIWindow(Rect2D<int> dimensions, std::wstring titlebar_text = L"Window", bool clip = true, bool showclose = true, bool modal = false, bool movable = true)
+{
+	auto ret = new GUIWindow(this, dimensions, titlebar_text, clip, showclose, modal, movable);
+	ret->SetParent(this);
+	return ret;
+}
+
+GUIPane* GUIEnvironment::AddGUIPane(Rect2D<int> dimensions, bool draw = true)
+{
+	auto ret = new GUIPane(this, dimensions, draw);
+	ret->SetParent(this);
+	return ret;
+}
+
 void GUIEnvironment::update(float delta)
 {
 }

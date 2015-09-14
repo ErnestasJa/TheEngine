@@ -34,8 +34,6 @@ GUIButton::GUIButton(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring t
 	_textOverlay = new GUIStaticText(environment, Rect2D<int>((int)(dimensions.w / 2.f - textDim.x / 2.f), (int)(dimensions.h / 2.f - textDim.y), dimensions.w, dimensions.h), text, false);
 	_textOverlay->SetListening(false);
 	_textOverlay->SetParent(this);
-
-	this->SetParent(env);
 }
 
 GUIButton::~GUIButton()

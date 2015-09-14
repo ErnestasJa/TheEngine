@@ -27,8 +27,6 @@ GUIEditBox::GUIEditBox(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring
 	_my = absolute_rect.y + (absolute_rect.h - font_size) / 2;
 
 	this->clearonsubmit = clearonsubmit;
-
-	this->SetParent(env);
 }
 
 GUIEditBox::~GUIEditBox()

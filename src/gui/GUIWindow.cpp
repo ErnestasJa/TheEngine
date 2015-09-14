@@ -41,8 +41,6 @@ GUIWindow::GUIWindow(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring t
 		close_btn->SetParent(this);
 		close_btn->SetEventListener(this);
 	}
-
-	this->SetParent(env);
 }
 
 GUIWindow::~GUIWindow()

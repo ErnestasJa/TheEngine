@@ -91,14 +91,14 @@ public:
 
 	FontRenderer *GetFontRenderer();
 
-	GUIStaticText* AddGUIStaticText();
-	GUIButton*  AddGUIButton();
-	GUICheckbox* AddGUICheckbox();
-	GUIEditBox* AddGUIEditBox();
-	GUISlider* AddGUISlider();
-	GUIImage* AddGUIImage();
-	GUIWindow* AddGUIWindow();
-	GUIPane* AddGUIPane();
+	GUIStaticText* AddGUIStaticText(Rect2D<int> dimensions, std::wstring text = L"text", bool drawbackground = false);
+	GUIButton*  AddGUIButton(Rect2D<int> dimensions, std::wstring text = L"text", bool colored = false, bool toggling = false, bool toggleStatus = false);
+	GUICheckbox* AddGUICheckbox(Rect2D<int> dimensions, bool checked);
+	GUIEditBox* AddGUIEditBox(Rect2D<int> dimensions, std::wstring text = L"text", glm::vec4 text_color = glm::vec4(1, 1, 1, 1), bool drawbackground = false, bool drawshadow = false, bool clearonsubmit = false);
+	GUISlider* AddGUISlider(Rect2D<int> dimensions, float min, float max, float pos, bool vertical = false);
+	GUIImage* AddGUIImage(Rect2D<int> dimensions, std::shared_ptr<Texture> tex, bool multichannel = true);
+	GUIWindow* AddGUIWindow(Rect2D<int> dimensions, std::wstring titlebar_text = L"Window", bool clip = true, bool showclose = true, bool modal = false, bool movable = true);
+	GUIPane* AddGUIPane(Rect2D<int> dimensions, bool draw = true);
 private:
 	AppContext* m_context;
 	GUISkin* skin;

@@ -19,8 +19,6 @@ GUIImage::GUIImage(GUIEnvironment* env, Rect2D<int> dimensions, std::shared_ptr<
 
 	//it's an image...
 	this->SetListening(false);
-
-	this->SetParent(env);
 }
 
 GUIImage::~GUIImage()

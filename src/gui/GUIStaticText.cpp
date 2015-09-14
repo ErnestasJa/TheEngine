@@ -19,8 +19,6 @@ GUIStaticText::GUIStaticText(GUIEnvironment* env, Rect2D<int> dimensions, std::w
 
 	m_text = text;
 	_font = "default";
-
-	this->SetParent(env);
 }
 
 GUIStaticText::~GUIStaticText()

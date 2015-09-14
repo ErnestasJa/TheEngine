@@ -20,8 +20,6 @@ GUICheckbox::GUICheckbox(GUIEnvironment* env, Rect2D<int> dimensions, bool check
 
 	absolute_rect = dimensions;
 	relative_rect = absolute_rect;
-
-	this->SetParent(env);
 }
 
 GUICheckbox::~GUICheckbox()
