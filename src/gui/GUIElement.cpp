@@ -12,6 +12,9 @@ GUIElement::GUIElement(GUIEnvironment* env, Rect2D<int> dimensions)
 
 	Id = -1;
 
+	_hAlign = GUIElementHAlignment::HALIGN_LEFT;
+	_vAlign = GUIElementVAlignment::VALIGN_TOP;
+
 	hovered = false;
 	visible = true;
 	focused = false;
@@ -104,10 +107,61 @@ void GUIElement::RenderChildren()
 void GUIElement::UpdateAbsolutePos()
 {
 	if (this->parent != nullptr)
-		this->absolute_rect =
-		Rect2D<int>(parent->absolute_rect.x + relative_rect.x,
-			parent->absolute_rect.y + relative_rect.y,
-			this->absolute_rect.w, this->absolute_rect.h);
+	{
+		switch (_hAlign)
+		{
+
+		case HALIGN_CENTER:
+		{
+			this->absolute_rect.x = parent->absolute_rect.x + parent->absolute_rect.w / 2 - relative_rect.w / 2 + relative_rect.x;
+			break;
+		}
+
+		case HALIGN_RIGHT:
+		{
+			this->absolute_rect.x = parent->absolute_rect.x + parent->absolute_rect.w - relative_rect.w - relative_rect.x;
+			break;
+		}
+
+		case HALIGN_LEFT:
+		default:
+		{
+			this->absolute_rect.x = relative_rect.x + parent->absolute_rect.x;
+			break;
+		}
+
+		}
+
+		switch (_vAlign)
+		{
+
+		case VALIGN_CENTER:
+		{
+			this->absolute_rect.y = parent->absolute_rect.y + parent->absolute_rect.h / 2 - relative_rect.h / 2 - relative_rect.y;
+			break;
+		}
+
+		case VALIGN_BOTTOM:
+		{
+			this->absolute_rect.y = parent->absolute_rect.y + parent->absolute_rect.h - relative_rect.h - relative_rect.x;
+			break;
+		}
+
+		case VALIGN_TOP:
+		default:
+		{
+			this->absolute_rect.y = relative_rect.y + parent->absolute_rect.y;
+			break;
+		}
+
+		}
+		//this->absolute_rect.x = relative_rect.x + parent->absolute_rect.x;
+		//this->absolute_rect.y = relative_rect.y + parent->absolute_rect.y;
+
+		this->absolute_rect.w = relative_rect.w;
+		this->absolute_rect.h = relative_rect.h;
+	}
+
 	for (GUIElement *e : children)
 		e->UpdateAbsolutePos();
 }
@@ -116,6 +170,12 @@ void GUIElement::Move(const glm::vec2 &pos)
 {
 	relative_rect.SetPosition(pos.x, pos.y);
 	UpdateAbsolutePos();
+}
+
+void GUIElement::SetAlignment(GUIElementHAlignment hAlign, GUIElementVAlignment vAlign)
+{
+	_hAlign = hAlign;
+	_vAlign = vAlign;
 }
 
 void GUIElement::SetName(std::string name)

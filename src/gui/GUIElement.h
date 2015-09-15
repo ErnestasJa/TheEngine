@@ -67,6 +67,8 @@ public:
 
 	void Move(const glm::vec2 &pos);
 
+	void SetAlignment(GUIElementHAlignment hAlign = HALIGN_LEFT, GUIElementVAlignment vAlign = VALIGN_TOP);
+
 	void SetName(std::string name);
 
 	void SetEventListener(GUIEventListener *listener);
@@ -129,6 +131,8 @@ protected:
 	vector<GUIElement*> children;
 	GUIEnvironment *environment;
 	GUIEventListener *event_listener;
+	GUIElementHAlignment _hAlign;
+	GUIElementVAlignment _vAlign;
 	Rect2D<int> absolute_rect, relative_rect;
 	bool visible, enabled, accept_events, focused, hovered, modal;
 };
