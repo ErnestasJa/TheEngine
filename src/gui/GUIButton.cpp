@@ -16,7 +16,6 @@
 GUIButton::GUIButton(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring text, bool colored, bool toggle, bool toggleStatus) : GUIElement(env, dimensions)
 {
 	this->Type = GUIET_BUTTON;
-	environment = env;
 
 	absolute_rect = dimensions;
 	relative_rect = absolute_rect;
@@ -30,10 +29,11 @@ GUIButton::GUIButton(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring t
 	_imageOverlay = nullptr;
 
 	glm::vec2 textDim = this->environment->GetFontRenderer()->GetTextDimensions(text);
-	printf("Text dim Y: %f\n", textDim.y);
-	_textOverlay = new GUIStaticText(environment, Rect2D<int>((int)(dimensions.w / 2.f - textDim.x / 2.f), (int)(dimensions.h / 2.f - textDim.y), dimensions.w, dimensions.h), text, false);
-	_textOverlay->SetListening(false);
+	printf("Text dim X: %f Y: %f\n", textDim.x, textDim.y);
+	_textOverlay = env->AddGUIStaticText(Rect2D<int>(0, 0, textDim.x, textDim.y), text, false);
 	_textOverlay->SetParent(this);
+	_textOverlay->SetAlignment(HALIGN_CENTER, VALIGN_CENTER);
+	_textOverlay->SetListening(false);
 }
 
 GUIButton::~GUIButton()

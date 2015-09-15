@@ -25,7 +25,7 @@ GUIElement::GUIElement(GUIEnvironment* env, Rect2D<int> dimensions)
 	this->parent = nullptr;
 	this->event_listener = nullptr;
 	this->environment = env;
-	SetName("gui_element_" + _elementIdCounter++);
+	SetName(std::string("gui_element_") + helpers::to_str(_elementIdCounter++));
 }
 
 GUIElement::~GUIElement()
@@ -108,58 +108,13 @@ void GUIElement::UpdateAbsolutePos()
 {
 	if (this->parent != nullptr)
 	{
-		switch (_hAlign)
-		{
-
-		case HALIGN_CENTER:
-		{
-			this->absolute_rect.x = parent->absolute_rect.x + parent->absolute_rect.w / 2 - relative_rect.w / 2 + relative_rect.x;
-			break;
-		}
-
-		case HALIGN_RIGHT:
-		{
-			this->absolute_rect.x = parent->absolute_rect.x + parent->absolute_rect.w - relative_rect.w - relative_rect.x;
-			break;
-		}
-
-		case HALIGN_LEFT:
-		default:
-		{
-			this->absolute_rect.x = relative_rect.x + parent->absolute_rect.x;
-			break;
-		}
-
-		}
-
-		switch (_vAlign)
-		{
-
-		case VALIGN_CENTER:
-		{
-			this->absolute_rect.y = parent->absolute_rect.y + parent->absolute_rect.h / 2 - relative_rect.h / 2 - relative_rect.y;
-			break;
-		}
-
-		case VALIGN_BOTTOM:
-		{
-			this->absolute_rect.y = parent->absolute_rect.y + parent->absolute_rect.h - relative_rect.h - relative_rect.x;
-			break;
-		}
-
-		case VALIGN_TOP:
-		default:
-		{
-			this->absolute_rect.y = relative_rect.y + parent->absolute_rect.y;
-			break;
-		}
-
-		}
-		//this->absolute_rect.x = relative_rect.x + parent->absolute_rect.x;
-		//this->absolute_rect.y = relative_rect.y + parent->absolute_rect.y;
+		this->absolute_rect.x = relative_rect.x + parent->absolute_rect.x;
+		this->absolute_rect.y = relative_rect.y + parent->absolute_rect.y;
 
 		this->absolute_rect.w = relative_rect.w;
 		this->absolute_rect.h = relative_rect.h;
+
+		this->absolute_rect.calculate_bounds();
 	}
 
 	for (GUIElement *e : children)
@@ -176,6 +131,47 @@ void GUIElement::SetAlignment(GUIElementHAlignment hAlign, GUIElementVAlignment 
 {
 	_hAlign = hAlign;
 	_vAlign = vAlign;
+
+	if (this->parent != nullptr)
+	{
+		switch (_hAlign)
+		{
+
+		case HALIGN_CENTER:
+		{
+			this->relative_rect.x = parent->absolute_rect.w / 2 - relative_rect.w / 2 + relative_rect.x;
+			break;
+		}
+
+		case HALIGN_RIGHT:
+		{
+			this->relative_rect.x = parent->absolute_rect.w - relative_rect.w - relative_rect.x;
+			break;
+		}
+
+		}
+
+		switch (_vAlign)
+		{
+
+		case VALIGN_CENTER:
+		{
+			this->relative_rect.y = parent->absolute_rect.h / 2 - relative_rect.h / 2 - relative_rect.y;
+			break;
+		}
+
+		case VALIGN_BOTTOM:
+		{
+			this->relative_rect.y = parent->absolute_rect.h - relative_rect.h - relative_rect.y;
+			break;
+		}
+
+		}
+
+		this->relative_rect.calculate_bounds();
+
+		UpdateAbsolutePos();
+	}
 }
 
 void GUIElement::SetName(std::string name)

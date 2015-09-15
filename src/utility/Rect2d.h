@@ -92,12 +92,15 @@ public:
 		return Rect2D<B>(x, y, w, h);
 	}
 
-	T x, y, x2, y2, w, h;
-protected:
-private:
 	void calculate_bounds()
 	{
 		x2 = x + w;
 		y2 = y + h;
 	}
+
+	T x, y, x2, y2, w, h;
+
+protected:
+private:
+	
 };
