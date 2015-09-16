@@ -29,7 +29,7 @@ GUIButton::GUIButton(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring t
 	_imageOverlay = nullptr;
 
 	glm::vec2 textDim = this->environment->GetFontRenderer()->GetTextDimensions(text);
-	printf("Text dim X: %f Y: %f\n", textDim.x, textDim.y);
+	//printf("Text dim X: %f Y: %f\n", textDim.x, textDim.y);
 	_textOverlay = env->AddGUIStaticText(Rect2D<int>(0, 0, textDim.x, textDim.y), text, false);
 	_textOverlay->SetParent(this);
 	_textOverlay->SetAlignment(HALIGN_CENTER, VALIGN_CENTER);
@@ -90,7 +90,7 @@ bool GUIButton::OnEvent(const GUIEvent & e)
 				break;
 
 		case gui_event_type::element_exitted:
-			_style = this->enabled ? gui_skin_button_active : gui_skin_button_disabled;
+			_style = gui_skin_button_active;
 			GUI_FIRE_EVENT(GUIEvent(element_exitted, this, this))
 				break;
 
