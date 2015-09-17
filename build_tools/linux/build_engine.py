@@ -5,39 +5,27 @@ class OS:
     linux = "linux"
     windows = "windows"
 
-lib_folder_mappings = {
-    "boost" : "boost"
-}
-
 class Helper:
     def __init__(self):
-        self.buildPath = "build"
-        self.binPath = "bin"
-        self.platform = ""
-        self.libpath = "libs"
-        self.enginePath = "src"
-        self.liboutputpath = ""
-        self.fullLibPath = ""
-        self.fullLibBuildPath = ""
-        self.fullEnginePath = ""
-        self.fullBuildPath = ""
-        self.fullProjectBinPath = ""
+        self.enginePath = os.path.dirname(os.path.dirname(os.getcwd()))
+        self.paths = {
+            "engine": os.path.join(self.enginePath, "src"),
+            "libraries": os.path.join(self.enginePath, "libs") 
+        }
+        
         self.buildcores = "-j9"
-        self.projectPath = os.path.dirname(os.path.dirname(os.getcwd()))
-        print(self.projectPath)
 
+        self.platform = ""
         if os.name == "posix":
             self.platform = OS.linux
         else:
             self.platform = OS.windows
 
-        self.liboutputpath = os.path.join(os.path.join(self.projectPath, self.libpath), self.platform);
-        self.fullLibPath = os.path.join(self.projectPath, self.libpath)
-        self.fullLibBuildPath = os.path.join(self.fullLibPath, self.buildPath)
-        self.fullEnginePath = os.path.join(self.projectPath, self.enginePath)
-        self.fullBuildPath = os.path.join(self.projectPath, self.buildPath)
-        self.fullProjectBinPath = os.path.join(self.projectPath, self.binPath)
+    def get_path_for(self, name):
+        return self.paths[name]
 
+    def get_build_path_for(self, name):
+        return os.path.join(self.paths[name],"build")
 
     def get_libs_from_dir(self, dir):
         match = []
@@ -59,21 +47,21 @@ class Helper:
         return match
 
     def get_lib_path(self, libFolderName):
-        return os.path.join(self.fullLibPath, libFolderName)
+        return os.path.join(self.get_path_for("libraries"), libFolderName)
 
     def copy_libs(self):
-        os.chdir(self.projectPath)
+        os.chdir(self.get_path_for("engine"))
 
         matches = []
         shared_matches = []
 
         directories = [
-            self.fullLibBuildPath,
+            self.get_path_for("libraries"),
             self.get_lib_path("python"),
             self.get_lib_path("bullet"),
             self.get_lib_path("libccd"),
             self.get_lib_path("boost"),
-            os.path.join(self.fullEnginePath, self.buildPath)
+            self.get_build_path_for("engine")
         ]
         
         #copy static libs
@@ -81,7 +69,7 @@ class Helper:
             matches.extend(self.get_libs_from_dir(directory))
 
         for f in matches:
-            filename = os.path.join(self.fullLibBuildPath, f[0])
+            filename = os.path.join(self.get_build_path_for('libraries'), f[0])
             try:
                 shutil.move(f[1], filename)
             except:
@@ -91,8 +79,8 @@ class Helper:
         for directory in directories:
             shared_matches.extend(self.get_shared_libs_from_dir(directory))
 
-        dbgPath = os.path.join(self.fullProjectBinPath,"Debug")
-        relPath = os.path.join(self.fullProjectBinPath,"Release")
+        dbgPath = os.path.join(self.get_build_path_for('engine'), "Debug")
+        relPath = os.path.join(self.get_build_path_for('engine'), "Release")
        
         if os.path.isdir(dbgPath) == False:
             os.makedirs(dbgPath)
@@ -103,12 +91,16 @@ class Helper:
         for f in shared_matches:
             dbg_filename = os.path.join(dbgPath, f[0])
             rel_filename = os.path.join(relPath, f[0])
-            shutil.copyfile(f[1], dbg_filename)
-            shutil.copyfile(f[1], rel_filename)
+            
+            if f[1]!=dbg_filename:
+                shutil.copyfile(f[1], dbg_filename)
+            
+            if f[1]!=rel_filename:
+                shutil.copyfile(f[1], rel_filename)
             
 
         #Write lib names to file for easy config
-        fname = os.path.join(self.fullLibBuildPath, "liblist.txt")
+        fname = os.path.join(self.get_build_path_for('libraries'), "liblist.txt")
         file = open(fname, "w")
 
         print("Libs found: " + str(len(matches)))
@@ -119,55 +111,54 @@ class Helper:
 
         file.close()
 
-        os.chdir(self.projectPath)
+        os.chdir(self.get_path_for('engine'))
 
     def compile_other_libs(self):
-        os.chdir(self.fullLibPath)
+        os.chdir(self.get_path_for('libraries'))
 
         try:
-            os.mkdir(self.buildPath)
+            os.mkdir('build')
         except OSError as e:
             print("Caught this little bad boy: " + str(e))
         
-        os.chdir(self.buildPath)
+        os.chdir('build')
 
         if(self.platform == "linux"):
             subprocess.call('cmake ../ -DCMAKE_BUILD_TYPE=RelWithDebInfo -G "Unix Makefiles"', shell=True)
             subprocess.call('make ' + self.buildcores, shell=True)
         
-        os.chdir(self.projectPath)
+        os.chdir(self.get_path_for('engine'))
 
     def compile_engine(self):
-        os.chdir(self.fullEnginePath)
+        os.chdir(self.get_path_for('engine'))
 
         try:
-            os.mkdir(self.buildPath)
+            os.mkdir('build')
         except OSError as e:
-            print("Caught this little bad boy: " + str(e))
+            pass
 
-        os.chdir(self.buildPath)
+        os.chdir('build')
 
         if(self.platform == "linux"):
-            subprocess.call('cmake ../ -DCMAKE_BUILD_TYPE=RelWithDebInfo -G "Unix Makefiles" -DPROJECT_PATH:STRING="/home/serengeor/Coding/Project"', shell=True)
+            subprocess.call('cmake ../ -DCMAKE_BUILD_TYPE=RelWithDebInfo -G "Unix Makefiles" -DPROJECT_PATH:STRING="/home/serengeor/Coding/Project/TheEngine"', shell=True)
             subprocess.call('make ' + self.buildcores, shell=True)
        
-        os.chdir(self.projectPath)
+        os.chdir(self.get_path_for('engine'))
 
     def compile_boost_build_sys(self):
-        os.chdir(os.path.join(self.fullLibPath, lib_folder_mappings["boost"]))
+        os.chdir(self.get_lib_path('boost'))
         subprocess.call('sh bootstrap.sh gcc', shell=True)
-        os.chdir(self.projectPath)
+        os.chdir(self.get_path_for('engine'))
 
     def compile_boost_bcp_tool(self):
-        os.chdir(os.path.join(self.fullLibPath, lib_folder_mappings["boost"]))
+        os.chdir(self.get_lib_path('boost'))
         subprocess.call('./b2 tools/bcp', shell=True)
-        os.chdir(self.projectPath)
+        os.chdir(self.get_path_for('engine'))
 
     def compile_boost(self):
-        os.chdir(os.path.join(self.fullLibPath, lib_folder_mappings["boost"]))
+        os.chdir(self.get_lib_path('boost'))
         subprocess.call('./b2 ' + self.buildcores + ' --without-python --build-dir="../../build"  toolset=gcc link=static threading=multi release', shell=True)
-        os.chdir(self.projectPath)
-
+        os.chdir(self.get_path_for('engine'))
 
 from tkinter import Tk, Frame, Checkbutton, Button, OptionMenu, Label, W
 from tkinter import IntVar, StringVar, RIGHT, LEFT, BOTH
@@ -246,7 +237,7 @@ class Launcher(Frame):
 
 def main():
     root = Tk()
-    root.geometry("250x150+300+300")
+    root.geometry("250x150+300+400")
     app = Launcher(root)
     root.mainloop()  
 
