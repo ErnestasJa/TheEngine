@@ -234,7 +234,7 @@ template <>
 void BufferObject<glm::detail::tvec4<uint8_t>>::Upload()
 {
 	glBindBuffer(GL_ARRAY_BUFFER, this->Id);
-	glBufferData(GL_ARRAY_BUFFER, data.size()*sizeof(glm::detail::tvec4<uint8_t>), &data[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, GetSize()*sizeof(glm::detail::tvec4<uint8_t>), data.size() > 0 ? &data[0] : NULL, GL_STATIC_DRAW);
 	//glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
