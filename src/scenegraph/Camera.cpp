@@ -201,11 +201,11 @@ glm::mat4x4 Camera::GetViewProjMat()
 	return GetProjectionMat()*GetViewMat();
 }
 
-void Camera::Orbit(glm::vec3 point, float distance, float angleX, float angleY)
+void Camera::Orbit(glm::vec3 point, float distance, float verticalAngle, float horizontalAngle)
 {
-	float camX = distance * sin(glm::radians(angleY)) * sin(glm::radians(angleX));
-	float camY = distance * cos(glm::radians(angleX));
-	float camZ = distance * cos(glm::radians(angleY)) * sin(glm::radians(angleX));
+	float camX = distance * sin(glm::radians(horizontalAngle)) * sin(glm::radians(verticalAngle));
+	float camY = distance * cos(glm::radians(verticalAngle));
+	float camZ = distance * cos(glm::radians(horizontalAngle)) * sin(glm::radians(verticalAngle));
 
 	m_pos = point + glm::vec3(camX, camY, camZ);
 	m_rot = glm::toQuat(glm::inverse(glm::lookAt(m_pos, point, glm::vec3(0, 1, 0))));
