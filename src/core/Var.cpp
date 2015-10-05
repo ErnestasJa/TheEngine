@@ -23,6 +23,7 @@ Var::Var()
 	m_type = VARNULL;
 	m_count = 0;
 	m_name = nullptr;
+	m_flags = 0;
 }
 
 Var::Var(const Var & o)
@@ -32,6 +33,7 @@ Var::Var(const Var & o)
 		m_count = 0;
 		m_type = VARNULL;
 		m_name = nullptr;
+		m_flags = 0;
 		return;
 	}
 	else if (o.Name() == nullptr)
@@ -42,6 +44,7 @@ Var::Var(const Var & o)
 	allocAndCopyStr(m_name, o.Name());
 	m_type = o.Type();
 	m_count = o.Count();
+	m_flags = o.Flags();
 
 	if (m_count)
 		switch (m_type)
@@ -73,7 +76,6 @@ Var::Var(const Var & o)
 Var & Var::operator = (const Var & other)
 {
 	(*this) = Var(other);
-	std::cout << "Operator = " << std::endl;
 	return *this;
 }
 
@@ -84,6 +86,7 @@ Var::Var(const char * name, float data)
 	m_type = VARF;
 	m_dataf = data;
 	m_count = 1;
+	m_flags = 0;
 }
 
 Var::Var(const char * name, float * data, uint8_t count)
@@ -93,6 +96,7 @@ Var::Var(const char * name, float * data, uint8_t count)
 	m_datafv = new float[count];
 	std::copy(data, data + count, m_datafv);
 	m_count = count;
+	m_flags = 0;
 }
 
 Var::Var(const char * name, int data)
@@ -101,6 +105,7 @@ Var::Var(const char * name, int data)
 	m_type = VARI;
 	m_datai = data;
 	m_count = 1;
+	m_flags = 0;
 }
 
 Var::Var(const char * name, int * data, uint8_t count)
@@ -110,6 +115,7 @@ Var::Var(const char * name, int * data, uint8_t count)
 	m_dataiv = new int[count];
 	std::copy(data, data + count, m_dataiv);
 	m_count = count;
+	m_flags = 0;
 }
 
 Var::Var(const char * name, const char * data)
@@ -117,6 +123,15 @@ Var::Var(const char * name, const char * data)
 	allocAndCopyStr(m_name, name);
 	m_type = VARS;
 	m_count = allocAndCopyStr(m_datas, data);
+	m_flags = 0;
+}
+
+Var::Var(const char * name, const std::string & data)
+{
+	allocAndCopyStr(m_name, name);
+	m_type = VARS;
+	m_count = allocAndCopyStr(m_datas, data.c_str());
+	m_flags = 0;
 }
 
 Var::~Var()
@@ -146,6 +161,11 @@ Var::~Var()
 VarType Var::Type() const
 {
 	return (VarType)m_type;
+}
+
+uint8_t Var::Flags() const
+{
+	return m_flags;
 }
 
 uint8_t Var::Count() const
@@ -183,6 +203,23 @@ const char * Var::ValueS() const
 	return m_datas;
 }
 
+
+void Var::AppendFlags(uint8_t flags)
+{
+	m_flags |= flags;
+}
+
+void Var::SetFlags(uint8_t flags)
+{
+	m_flags = flags;
+}
+
+void Var::RemoveFlags(uint8_t flags)
+{
+	m_flags = m_flags & ~flags;
+}
+
+
 void Var::Value(int * values, uint8_t count)
 {
 	///optimize realocs
@@ -215,10 +252,10 @@ void Var::Value(int value)
 	m_datai = value;
 }
 
-void Var::Value(const char* value)
+void Var::Value(const std::string & value)
 {
 	if (m_datas)
 		delete[] m_datas;
 
-	allocAndCopyStr(m_datas, value);
+	allocAndCopyStr(m_datas, value.c_str());
 }

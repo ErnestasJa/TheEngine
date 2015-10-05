@@ -9,7 +9,9 @@ public:
 	VarJsonReader(Logger * l);
 	~VarJsonReader();
 
-	bool Load(void * buffer, uint32_t size, VarGroup & group);
+	bool Read(void * buffer, uint32_t size, VarGroup & group);
+	bool Read(const std::string & fileName, VarGroup & group);
+	bool Write(const std::string & fileName, VarGroup & group);
 
 private:
 	Logger * m_logger;
