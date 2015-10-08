@@ -6,7 +6,7 @@
 #include "utility/Logger.h"
 #include "utility/Timer.h"
 #include "InputHandler.h"
-#include "core/SettingsManager.h"
+#include "SettingsManager.h"
 
 struct AppContext
 {

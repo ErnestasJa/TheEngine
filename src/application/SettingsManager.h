@@ -6,7 +6,6 @@
 #include "core/Var.h"
 #include "core/VarGroup.h"
 #include "core/VarJsonReader.h"
-#include "core/FileSystemHelpers.h"
 
 class ApplicationSettingsManager: public VarGroup
 {

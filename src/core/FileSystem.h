@@ -18,7 +18,7 @@ public:
 	Path GetWorkingDirectory();
 	bool AddSearchDirectory(const Path & path);
 
-	File OpenWrite(const Path & path);
+	//File OpenWrite(const Path & path);
 	File OpenRead(const Path & path);
 
 private:	

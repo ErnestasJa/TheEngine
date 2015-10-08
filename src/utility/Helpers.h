@@ -14,6 +14,7 @@
 
 namespace helpers
 {
+	[[deprecated("Use filesystem functionality instead.")]]
 	uint32_t read(const std::string & file, char *& buf);
 
 	struct u8vec4
@@ -51,6 +52,7 @@ inline std::shared_ptr<T> share(T* t)
 
 #define _DEBUG_OGL
 #ifdef _DEBUG_OGL
+
 
 inline void CheckOpenGLError(const char* stmt, const char* fname, int line)
 {
