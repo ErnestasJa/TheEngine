@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 2.6)
 set(Python_ADDITIONAL_VERSIONS 3.4)
 project (ENGINE)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wfatal-errors -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -w -Wfatal-errors -std=c++11")
 
 
 set(PROJECT_PATH "" CACHE FILEPATH "Path to root directory of project")
@@ -64,6 +64,7 @@ add_library(engine STATIC
 ./core/Var.cpp
 ./core/VarJsonReader.cpp
 ./core/FileSystem.cpp
+./core/File.cpp
 ./scenegraph/Camera.cpp
 ./gui/font_rendering/FontFamily.cpp
 ./gui/font_rendering/Font.cpp
