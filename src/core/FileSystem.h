@@ -1,25 +1,29 @@
 #ifndef FILESYSTEM
 #define FILESYSTEM
 
-#include "utility/vector.h"
+#include "utility/Vector.h"
+#include "boost/filesystem/path.hpp"
+#include "IFile.h"
 
 using Path = boost::filesystem::path;
-class File;
-struct AppContext;
+class AppContext;
 
 class FileSystem
 {
 public:
-	FileSystem(AppContext * appContext);
+	FileSystem(AppContext * appContext, const char * argv);
 	virtual ~FileSystem();
 
 	bool SetWriteDirectory(const Path & path);
 	Path GetWriteDirectory();
 	Path GetWorkingDirectory();
 	bool AddSearchDirectory(const Path & path);
+	bool DirectoryExists(const Path & path);
+	bool FileExists(const Path & path);
+	bool CreateDirectory(const Path & path);
 
-	//File OpenWrite(const Path & path);
-	File OpenRead(const Path & path);
+	FilePtr OpenWrite(const Path & path);
+	FilePtr OpenRead(const Path & path);
 
 private:	
 	AppContext * m_appContext;

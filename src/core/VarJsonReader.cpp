@@ -5,11 +5,14 @@
 #include "core/Var.h"
 #include "core/VarGroup.h"
 #include "utility/Logger.h"
+#include "application/AppContext.h"
 
 
-VarJsonReader::VarJsonReader(Logger * l)
+VarJsonReader::VarJsonReader(AppContext * appContext)
 {
-	m_logger = l;
+	m_appContext = appContext;
+	m_logger = appContext->logger;
+	m_fileSystem = appContext->fileSystem;
 }
 
 VarJsonReader::~VarJsonReader()
@@ -17,7 +20,7 @@ VarJsonReader::~VarJsonReader()
 }
 
 void LoadGroup(VarGroup & g, Json::Value & jg, Logger * logger);
-bool VarJsonReader::Load(void * buffer, uint32_t size, VarGroup & group)
+bool VarJsonReader::Read(void * buffer, uint32_t size, VarGroup & group)
 {
 	Json::Reader reader;
 	const char * doc = (const char *)buffer;
@@ -32,24 +35,23 @@ bool VarJsonReader::Load(void * buffer, uint32_t size, VarGroup & group)
 	return true;
 }
 
-bool VarJsonReader::Load(const std::string & fileName, VarGroup & group)
+bool VarJsonReader::Read(const Path & fileName, VarGroup & group)
 {
-	char * buf;
-	uint32_t len;
-	len=helpers::read(fileName,buf);
+	FilePtr file = m_fileSystem->OpenRead(fileName);
+	
+	if(file && file->IsOpen())
+	{
+		ByteBufferPtr buffer = file->Read();
+		return Read(buffer->data(), buffer->size(), group);
+	}
 
-	if(len==0)
-		return true;
-	
-	Load(buf, len, group);
-	
-	return true;
+	return false;
 }
 
 void BuildGroup(VarGroup & group, Json::Value & parentValue);
-void WriteFile(const std::string & fileName, const std::string & jsonString, Logger * logger);
+void WriteFile(const Path & fileName, const std::string & jsonString, AppContext * appContext);
 
-bool VarJsonReader::Write(const std::string & fileName, VarGroup & group)
+bool VarJsonReader::Write(const Path & fileName, VarGroup & group)
 {
 	Json::StyledWriter writer;
 
@@ -59,21 +61,19 @@ bool VarJsonReader::Write(const std::string & fileName, VarGroup & group)
 
 	std::string buf = writer.write(root);
 
-	WriteFile(fileName, buf, m_logger);
+	WriteFile(fileName, buf, m_appContext);
+
+	return true;
 }
 
-void WriteFile(const std::string & fileName, const std::string & jsonString, Logger * logger)
+void WriteFile(const Path & fileName, const std::string & jsonString, AppContext * appContext)
 {
-	PHYSFS_file* f = PHYSFS_openWrite(fileName.c_str());
-
-	if(!f)
+	FilePtr file = appContext->fileSystem->OpenWrite(fileName);
+	
+	if(file && file->IsOpen())
 	{
-		logger->log(LOG_LOG, "PHYSFS: Opening (%s) to write failed.\n", fileName.c_str());
-		return;
+		file->Write((void*)&jsonString[0], jsonString.size());
 	}
-
-	PHYSFS_write(f, (void*)&jsonString[0], jsonString.size(), 1);
-	PHYSFS_close(f);
 }
 
 void BuildVars(VarGroup & group, Json::Value & groupValue);

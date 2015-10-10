@@ -22,7 +22,7 @@ enum INTERSECT_RESULT
 	IR_INTERSECT
 };
 
-struct AppContext;
+class AppContext;
 class AABB;
 
 class Camera

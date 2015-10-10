@@ -7,9 +7,12 @@
 #include "utility/Timer.h"
 #include "InputHandler.h"
 #include "SettingsManager.h"
+#include "FileSystem.h"
 
-struct AppContext
+class AppContext
 {
+
+public:
 	AppContext()
 	{
 		_window = nullptr;
@@ -19,11 +22,12 @@ struct AppContext
 		_glUtil = nullptr;
 		_input = nullptr;
 		settingsManager = nullptr;
+		fileSystem = nullptr;
 	}
 
 	bool IsInitialized()
 	{
-		return _window && _glUtil && _timer && _logger && settingsManager;
+		return _window && _glUtil && _timer && _logger && settingsManager && fileSystem;
 	}
 
 
@@ -68,5 +72,6 @@ struct AppContext
 		InputHandler* _input;
 	};
 
-	SettingsManager * settingsManager;
+	ApplicationSettingsManager * settingsManager;
+	FileSystem * fileSystem;
 };
