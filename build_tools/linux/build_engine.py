@@ -237,7 +237,8 @@ class Launcher(Frame):
 
 def main():
     root = Tk()
-    root.geometry("250x150+300+400")
+    root.geometry("250x200+10+10")
+    root.resizable(0,0)
     app = Launcher(root)
     root.mainloop()  
 

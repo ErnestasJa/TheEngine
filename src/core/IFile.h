@@ -9,7 +9,7 @@ typedef std::shared_ptr<ByteBuffer> ByteBufferPtr;
 class IFile 
 {
 public:
-	virtual ~IFile();
+	virtual ~IFile(){};
 	virtual bool IsOpen() = 0;
 	virtual EFileMode GetMode() = 0;
 	virtual uint32_t GetLength() = 0;

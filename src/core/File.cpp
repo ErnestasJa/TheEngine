@@ -13,15 +13,31 @@ File::File(const Path & file, EFileMode mode)
 			if(mode & EFM_APPEND)
 			{
 				m_fileHandle = PHYSFS_openAppend(file_cstr);
+				
+				if(m_fileHandle == nullptr)
+				{
+					printf("File open append failed: %s\n", PHYSFS_getLastError());
+				}
 			}
 			else
 			{
 				m_fileHandle = PHYSFS_openRead(file_cstr);
+				
+				if(m_fileHandle == nullptr)
+				{
+					printf("File open read failed: %s\n", PHYSFS_getLastError());
+				}
 			}
 	}
 	else if( mode & EFM_WRITE )
 	{
 		m_fileHandle = PHYSFS_openWrite(file_cstr);
+
+		if(m_fileHandle == nullptr)
+		{
+			printf("File open write failed: %s\n", PHYSFS_getLastError());
+		}
+
 	}
 	else
 		m_fileHandle = nullptr;

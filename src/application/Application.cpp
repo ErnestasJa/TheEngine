@@ -32,7 +32,11 @@ bool Application::Init(const std::string  &title)
 	m_appContext->window = new Window();
 
 	InitFileSystemAndLoadConfig();
-	InitWindowAndOpenGL(title);
+
+	if(InitWindowAndOpenGL(title))
+	{
+		m_appContext->logger->log(LOG_ERROR, "Failed to initialize window.");
+	}
 	
 	if (!m_appContext->IsInitialized())
 		throw "Failed to initialize app context.";
@@ -40,15 +44,57 @@ bool Application::Init(const std::string  &title)
 	return true;
 }
 
+
+static void printSearchPath(void *data, const char *pathItem)
+{
+	printf("[%s] is in the search path.\n", pathItem);
+}
+
 void Application::InitFileSystemAndLoadConfig()
 {
-	auto applicationDirectory = m_appContext->fileSystem->GetWorkingDirectory();
-	applicationDirectory.append(GetApplicationId());
-	m_appContext->fileSystem->AddSearchDirectory(applicationDirectory);
-	m_appContext->fileSystem->SetWriteDirectory(applicationDirectory);
+	///set working directory to where the binary is.
+	auto workingDirectory = m_appContext->fileSystem->GetWorkingDirectory();
+	m_appContext->fileSystem->SetWriteDirectory(workingDirectory);
+
+	///create directory for application
+	auto applicationDirectory = Path(GetApplicationId());
 	
+	if(!m_appContext->fileSystem->DirectoryExists(applicationDirectory))
+	{
+		if(!m_appContext->fileSystem->CreateDirectory(applicationDirectory))
+		{
+			printf("%s\n", "Failed to create directory for current application.");
+			exit(-1);
+		}
+	}
+
+ 	PHYSFS_getSearchPathCallback(printSearchPath, NULL);
+
+	m_appContext->fileSystem->SetWriteDirectory(applicationDirectory);
+	m_appContext->fileSystem->AddSearchDirectory(applicationDirectory);
+
+ 	// ...
+ 	PHYSFS_getSearchPathCallback(printSearchPath, NULL);
+	
+	auto & fileSystemVars = m_appContext->settingsManager->GetGroup("filesystem");
+	
+	Path logPath(fileSystemVars.GetVar("log_path").ValueS());
+
+	//REFACTOR: Method that creates if not dir doesn't exist
+	if(!m_appContext->fileSystem->DirectoryExists(logPath))
+	{
+		m_appContext->fileSystem->CreateDirectory(logPath);
+	}
+
+	Path configPath(fileSystemVars.GetVar("config_path").ValueS());
+
+	if(!m_appContext->fileSystem->DirectoryExists(configPath))
+	{
+		m_appContext->fileSystem->CreateDirectory(configPath);
+	}
+
 	///REFACTOR: Magic strings
-	if(m_appContext->settingsManager->LoadSettings("config.cfg"))
+	if(!m_appContext->settingsManager->LoadSettings("config.cfg"))
 		m_appContext->settingsManager->WriteSettings("config.cfg");
 }
 
@@ -57,6 +103,7 @@ bool Application::InitWindowAndOpenGL(const std::string & title)
 	int32_t width = m_appContext->settingsManager->GetGroup("video").GetVar("window_width").ValueI(),
 		height = m_appContext->settingsManager->GetGroup("video").GetVar("window_height").ValueI();
 	
+	m_appContext->logger->log(LOG_LOG, "Trying to initialize window, dimensions %ix%i", width, height);
 	if (!m_appContext->window->Init(title, width, height))
 	{
 		delete m_appContext->window;
@@ -75,7 +122,8 @@ bool Application::InitWindowAndOpenGL(const std::string & title)
 		return false;
 	}
 
-#ifdef _DEBUG_OGL
+#if 0
+
 	if (glDebugMessageCallback) {
 		std::cout << "Register OpenGL debug callback " << std::endl;
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
@@ -107,6 +155,11 @@ void Application::Exit()
 		delete m_appContext->fileSystem;
 
 	m_appContext->timer = nullptr;
+}
+
+AppContext * Application::GetContext()
+{
+	return m_appContext;
 }
 
 AppContext * Application::Ctx()

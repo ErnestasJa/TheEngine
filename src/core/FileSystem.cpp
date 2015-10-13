@@ -7,13 +7,13 @@
 
 #include "boost/filesystem/operations.hpp"
 
-Path GetWorkingDirectory();
+Path GetPhysFSWorkingDirectory();
 
 FileSystem::FileSystem(AppContext * appContext, const char * argv)
 {
 	m_appContext = appContext;
 	PHYSFS_init(argv);
-	m_workingDirectory = GetWorkingDirectory();
+	m_workingDirectory = GetPhysFSWorkingDirectory();
 	PHYSFS_mount(m_workingDirectory.generic_string().c_str(), NULL, 0);
 }
 
@@ -83,12 +83,20 @@ bool FileSystem::FileExists(const Path & path)
 
 bool FileSystem::CreateDirectory(const Path & path)
 {
-	return PHYSFS_mkdir(path.generic_string().c_str()) != 0;
+	int returnCode  = PHYSFS_mkdir(path.generic_string().c_str()) != 0;
+
+	if(returnCode == 0)
+	{
+		m_appContext->logger->log(LOG_LOG, "Failed to create directory, error: %s", PHYSFS_getLastError());
+		//printf("Failed to create directory, error: %s\n", PHYSFS_getLastError());
+	}
+
+	return returnCode != 0;
 }
 
 
 ///~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
-Path GetWorkingDirectory()
+Path GetPhysFSWorkingDirectory()
 {
 	std::string workingDirStr = PHYSFS_getBaseDir();
 	Path workingDirectory(workingDirStr);

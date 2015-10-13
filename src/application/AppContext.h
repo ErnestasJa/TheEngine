@@ -7,8 +7,9 @@
 #include "utility/Timer.h"
 #include "InputHandler.h"
 #include "SettingsManager.h"
-#include "FileSystem.h"
+#include "core/FileSystem.h"
 
+///REFACTOR: make it a bit more of a class rather than hybrid struct+class.
 class AppContext
 {
 

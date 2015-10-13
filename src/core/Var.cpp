@@ -259,3 +259,11 @@ void Var::Value(const std::string & value)
 
 	allocAndCopyStr(m_datas, value.c_str());
 }
+
+void Var::Value(const char * value)
+{
+	if (m_datas)
+		delete[] m_datas;
+
+	allocAndCopyStr(m_datas, value);
+}

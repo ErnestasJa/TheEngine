@@ -9,17 +9,21 @@ ApplicationSettingsManager::ApplicationSettingsManager(AppContext * appContext) 
 	InitSettings();		
 }
 
-
-void ApplicationSettingsManager::LoadSettings(const Path & fileName)
+ApplicationSettingsManager::~ApplicationSettingsManager()
 {
-	VarJsonReader reader(m_appContext->logger);
-	reader.Read(fileName, *this);
+
 }
 
-void ApplicationSettingsManager::WriteSettings(const Path & fileName)
+bool ApplicationSettingsManager::LoadSettings(const Path & fileName)
 {
-	VarJsonReader jsonWriter(m_appContext->logger); // whoa whoa, it can write..
-	jsonReader.Write(fileName, *this);
+	VarJsonReader reader(m_appContext);
+	return reader.Read(fileName, *this);
+}
+
+bool ApplicationSettingsManager::WriteSettings(const Path & fileName)
+{
+	VarJsonReader jsonWriter(m_appContext); // whoa whoa, it can write..
+	return jsonWriter.Write(fileName, *this);
 }
 
 void ApplicationSettingsManager::InitSettings()
@@ -29,6 +33,6 @@ void ApplicationSettingsManager::InitSettings()
 	fileSystemVarGroup.AddVar(Var("log_path", "log"));	
 
 	VarGroup & videoVarGroup = this->AddGroup("video");
-	videoVarGroup.AddVar(Var("window_width", "1024"));
-	videoVarGroup.AddVar(Var("window_height", "768"));
+	videoVarGroup.AddVar(Var("window_width", 1024));
+	videoVarGroup.AddVar(Var("window_height", 768));
 }

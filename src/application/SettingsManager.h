@@ -11,6 +11,7 @@ class ApplicationSettingsManager: public VarGroup
 {
 public:
 	ApplicationSettingsManager(AppContext * appContext);
+	virtual ~ApplicationSettingsManager();
 	bool LoadSettings(const Path & fileName);
 	bool WriteSettings(const Path & fileName);
 

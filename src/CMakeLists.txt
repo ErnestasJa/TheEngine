@@ -82,6 +82,7 @@ add_library(engine STATIC
 ./gui/GUIStaticText.cpp
 ./gui/GUIPane.cpp
 ./application/ApplicationLauncher.cpp
+./application/SettingsManager.cpp
 ./application/Window.cpp
 ./application/InputHandler.cpp
 ./application/Application.cpp
