@@ -94,8 +94,10 @@ void Application::InitFileSystemAndLoadConfig()
 	}
 
 	///REFACTOR: Magic strings
-	if(!m_appContext->settingsManager->LoadSettings("config.cfg"))
-		m_appContext->settingsManager->WriteSettings("config.cfg");
+	Path configFilePath = configPath;
+	configFilePath.append("config.cfg");
+	if(!m_appContext->settingsManager->LoadSettings(configFilePath))
+		m_appContext->settingsManager->WriteSettings(configFilePath);
 }
 
 bool Application::InitWindowAndOpenGL(const std::string & title)

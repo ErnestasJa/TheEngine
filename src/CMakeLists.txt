@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 2.6)
 set(Python_ADDITIONAL_VERSIONS 3.4)
 project (ENGINE)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -w -Wfatal-errors -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ggdb3 -w -Wfatal-errors -std=c++11")
 
 
 set(PROJECT_PATH "" CACHE FILEPATH "Path to root directory of project")

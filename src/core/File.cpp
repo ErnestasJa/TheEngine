@@ -85,10 +85,9 @@ ByteBufferPtr File::Read(uint32_t length)
 	if(m_fileHandle)
 	{
 		ByteBuffer * buffer = new ByteBuffer();
-		buffer->reserve(length);
 
+		buffer->resize(length);
 		uint32_t bytesRead = PHYSFS_read(m_fileHandle, (char *)buffer->data(), length, 1) * length;
-
 		buffer->resize(bytesRead);
 	
 		return share(buffer);

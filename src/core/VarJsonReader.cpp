@@ -26,10 +26,9 @@ bool VarJsonReader::Read(void * buffer, uint32_t size, VarGroup & group)
 	const char * doc = (const char *)buffer;
 
 	Json::Value root;
-	reader.parse(doc, doc + size, root);
 
-	if (m_logger)
-		m_logger->log(LOG_LOG, "Group: %s", group.Name());
+	if(!reader.parse(doc, doc + size, root) && m_logger)
+		m_logger->log(LOG_WARN, "%s\n", "Failed to parse json buffer.");
 
 	LoadGroup(group, root, m_logger);
 	return true;
@@ -79,12 +78,12 @@ void WriteFile(const Path & fileName, const std::string & jsonString, AppContext
 void BuildVars(VarGroup & group, Json::Value & groupValue);
 void BuildGroup(VarGroup & group, Json::Value & parentValue)
 {
-	Json::Value newGroup = Json::Value(Json::objectValue);
-	parentValue[group.Name()] = newGroup;
+	parentValue[group.Name()] = Json::Value(Json::objectValue);
+	Json::Value & newGroup = parentValue[group.Name()];
 
 	BuildVars(group, newGroup);
 
-	for(auto varGroup : group.Groups())
+	for(auto & varGroup : group.Groups())
 	{
 		BuildGroup(varGroup, newGroup);
 	}
@@ -117,7 +116,7 @@ void BuildVars(VarGroup & group, Json::Value & groupValue)
 
 void LoadGroup(VarGroup & g, Json::Value & jg, Logger * logger)
 {
-	Json::Value jgroup = jg[g.Name()];
+	Json::Value & jgroup = jg[g.Name()];
 
 	if (jgroup.isNull() || !jgroup.isObject())
 		return;
@@ -127,7 +126,7 @@ void LoadGroup(VarGroup & g, Json::Value & jg, Logger * logger)
 
 	for (Var & var : g.Vars())
 	{
-		Json::Value jvar = jgroup[var.Name()];
+		Json::Value & jvar = jgroup[var.Name()];
 
 		if (!jvar.isNull())
 			switch (var.Type())

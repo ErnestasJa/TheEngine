@@ -2,9 +2,10 @@
 #define VARGROUP_H
 
 #include "utility/Vector.h"
+#include <boost/core/noncopyable.hpp>
 
 class Var;
-class VarGroup
+class VarGroup: private boost::noncopyable
 {
 public:
 	static VarGroup Null;
