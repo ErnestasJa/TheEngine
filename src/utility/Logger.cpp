@@ -8,7 +8,6 @@ Logger::Logger(AppContext * appContext, int verbosity)
 {
 	m_verbosity = verbosity;
 	m_appContext = appContext;
-	m_logfile = m_appContext->fileSystem->OpenWrite(GenerateLogFileName());
 	log(LOG_DEBUG, "Logger initialised...");
 }
 
@@ -24,8 +23,20 @@ void Logger::log(loglevel lev, const char* formatString, ...)
 	std::string logMessage = FormatMessage(lev, formatString, variableArgumentList);
 	va_end(variableArgumentList);
 
-	m_logfile->Write((void*)logMessage.c_str(), logMessage.size());
+	if(m_logfile)
+		m_logfile->Write((void*)logMessage.c_str(), logMessage.size());
+	
 	printf("%s", logMessage.c_str());
+}
+
+void Logger::SetLogFile(FilePtr file)
+{
+	m_logfile = file;
+}
+
+void Logger::SetTimestampedLogFile()
+{
+	m_logfile = m_appContext->fileSystem->OpenWrite(GenerateLogFileName());
 }
 
 std::string Logger::FormatMessage(loglevel lev, const char* formatString, va_list & variableArgumentList)

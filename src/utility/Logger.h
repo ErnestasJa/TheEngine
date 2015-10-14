@@ -25,6 +25,10 @@ public:
 	~Logger();
 
 	void log(loglevel lev, const char* st, ...);
+	void SetLogFile(FilePtr file);
+	void SetTimestampedLogFile();
+	Path GenerateLogFileName();
+
 private:
 	int m_verbosity;
 	AppContext * m_appContext;
@@ -32,7 +36,6 @@ private:
 	//vector< std::pair<debuglevel,std::string> > outputs; //wrapped outputs for easy output
 
 	std::string GenerateTimestamp(); //timestamp generation
-	Path GenerateLogFileName();
 	std::string FormatMessage(loglevel lev, const char* st, va_list & variableArgumentList);
 };
 
