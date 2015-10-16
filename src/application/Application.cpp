@@ -33,6 +33,8 @@ bool Application::Init(const std::string  &title)
 
 	InitFileSystemAndLoadConfig();
 
+	m_appContext->logger->SetTimestampedLogFile();
+
 	if(InitWindowAndOpenGL(title))
 	{
 		m_appContext->logger->log(LOG_ERROR, "Failed to initialize window.");
@@ -58,14 +60,11 @@ void Application::InitFileSystemAndLoadConfig()
 
 	///create directory for application
 	auto applicationDirectory = Path(GetApplicationId());
-	
-	if(!m_appContext->fileSystem->DirectoryExists(applicationDirectory))
+
+	if(!m_appContext->fileSystem->CreateDirectory(applicationDirectory))
 	{
-		if(!m_appContext->fileSystem->CreateDirectory(applicationDirectory))
-		{
-			printf("%s\n", "Failed to create directory for current application.");
-			exit(-1);
-		}
+		printf("%s\n", "Failed to create directory for current application.");
+		exit(-1);
 	}
 
  	PHYSFS_getSearchPathCallback(printSearchPath, NULL);
@@ -79,19 +78,10 @@ void Application::InitFileSystemAndLoadConfig()
 	auto & fileSystemVars = m_appContext->settingsManager->GetGroup("filesystem");
 	
 	Path logPath(fileSystemVars.GetVar("log_path").ValueS());
-
-	//REFACTOR: Method that creates if not dir doesn't exist
-	if(!m_appContext->fileSystem->DirectoryExists(logPath))
-	{
-		m_appContext->fileSystem->CreateDirectory(logPath);
-	}
-
 	Path configPath(fileSystemVars.GetVar("config_path").ValueS());
 
-	if(!m_appContext->fileSystem->DirectoryExists(configPath))
-	{
-		m_appContext->fileSystem->CreateDirectory(configPath);
-	}
+	m_appContext->fileSystem->CreateDirectory(logPath);
+	m_appContext->fileSystem->CreateDirectory(configPath);
 
 	///REFACTOR: Magic strings
 	Path configFilePath = configPath;

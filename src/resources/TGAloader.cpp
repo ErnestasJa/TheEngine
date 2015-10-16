@@ -5,7 +5,7 @@
 
 #include "utility/Logger.h"
 
-tgaloader::tgaloader(Logger * l) : _logger(l)
+tgaloader::tgaloader(AppContext * appContext) : m_appContext(appContext)
 {
 }
 
@@ -32,7 +32,7 @@ image * tgaloader::loadUncompressedTGA(void * buffer, const uint32_t size)
 	uint8_t components = m_header.bitsperpixel / 8;
 	if (m_header.width <= 0 || m_header.height <= 0 || (components != 3 && components != 4))
 	{
-		printf("Somethings wrong: %i, %i, %i\n", (int)m_header.width, (int)m_header.height, (int)m_header.bitsperpixel);
+		m_appContext->logger->log(LOG_LOG, "Ooops, something is wrong with image: %i, %i, %i\n", (int)m_header.width, (int)m_header.height, (int)m_header.bitsperpixel);
 		return 0;
 	}
 
