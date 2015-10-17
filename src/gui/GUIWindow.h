@@ -2,25 +2,24 @@
 
 #include "gui/GUIElement.h"
 
-template <typename T>
-class Rect2D;
-
 class GUIButton;
+class GUIPane;
+class GUIStaticText;
+
 class GUIWindow :public GUIElement
 {
 private:
-	bool clip, showclose, modal, dragging, movable;
-	std::wstring titlebar_text;
+	bool _clipping, _showClose, _modal, _dragging, _draggable;
 
 	glm::mat4 m_transform;
-	GUIButton* close_btn;
+	GUIPane *_titlebar, *_background;
+	GUIStaticText *_titlebarText;
+	GUIButton* _closeButton;
 
-	glm::vec2 mp, dif, ds;
-	void move(glm::vec2 delta);
-
-	Rect2D<int> tbr, bgr;
+	glm::vec2 _mousePos, _difference, _dragStart;
+	void Move(glm::vec2 delta);
 public:
-	GUIWindow(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring titlebar_text = L"Window", bool clip = true, bool showclose = true, bool modal = false, bool movable = true);
+	GUIWindow(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring tittleBarText = L"Window", bool clip = true, bool showClose = true, bool modal = false, bool draggable = true);
 	virtual ~GUIWindow();
 
 	void Render();

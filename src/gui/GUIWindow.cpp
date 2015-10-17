@@ -3,63 +3,61 @@
 #include "opengl/Quad.h"
 #include "opengl/Shader.h"
 
-#include "GUIEnvironment.h"
+#include "GUI.h"
 
-#include "GUIWindow.h"
-
-#include "GUIPane.h"
-#include "GUIButton.h"
-
-GUIWindow::GUIWindow(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring titlebar_text, bool clip, bool showclose, bool modal, bool movable) :GUIElement(env, dimensions)
+GUIWindow::GUIWindow(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring tittleBarText, bool clip, bool showClose, bool modal, bool draggable) :GUIElement(env, dimensions)
 {
 	this->Type = GUIET_WINDOW;
-	environment = env;
 
-	this->titlebar_text = titlebar_text;
+	_clipping = clip;
+	_showClose = showClose;
+	_modal = modal;
+	_draggable = draggable;
 
-	this->clip = clip;
-	this->showclose = showclose;
-	this->modal = modal;
-	this->movable = movable;
-
-	this->dragging = false;
+	_dragging = false;
 
 	absolute_rect = dimensions;
 	relative_rect = absolute_rect;
 
-	tbr = Rect2D<int>(absolute_rect);
-	tbr.resize(tbr.w, 20);
-	tbr.move(0, 1);
-	//printf("TBR: %s\n",tbr.to_string().c_str());
-	bgr = Rect2D<int>(absolute_rect);
-	bgr.resize(bgr.w, bgr.h - 20);
-	bgr.move(0, 20);
+	_titlebar = env->AddGUIPane(Rect2D<int>(0, 0, absolute_rect.w, 24), true);
+	_titlebar->SetListening(false);
+	_titlebar->SetParent(this);
 
-	if (showclose)
+	_background = env->AddGUIPane(Rect2D<int>(0, 24, absolute_rect.w, absolute_rect.h - 24), true);
+	_background->SetListening(false);
+	_background->SetParent(this);
+
+	auto textDimensions = env->GetFontRenderer()->GetTextDimensions(tittleBarText);
+	_titlebarText = env->AddGUIStaticText(Rect2D<int>(0, 0, textDimensions.x, textDimensions.y), tittleBarText);
+	_titlebarText->SetParent(_titlebar);
+	_titlebarText->SetListening(false);
+	_titlebarText->SetAlignment(HALIGN_CENTER, VALIGN_CENTER);
+
+	if (_showClose)
 	{
-		close_btn = new GUIButton(env, Rect2D<int>(tbr.w - 17, 4, 14, 14), L"['s]x[s']");
-		close_btn->SetParent(this);
-		close_btn->SetEventListener(this);
+		_closeButton = new GUIButton(env, Rect2D<int>(0, 0, 16, 16), L"['s]X[s']");
+		_closeButton->SetParent(_titlebar);
+		_closeButton->SetEventListener(this);
+		_closeButton->SetAlignment(HALIGN_RIGHT, VALIGN_CENTER);
 	}
 }
 
 GUIWindow::~GUIWindow()
 {
+	RemoveChild(_titlebar);
+	RemoveChild(_background);
+	RemoveChild(_titlebarText);
+	RemoveChild(_closeButton);
+
+	delete _titlebar;
+	delete _background;
+	delete _titlebarText;
+	delete _closeButton;
 }
 
 void GUIWindow::Render()
 {
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	environment->draw_sliced_gui_quad(tbr, gui_skin_titlebar);
-	environment->draw_sliced_gui_quad(bgr, gui_skin_background);
-	environment->GetFontRenderer()->RenderString(L"['s]" + titlebar_text + L"[s']", glm::ivec2(tbr.x + 6, tbr.y + 6));
-
-	this->absolute_rect.move(0, 20);
-	UpdateAbsolutePos();
 	this->RenderChildren();
-	this->absolute_rect.move(0, -20);
-	UpdateAbsolutePos();
 }
 
 bool GUIWindow::OnEvent(const GUIEvent & e)
@@ -69,31 +67,31 @@ bool GUIWindow::OnEvent(const GUIEvent & e)
 		switch (e.GetType())
 		{
 		case mouse_pressed:
-			ds = environment->get_mouse_pos();
-			if (movable&&dragging == false && tbr.is_point_inside((int)ds.x, (int)ds.y) == true)
-				dragging = true;
+			_dragStart = environment->get_mouse_pos();
+			if (_draggable&&_dragging == false && _titlebar->GetAbsoluteRect().is_point_inside((int)_dragStart.x, (int)_dragStart.y) == true)
+				_dragging = true;
 			break;
 		case mouse_released:
-			if (dragging) dragging = false;
+			if (_dragging) _dragging = false;
 			break;
 		case mouse_dragged:
-			if (movable&&dragging)
+			if (_draggable&&_dragging)
 			{
-				mp = environment->get_mouse_pos();
-				dif.x = mp.x - ds.x;
-				dif.y = mp.y - ds.y;
-				this->move(glm::vec2(dif.x, dif.y));
+				_mousePos = environment->get_mouse_pos();
+				_difference.x = _mousePos.x - _dragStart.x;
+				_difference.y = _mousePos.y - _dragStart.y;
+				this->Move(glm::vec2(_difference.x, _difference.y));
 			}
 			break;
 		case mouse_moved:
-			mp = environment->get_mouse_pos();
+			_mousePos = environment->get_mouse_pos();
 
 			break;
 		case button_pressed:
 
 			break;
 		case button_released:
-			if (e.get_caller() == this->close_btn)
+			if (e.get_caller() == this->_closeButton)
 			{
 				this->SetVisible(false);
 				GUI_FIRE_EVENT(GUIEvent(window_closed, this, this))
@@ -107,21 +105,15 @@ bool GUIWindow::OnEvent(const GUIEvent & e)
 	GUI_END_ON_EVENT(e)
 }
 
-void GUIWindow::move(glm::vec2 delta)
+void GUIWindow::Move(glm::vec2 delta)
 {
-	this->relative_rect.x += delta.x;
-	this->relative_rect.y += delta.y;
-	if (this->clip)
+	relative_rect.x += delta.x;
+	relative_rect.y += delta.y;
+	if (_clipping)
 	{
 		Rect2D<int> par = parent->GetAbsoluteRect();
 		relative_rect.clip(par);
 	}
 	UpdateAbsolutePos();
-	tbr = Rect2D<int>(absolute_rect);
-	tbr.resize(tbr.w, 20);
-	tbr.move(0, 1);
-	bgr = Rect2D<int>(absolute_rect);
-	bgr.resize(bgr.w, bgr.h - 20);
-	bgr.move(0, 20);
-	ds = environment->get_mouse_pos();
+	_dragStart = environment->get_mouse_pos();
 }

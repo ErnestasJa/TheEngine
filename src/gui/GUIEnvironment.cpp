@@ -216,6 +216,8 @@ void GUIEnvironment::on_mouse_moved(double x, double y)
 
 	GUIElement *target = GetElementFromPoint(mouse_pos.x, mouse_pos.y);
 
+	//printf("Target name: %s @ %f %f\n", target != nullptr ? target->GetName().c_str() : "das is null", mouse_pos.x, mouse_pos.y);
+
 	//only update elements which are enabled,visible and accept events
 	if (target != nullptr)
 		if (target->IsEnabled() && target->IsVisible() && target->AcceptsEvents())

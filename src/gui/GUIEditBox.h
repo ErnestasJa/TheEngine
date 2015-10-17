@@ -15,6 +15,8 @@ private:
 	std::wstring m_text, disp_text;
 	glm::vec4 m_text_color;
 
+	gui_style cur_style;
+
 	void add_text(int32_t index, std::wstring text);
 	void remove_text(int32_t index, int32_t length);
 public:

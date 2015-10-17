@@ -28,12 +28,7 @@ GUICheckbox::~GUICheckbox()
 
 void GUICheckbox::Render()
 {
-	if (enabled&&!hovered)
-		cur_style = this->checked ? gui_skin_checkbox_c_active : gui_skin_checkbox_u_active;
-	else if (!enabled&&!hovered)
-		cur_style = this->checked ? gui_skin_checkbox_c_disabled : gui_skin_checkbox_u_disabled;
-
-	environment->draw_gui_quad(absolute_rect, cur_style);
+	environment->draw_gui_quad(absolute_rect, enabled ? cur_style : checked ? gui_skin_checkbox_c_disabled : gui_skin_checkbox_u_disabled);
 }
 
 bool GUICheckbox::OnEvent(const GUIEvent & e)
@@ -42,20 +37,21 @@ bool GUICheckbox::OnEvent(const GUIEvent & e)
 
 		switch (e.GetType())
 		{
-		case gui_event_type::element_hovered:
+		case element_hovered:
 			cur_style = this->checked ? gui_skin_checkbox_c_hover : gui_skin_checkbox_u_hover;
 			GUI_FIRE_EVENT(GUIEvent(element_hovered, this, this))
 				break;
 
-		case gui_event_type::element_exitted:
-			GUI_FIRE_EVENT(GUIEvent(element_exitted, this, this));
-			break;
+		case element_exitted:
+			cur_style = this->checked ? gui_skin_checkbox_c_active : gui_skin_checkbox_u_active;
+			GUI_FIRE_EVENT(GUIEvent(element_exitted, this, this))
+				break;
 
-		case gui_event_type::mouse_pressed:
+		case mouse_pressed:
 			cur_style = this->checked ? gui_skin_checkbox_c_click : gui_skin_checkbox_u_click;
 			break;
 
-		case gui_event_type::mouse_released:
+		case mouse_released:
 			checked = !checked;
 			cur_style = this->checked ? gui_skin_checkbox_c_hover : gui_skin_checkbox_u_hover;
 			GUI_FIRE_EVENT(GUIEvent(checkbox_state_changed, this, this))

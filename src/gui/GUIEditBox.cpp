@@ -56,18 +56,12 @@ void GUIEditBox::Render()
 	FontRenderer* fr = this->environment->GetFontRenderer();
 
 	// RECT
-	if (this->IsFocused())
+	if (cur_style != gui_skin_input_disabled && !enabled)
 	{
-		environment->draw_sliced_gui_quad(absolute_rect, gui_skin_input_hover);
+		cur_style = gui_skin_input_disabled;
 	}
-	else if (this->IsEnabled() == false)
-	{
-		environment->draw_sliced_gui_quad(absolute_rect, gui_skin_input_disabled);
-	}
-	else
-	{
-		environment->draw_sliced_gui_quad(absolute_rect, gui_skin_input_active);
-	}
+
+	environment->draw_sliced_gui_quad(absolute_rect, gui_skin_input_disabled);
 
 	glEnable(GL_SCISSOR_TEST);
 	glScissor(absolute_rect.x, environment->GetAbsoluteRect().h - (absolute_rect.y + absolute_rect.h), absolute_rect.w, absolute_rect.h);
@@ -97,9 +91,23 @@ bool GUIEditBox::OnEvent(const GUIEvent & e)
 	GUI_BEGIN_ON_EVENT(e)
 
 		std::wstring temp;
+
 	switch (e.GetType())
 	{
+	case element_hovered:
+		cur_style = gui_skin_input_hover;
+		break;
+
+	case element_exitted:
+		cur_style = gui_skin_input_active;
+		break;
+
 	case element_focused:
+		cur_style = gui_skin_input_hover;
+		break;
+
+	case element_focus_lost:
+		cur_style = gui_skin_input_active;
 		break;
 
 	case mouse_pressed:

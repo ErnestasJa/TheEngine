@@ -12,6 +12,9 @@ GUIElement::GUIElement(GUIEnvironment* env, Rect2D<int> dimensions)
 
 	Id = -1;
 
+	_hAlign = GUIElementHAlignment::HALIGN_LEFT;
+	_vAlign = GUIElementVAlignment::VALIGN_TOP;
+
 	hovered = false;
 	visible = true;
 	focused = false;
@@ -22,7 +25,7 @@ GUIElement::GUIElement(GUIEnvironment* env, Rect2D<int> dimensions)
 	this->parent = nullptr;
 	this->event_listener = nullptr;
 	this->environment = env;
-	SetName("gui_element_" + _elementIdCounter++);
+	SetName(std::string("gui_element_") + helpers::to_str(_elementIdCounter++));
 }
 
 GUIElement::~GUIElement()
@@ -104,10 +107,16 @@ void GUIElement::RenderChildren()
 void GUIElement::UpdateAbsolutePos()
 {
 	if (this->parent != nullptr)
-		this->absolute_rect =
-		Rect2D<int>(parent->absolute_rect.x + relative_rect.x,
-			parent->absolute_rect.y + relative_rect.y,
-			this->absolute_rect.w, this->absolute_rect.h);
+	{
+		this->absolute_rect.x = relative_rect.x + parent->absolute_rect.x;
+		this->absolute_rect.y = relative_rect.y + parent->absolute_rect.y;
+
+		this->absolute_rect.w = relative_rect.w;
+		this->absolute_rect.h = relative_rect.h;
+
+		this->absolute_rect.calculate_bounds();
+	}
+
 	for (GUIElement *e : children)
 		e->UpdateAbsolutePos();
 }
@@ -116,6 +125,53 @@ void GUIElement::Move(const glm::vec2 &pos)
 {
 	relative_rect.SetPosition(pos.x, pos.y);
 	UpdateAbsolutePos();
+}
+
+void GUIElement::SetAlignment(GUIElementHAlignment hAlign, GUIElementVAlignment vAlign)
+{
+	_hAlign = hAlign;
+	_vAlign = vAlign;
+
+	if (this->parent != nullptr)
+	{
+		switch (_hAlign)
+		{
+
+		case HALIGN_CENTER:
+		{
+			this->relative_rect.x = parent->absolute_rect.w / 2 - relative_rect.w / 2 + relative_rect.x;
+			break;
+		}
+
+		case HALIGN_RIGHT:
+		{
+			this->relative_rect.x = parent->absolute_rect.w - relative_rect.w - relative_rect.x;
+			break;
+		}
+
+		}
+
+		switch (_vAlign)
+		{
+
+		case VALIGN_CENTER:
+		{
+			this->relative_rect.y = parent->absolute_rect.h / 2 - relative_rect.h / 2 - relative_rect.y;
+			break;
+		}
+
+		case VALIGN_BOTTOM:
+		{
+			this->relative_rect.y = parent->absolute_rect.h - relative_rect.h - relative_rect.y;
+			break;
+		}
+
+		}
+
+		this->relative_rect.calculate_bounds();
+
+		UpdateAbsolutePos();
+	}
 }
 
 void GUIElement::SetName(std::string name)
@@ -146,7 +202,7 @@ void GUIElement::SetEnabled(bool b)
 	this->enabled = b;
 	if (children.size() > 0)
 		for (GUIElement *e : children)
-			e->SetEnabled(true);
+			e->SetEnabled(b);
 }
 
 void GUIElement::SetFocused(bool b)

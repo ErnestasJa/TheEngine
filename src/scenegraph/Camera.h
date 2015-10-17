@@ -37,6 +37,7 @@ public:
 	const glm::vec3 GetRight() const;
 	const glm::vec3 GetPosition() const;
 	void SetPosition(glm::vec3 pos);
+	void SetRotation(const glm::quat &rotation);
 	const float GetFar() const;
 	const float GetNear() const;
 	const float GetFOV() const;
@@ -60,7 +61,7 @@ public:
 	void Lift(const float amount);
 	virtual glm::mat4x4 GetViewMat();
 	virtual glm::mat4x4 GetViewProjMat();
-	void Orbit(glm::vec3 point, float distance, float angleX, float angleY);
+	void Orbit(glm::vec3 point, float distance, float verticalAngle, float horizontalAngle);
 
 	void DrawFrustum()
 	{

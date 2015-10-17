@@ -82,7 +82,7 @@ INTERSECT_RESULT Camera::PointInFrustum(const glm::vec3 &point)
 
 INTERSECT_RESULT Camera::BoxInFrustum(const AABB &box)
 {
-	/*INTERSECT_RESULT res=IR_INSIDE;
+	INTERSECT_RESULT res=IR_INSIDE;
 	bool in=false,out=false;
 	loop(i,6)
 	{
@@ -100,7 +100,7 @@ INTERSECT_RESULT Camera::BoxInFrustum(const AABB &box)
 		else if(out)
 			res = IR_INTERSECT;
 	}
-	return res;*/
+	return res;
 
 	return IR_INTERSECT;
 }
@@ -150,6 +150,11 @@ void Camera::SetPosition(glm::vec3 pos)
 	m_pos = pos;
 }
 
+void Camera::SetRotation(const glm::quat &rotation)
+{
+	m_rot = rotation;
+}
+
 void Camera::Update(float dt)
 {
 	m_pos += m_translation;
@@ -162,13 +167,13 @@ void Camera::Update(float dt)
 		_appContext->_window->SetMousePos(s / 2);
 		m_last_mouse_pos = _appContext->_window->GetMousePos();
 		HandleMouse();
-
-		m_look = glm::vec3(m_rot*glm::vec3(0, 0, -1));
-		m_up = glm::vec3(m_rot*glm::vec3(0, 1, 0));
-		m_right = glm::cross(m_look, m_up);
-
-		InitFrustum();
 	}
+
+	m_look = glm::vec3(m_rot*glm::vec3(0, 0, -1));
+	m_up = glm::vec3(m_rot*glm::vec3(0, 1, 0));
+	m_right = glm::cross(m_look, m_up);
+
+	InitFrustum();
 }
 
 void Camera::Walk(const float amount)
@@ -201,22 +206,14 @@ glm::mat4x4 Camera::GetViewProjMat()
 	return GetProjectionMat()*GetViewMat();
 }
 
-void Camera::Orbit(glm::vec3 point, float distance, float angleX, float angleY)
+void Camera::Orbit(glm::vec3 point, float distance, float verticalAngle, float horizontalAngle)
 {
-	float r, phi, theta;
-	r = distance;
-	phi = angleX;
-	theta = angleY;
+	float camX = distance * sin(glm::radians(horizontalAngle)) * sin(glm::radians(verticalAngle));
+	float camY = distance * cos(glm::radians(verticalAngle));
+	float camZ = distance * cos(glm::radians(horizontalAngle)) * sin(glm::radians(verticalAngle));
 
-	float camX = r * sin(glm::radians(theta)) * sin(glm::radians(phi));
-	float camY = r * cos(glm::radians(phi));
-	float camZ = r * cos(glm::radians(theta)) * sin(glm::radians(phi));
-	glm::vec3 camoffs(camX, camY, camZ);
-	glm::vec3 camPos = point + camoffs;
-
-	m_pos = camPos;
-	m_rot = glm::toQuat(glm::inverse(glm::lookAt(camPos, point, glm::vec3(0, 1, 0))));
-	///this->update_absolute_transform();
+	m_pos = point + glm::vec3(camX, camY, camZ);
+	m_rot = glm::toQuat(glm::inverse(glm::lookAt(m_pos, point, glm::vec3(0, 1, 0))));
 }
 
 void Camera::HandleMouse()
