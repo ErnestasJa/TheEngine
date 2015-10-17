@@ -3,9 +3,9 @@
 #include "PNGLoader.h"
 #include "stb_image.h"
 
-#include "utility/Logger.h"
+#include "application/AppContext.h"
 
-png_loader::png_loader(Logger * l) : _logger(l)
+png_loader::png_loader(AppContext * appContext) : m_appContext(appContext)
 {
 	//ctor
 }
@@ -20,7 +20,7 @@ image_ptr png_loader::load(void * buffer, const uint32_t size)
 	int32_t x = 0, y = 0, comp = 0;
 	uint8_t * data = stbi_load_from_memory((const uint8_t*)buffer, size, &x, &y, &comp, 0);
 
-	_logger->log(LOG_LOG, "Image loaded: w=%u; h=%u; comp=%u;", x, y, comp);
+	m_appContext->logger->log(LOG_LOG, "Image loaded: w=%u; h=%u; comp=%u;", x, y, comp);
 
 	if (data)
 	{

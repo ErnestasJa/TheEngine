@@ -50,7 +50,7 @@ GUIEnvironment::GUIEnvironment(AppContext* ctx) :GUIElement(nullptr, Rect2D<int>
 	skin->load("gui/skins/skin_default.xml");
 
 	skin_atlas = new Texture();
-	image_loader* imgl = new image_loader(m_context->_logger);
+	image_loader* imgl = new image_loader(ctx);
 	std::shared_ptr<image> img = std::shared_ptr<image>(imgl->load("gui/skins/skin_default2.png"));
 	skin_atlas->Init(img);
 	delete imgl;

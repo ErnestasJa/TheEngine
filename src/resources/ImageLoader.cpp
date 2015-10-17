@@ -30,39 +30,39 @@ void image_loader::add_loader(iimage_loader * loader)
 		m_loaders.push_back(loader);
 }
 
-image_ptr image_loader::load(const Path & file)
+image_ptr image_loader::load(const Path & filePath)
 {
 	resource<image> res;
-	res = this->get_resource(file);
+	res = this->get_resource(filePath);
 
 	if (res._resource)
 	{
-		_logger->log(LOG_LOG, "Found image in cache, skipping loading.");
+		m_appContext->logger->log(LOG_LOG, "Found image in cache, skipping loading.");
 		return res._resource;
 	}
 
-	std::string ext = file.extension().generic_string();
+	std::string ext = filePath.extension().generic_string();
 	m_appContext->logger->log(LOG_LOG, "Image extension: '%s'", ext.c_str());
 	auto fileSystem = m_appContext->fileSystem;
 
-	if (fileSystem->FileExists(file))
+	if (fileSystem->OpenRead(filePath))
 	{
 		for (iimage_loader * l : m_loaders)
 		{
 			if (l->check_by_extension(ext))
 			{
-				FilePtr file = fileSystem->OpenRead(file);
+				FilePtr file = fileSystem->OpenRead(filePath);
 
 				if(file)
 				{
-					BufferPtr buffer = file->ReadBuffer();
+					ByteBufferPtr buffer = file->Read();
 
-					if (buffer.size() != 0)
+					if (buffer->size() != 0)
 					{
-						_logger->log(LOG_LOG, "Image file size: %u", buffer.size());
+						m_appContext->logger->log(LOG_LOG, "Image file size: %u", buffer->size());
 
-						res._path = file;
-						res._resource = image_ptr(l->load(buffer.data(), buffer.size()));
+						res._path = filePath;
+						res._resource = image_ptr(l->load(buffer->data(), buffer->size()));
 						this->add_resource(res);
 						return res._resource;
 					}

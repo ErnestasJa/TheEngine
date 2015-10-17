@@ -2,7 +2,7 @@
 
 #include "IImageLoader.h"
 #include "ResourceCache.h"
-#include "core/AppContext.h"
+#include "application/AppContext.h"
 
 struct Texture;
 typedef std::shared_ptr<Texture> TexturePtr;

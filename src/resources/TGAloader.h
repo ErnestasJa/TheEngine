@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IImageLoader.h"
+class AppContext;
 class Logger;
 class tgaloader : public iimage_loader
 {

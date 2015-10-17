@@ -1,7 +1,7 @@
 #pragma once
 
 #include "IMeshLoader.h"
-#include "core/AppContext.h"
+#include "application/AppContext.h"
 
 class Mesh;
 struct iqmheader;

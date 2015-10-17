@@ -3,6 +3,7 @@
 #include "IImageLoader.h"
 // FIXME (Ernestas#1#): some pngs are not loaded, make sure they don't crash app
 
+class AppContext;
 class Logger;
 class png_loader : public iimage_loader
 {

@@ -3,7 +3,7 @@
 #include "TGAloader.h"
 #include "glm.hpp"
 
-#include "utility/Logger.h"
+#include "application/AppContext.h"
 
 tgaloader::tgaloader(AppContext * appContext) : m_appContext(appContext)
 {
