@@ -150,6 +150,11 @@ void Camera::SetPosition(glm::vec3 pos)
 	m_pos = pos;
 }
 
+void Camera::SetRotation(const glm::quat &rotation)
+{
+	m_rot = rotation;
+}
+
 void Camera::Update(float dt)
 {
 	m_pos += m_translation;
