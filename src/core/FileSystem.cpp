@@ -4,34 +4,38 @@
 #include "utility/Logger.h"
 #include "FileSystem.h"
 #include "File.h"
-
-#include "boost/filesystem/operations.hpp"
+#include "PathTools.h"
 
 Path GetPhysFSWorkingDirectory();
 
 FileSystem::FileSystem(const char * argv)
 {
-	PHYSFS_init(argv);
+	std::string path = argv;
+
+	path = WorkaroundVisualStudio(path);
+
+	PHYSFS_init(path.c_str());
 	m_workingDirectory = GetPhysFSWorkingDirectory();
 	PHYSFS_mount(m_workingDirectory.generic_string().c_str(), NULL, 0);
 }
 
 FileSystem::~FileSystem()
 {
-	if(!PHYSFS_deinit())
+	if (!PHYSFS_deinit())
 		std::cout << "PHYSFS_deinit() failed!\n reason: " << PHYSFS_getLastError() << "." << std::endl;
 }
 
 bool FileSystem::SetWriteDirectory(const Path & path)
 {
-	int32_t status = PHYSFS_setWriteDir(path.c_str());
+	auto posixPath = MakePosix(path);
+	int32_t status = PHYSFS_setWriteDir(posixPath.generic_string().c_str());
 
 	if (status == 0)
 	{
 		return false;
 	}
 
-	m_writeDirectory = path.generic_string();
+	m_writeDirectory = posixPath.generic_string();
 	return true;
 }
 
@@ -82,9 +86,9 @@ bool FileSystem::FileExists(const Path & path)
 
 bool FileSystem::CreateDirectory(const Path & path)
 {
-	int returnCode  = PHYSFS_mkdir(path.generic_string().c_str()) != 0;
+	int returnCode = PHYSFS_mkdir(path.generic_string().c_str()) != 0;
 
-	if(returnCode == 0)
+	if (returnCode == 0)
 	{
 		GetContext().GetLogger()->log(LOG_LOG, "Failed to create directory, error: %s", PHYSFS_getLastError());
 		//printf("Failed to create directory, error: %s\n", PHYSFS_getLastError());
@@ -92,7 +96,6 @@ bool FileSystem::CreateDirectory(const Path & path)
 
 	return returnCode != 0;
 }
-
 
 ///~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
 Path GetPhysFSWorkingDirectory()

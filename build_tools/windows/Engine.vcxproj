@@ -166,6 +166,7 @@
     <ClInclude Include="..\..\src\core\File.h" />
     <ClInclude Include="..\..\src\core\FileSystem.h" />
     <ClInclude Include="..\..\src\core\IFile.h" />
+    <ClInclude Include="..\..\src\core\PathTools.h" />
     <ClInclude Include="..\..\src\core\Var.h" />
     <ClInclude Include="..\..\src\core\VarGroup.h" />
     <ClInclude Include="..\..\src\core\VarJsonReader.h" />

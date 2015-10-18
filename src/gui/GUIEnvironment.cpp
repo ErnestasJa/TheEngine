@@ -13,6 +13,8 @@
 
 GUIEnvironment::GUIEnvironment() :GUIElement(nullptr, Rect2D<int>(0, 0, GetContext().GetWindow()->GetWindowSize().x, GetContext().GetWindow()->GetWindowSize().y))
 {
+	GetContext().SetGUIEnvironment(this);
+
 	this->m_window = GetContext().GetWindow();
 
 	_sig_mouse_move = m_window->SigMouseMoved().connect(sigc::mem_fun(this, &GUIEnvironment::on_mouse_moved));
@@ -36,7 +38,7 @@ GUIEnvironment::GUIEnvironment() :GUIElement(nullptr, Rect2D<int>(0, 0, GetConte
 	this->SetName("GUI_ENVIRONMENT");
 	last_char = ' ';
 
-	gui_shader = Shader::LoadShader("engine/shaders/gui_quad");
+	gui_shader = Shader::LoadShader("res/engine/shaders/gui_quad");
 	gui_quad = new GUIQuad();
 	gui_quad->Init();
 
@@ -45,11 +47,11 @@ GUIEnvironment::GUIEnvironment() :GUIElement(nullptr, Rect2D<int>(0, 0, GetConte
 
 	skin = new GUISkin();
 
-	skin->load("gui/skins/skin_default.xml");
+	skin->load("res/gui/skins/skin_default.xml");
 
 	skin_atlas = new Texture();
 	image_loader* imgl = new image_loader();
-	std::shared_ptr<image> img = std::shared_ptr<image>(imgl->load("gui/skins/skin_default2.png"));
+	std::shared_ptr<image> img = std::shared_ptr<image>(imgl->load("res/gui/skins/skin_default2.png"));
 	skin_atlas->Init(img);
 	delete imgl;
 
