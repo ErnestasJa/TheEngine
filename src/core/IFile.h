@@ -15,6 +15,9 @@ public:
 	virtual uint32_t GetLength() = 0;
 	virtual ByteBufferPtr Read() = 0;
 	virtual ByteBufferPtr Read(uint32_t length) = 0;
+	///Reads a null terminated buffer
+	virtual ByteBufferPtr ReadText() = 0;
+	virtual ByteBufferPtr ReadText(uint32_t length) = 0;
 	virtual uint32_t Write(void * buffer, uint32_t length) = 0;
 };
 

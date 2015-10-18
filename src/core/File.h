@@ -17,6 +17,8 @@ public:
 	virtual uint32_t GetLength();
 	virtual ByteBufferPtr Read();
 	virtual ByteBufferPtr Read(uint32_t length);
+	virtual ByteBufferPtr ReadText();
+	virtual ByteBufferPtr ReadText(uint32_t length);
 	virtual uint32_t Write(void * buffer, uint32_t length);
 private:
 	PHYSFS_file * m_fileHandle;

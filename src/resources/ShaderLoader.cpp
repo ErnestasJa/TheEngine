@@ -36,8 +36,8 @@ ShaderPtr shader_loader::load(const Path & vertex_file_name, const Path & fragme
 
 	GetContext().GetLogger()->log(LOG_LOG, "Shader resource name: %s", resourceName.generic_string().c_str());
 
-	ByteBufferPtr vertexBuffer = vertexFile->Read();
-	ByteBufferPtr fragmentBuffer = fragmentFile->Read();
+	ByteBufferPtr vertexBuffer = vertexFile->ReadText();
+	ByteBufferPtr fragmentBuffer = fragmentFile->ReadText();
 
 	Shader * shader = new Shader(resourceName.generic_string(), (char*)vertexBuffer->data(), (char*)fragmentBuffer->data(), "");
 	shader->Compile();
@@ -69,13 +69,13 @@ ShaderPtr shader_loader::load(const Path & fileName)
 	}
 
 	FilePtr vertexFile = GetContext().GetFileSystem()->OpenRead(Path(fileName).replace_extension(".vert"));
-	ByteBufferPtr vertexBuffer = vertexFile->Read();
+	ByteBufferPtr vertexBuffer = vertexFile->ReadText();
 
 	FilePtr fragmentFile = GetContext().GetFileSystem()->OpenRead(Path(fileName).replace_extension(".frag"));
-	ByteBufferPtr fragmentBuffer = fragmentFile->Read();
+	ByteBufferPtr fragmentBuffer = fragmentFile->ReadText();
 
 	FilePtr geometryFile = GetContext().GetFileSystem()->OpenRead(Path(fileName).replace_extension(".geom"));
-	ByteBufferPtr geometryBuffer = geometryFile->Read();
+	ByteBufferPtr geometryBuffer = geometryFile->ReadText();
 
 	if(vertexBuffer)
 	{

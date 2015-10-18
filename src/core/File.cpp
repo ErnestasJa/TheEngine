@@ -98,6 +98,31 @@ ByteBufferPtr File::Read(uint32_t length)
 	}
 }
 
+ByteBufferPtr File::ReadText()
+{
+	uint32_t length = GetLength();
+	return ReadText(length);
+}
+
+ByteBufferPtr File::ReadText(uint32_t length)
+{
+	if(m_fileHandle)
+	{
+		ByteBuffer * buffer = new ByteBuffer();
+
+		buffer->resize(length+1);
+		uint32_t bytesRead = PHYSFS_read(m_fileHandle, (char *)buffer->data(), length, 1) * length;
+		buffer->resize(bytesRead+1);
+		buffer->data()[bytesRead]='/0';
+	
+		return share(buffer);
+	}
+	else
+	{
+		return std::shared_ptr<ByteBuffer>();
+	}
+}
+
 
 uint32_t File::Write(void * buffer, uint32_t length)
 {
