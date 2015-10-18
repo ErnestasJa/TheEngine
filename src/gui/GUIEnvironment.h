@@ -8,7 +8,7 @@ class Shader;
 class GUIQuad;
 class SlicedGUIQuad;
 class Texture;
-class Window;
+class ApplicationWindow;
 class GUISkin;
 class Logger;
 class AppContext;
@@ -25,7 +25,7 @@ class GUIImage;
 class GUIEnvironment : public GUIElement
 {
 public:
-	GUIEnvironment(AppContext* ctx);
+	GUIEnvironment();
 	~GUIEnvironment();
 
 	void update(float delta);
@@ -53,11 +53,6 @@ public:
 	void on_mouse_scroll(double sx, double sy);
 	void on_key_event(int32_t key, int32_t scan_code, int32_t action, int32_t mod);
 	void on_char_typed(int32_t scan_code);
-
-	AppContext* GetContext()
-	{
-		return m_context;
-	}
 
 	const std::wstring &GetClipboard()
 	{
@@ -100,7 +95,6 @@ public:
 	GUIWindow* AddGUIWindow(Rect2D<int> dimensions, std::wstring titlebar_text = L"Window", bool clip = true, bool showclose = true, bool modal = false, bool movable = true);
 	GUIPane* AddGUIPane(Rect2D<int> dimensions, bool draw = true);
 private:
-	AppContext* m_context;
 	GUISkin* skin;
 	Texture* skin_atlas;
 	Shader* gui_shader;
@@ -109,7 +103,7 @@ private:
 	SlicedGUIQuad* sliced_quad;
 
 	FontRenderer* m_font_renderer;
-	Window* m_window;
+	ApplicationWindow * m_window;
 
 	sigc::connection _sig_mouse_move, _sig_mouse_button, _sig_mouse_scroll, _sig_key, _sig_text;
 

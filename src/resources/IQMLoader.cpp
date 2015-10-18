@@ -6,9 +6,9 @@
 #include "utility/Util.h"
 #include "utility/Logger.h"
 
-iqmloader::iqmloader(Logger *Logger)
+iqmloader::iqmloader()
 {
-	_logger = Logger;
+	m_logger = GetContext().GetLogger();
 }
 
 void iqmloader::load_header(const char* data, iqmheader & header)
@@ -29,10 +29,10 @@ std::shared_ptr<Mesh> iqmloader::load(const char* data, const uint32_t size)
 	load_header(data, head);
 
 	if (!strcmp(IQM_MAGIC, head.magic) && head.version == IQM_VERSION && head.filesize > 0)
-		_logger->log(LOG_DEBUG, "IQM File appears to be correct and not empty. (MAGIC:%s,VERSION:%i)", head.magic, head.version);
+		m_logger->log(LOG_DEBUG, "IQM File appears to be correct and not empty. (MAGIC:%s,VERSION:%i)", head.magic, head.version);
 	else
 	{
-		_logger->log(LOG_DEBUG, "IQM file is corrupt or invalid.");
+		m_logger->log(LOG_DEBUG, "IQM file is corrupt or invalid.");
 		return glmesh;
 	}
 
@@ -130,7 +130,7 @@ std::shared_ptr<Mesh> iqmloader::load(const char* data, const uint32_t size)
 		m.start = sm.first_triangle * 3;
 		m.num_indices = sm.num_triangles * 3;
 
-		_logger->log(LOG_DEBUG, "TEST MESH LOADER INFO:\nName:%s\nMaterial:%s\nF.Vert:%i\nN.Verts:%i\nF.Ind:%i\nN.Inds:%i", m.name.c_str(), m.material_name.c_str(), sm.first_vertex, sm.num_vertexes, sm.first_triangle * 3, sm.num_triangles * 3);
+		m_logger->log(LOG_DEBUG, "TEST MESH LOADER INFO:\nName:%s\nMaterial:%s\nF.Vert:%i\nN.Verts:%i\nF.Ind:%i\nN.Inds:%i", m.name.c_str(), m.material_name.c_str(), sm.first_vertex, sm.num_vertexes, sm.first_triangle * 3, sm.num_triangles * 3);
 	}
 
 	loadiqmanims(glmesh, data, head);
@@ -238,6 +238,6 @@ void iqmloader::loadiqmanims(std::shared_ptr<Mesh> m, const char* data, iqmheade
 		ai.num = a.num_frames;
 		ai.loop = CheckBit(a.flags, IQM_LOOP);
 
-		_logger->log(LOG_DEBUG, "Loaded anim: %s.", ai.name.c_str());
+		m_logger->log(LOG_DEBUG, "Loaded anim: %s.", ai.name.c_str());
 	}
 }

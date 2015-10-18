@@ -1,10 +1,12 @@
 #pragma once
 #include "utility/Vector.h"
+#include "ForwardDecl.h"
+#include "boost/filesystem/path.hpp"
 
 template <class T>
 struct resource
 {
-	std::string _path;
+	Path _path;
 	std::shared_ptr<T> _resource;
 };
 
@@ -18,7 +20,7 @@ public:
 		m_resources.push_back(res);
 	}
 
-	resource<T> get_resource(const std::string & path)
+	resource<T> get_resource(const Path & path)
 	{
 		auto it = std::find_if(m_resources.begin(), m_resources.end(), [&path](resource<T> res)
 		{

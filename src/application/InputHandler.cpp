@@ -2,7 +2,7 @@
 #include "InputHandler.h"
 #include "Window.h"
 
-InputHandler::InputHandler(Window* win)
+InputHandler::InputHandler(ApplicationWindow* win)
 {
 	//ctor
 	loop(i, GLFW_KEY_LAST) keys[i] = false;

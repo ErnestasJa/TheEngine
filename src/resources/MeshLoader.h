@@ -3,19 +3,18 @@
 
 #include "IMeshLoader.h"
 #include "ResourceCache.h"
+#include "ForwardDecl.h"
 
-class Logger;
 class mesh_loader : public resource_cache<Mesh>
 {
 public:
-	mesh_loader(Logger * l);
+	mesh_loader();
 	virtual ~mesh_loader();
 
 	virtual void add_loader(imesh_loader * loader);
-	virtual MeshPtr load(const std::string & file);
+	virtual MeshPtr load(const Path & file);
 
 protected:
-	Logger * _logger;
 	vector<imesh_loader*> m_loaders;
 };
 

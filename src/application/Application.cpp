@@ -1,198 +1,121 @@
 #include "Precomp.h"
 
-#include "application/Window.h"
+#include "Window.h"
 #include "utility/Timer.h"
 #include "utility/Logger.h"
 #include "utility/StringUtil.h"
-
 #include "boost/filesystem/path.hpp"
 #include "boost/filesystem/operations.hpp"
-
+#include "core/FileSystem.h"
 #include "Application.h"
-
-void Application::OutputPhysFSVersions()
-{
-	PHYSFS_Version compiled;
-	PHYSFS_Version linked;
-
-	PHYSFS_VERSION(&compiled);
-	PHYSFS_getLinkedVersion(&linked);
-
-	printf("Compiled against PhysicsFS version %d.%d.%d,\n"
-		" and linked against %d.%d.%d.\n\n",
-		(int)compiled.major, (int)compiled.minor, (int)compiled.patch,
-		(int)linked.major, (int)linked.minor, (int)linked.patch);
-} /* output_versions */
-
-Application::Application(int32_t argc, const char ** argv) : VarGroup("settings")
-{
-	this->_argc = argc;
-	this->_argv = argv;
-	_appContext = new AppContext();
-}
+#include "SettingsManager.h"
+#include "opengl/OpenGLUtil.h"
 
 #define DSP() "/"
-void Application::InitSettings()
+
+Application::Application(int32_t argc, const char ** argv)
 {
-	VarGroup & fs = this->AddGroup("filesystem");
-	fs.AddVar(Var("resource_path", "res"));
-	fs.AddVar(Var("engine_resource_path", "engine"));
-	fs.AddVar(Var("config_path", "conf"));
-	fs.AddVar(Var("log_path", "log"));
-	Application::LoadSettings(*this, "config.json");
-
-	InitVariables();
-	VarGroup & app = this->GetGroup(this->GetApplicationId().c_str());
-
-	if (app.Name() != 0)
-		Application::LoadSettings(app, (std::string(fs.GetVar("config_path").ValueS()) + DSP() + this->GetApplicationId() + ".json").c_str());
-}
-
-void Application::ApplySettings()
-{
-	InitFileSystem();
-}
-
-void Application::SetWriteDirectory(const std::string & dir)
-{
-	int32_t changeWriteDirStatus = PHYSFS_setWriteDir(dir.c_str());
-
-	if (changeWriteDirStatus == 0) {
-		printf("Write dir change to '%s' failed.", dir.c_str());
-		exit(-1);
-	}
-}
-
-void RemoveFromEnd(std::string & stringToSearch, const std::string & toRemove)
-{
-	if (&stringToSearch[stringToSearch.length() - toRemove.length()] == toRemove) {
-		stringToSearch.erase((stringToSearch.length() - toRemove.length()), toRemove.length());
-	}
-}
-
-#include <boost/algorithm/string/replace.hpp>
-std::string Application::GetAbsoluteDir(const std::string & absolutePart, const std::string & relativePart)
-{
-	///Maybe add regex path validations, throw exceptions?
-	std::string dir = relativePart,
-		absoluteDir = absolutePart,
-		backStr = std::string("..") + DSP();
-
-	RemoveFromEnd(dir, DSP());
-	RemoveFromEnd(absoluteDir, DSP());
-
-	uint32_t len = dir.size();
-
-	boost::replace_all(dir, backStr, "");
-
-	uint32_t removed = (len - dir.size()) / backStr.length();
-	std::string::size_type index = std::string::npos;
-
-	for (uint32_t i = 0; i < removed; i++)
-	{
-		uint32_t found = absoluteDir.find_last_of(DSP(), index - 1);
-		if (found < index)
-			index = found;
-	}
-
-	if (index < std::string::npos)
-		absoluteDir.erase(absoluteDir.begin() + index, absoluteDir.end());
-
-	RemoveFromEnd(absoluteDir, DSP());
-	return absoluteDir;
-}
-
-void Application::InitFileSystem()
-{
-	// Working dir
-	// /home/senpai/Coding/TheProject/src/applications/voxel_octree/bin
-	// Res dir
-	// /home/senpai/Coding/TheProject/src/applications/voxel_octree/resources
-	//
-
-	//! Add error handling/exceptions
-	VarGroup & fs = this->GetGroup("filesystem");
-
-	_resourcePath = std::string(fs.GetVar("resource_path").ValueS());
-	_workingDirectoryPath = GetAbsoluteDir(_workingDirectoryPath, _resourcePath);
-	boost::replace_all(_resourcePath, std::string("..") + DSP(), "");
-
-	///first set working directory as write dir
-	std::string engineResources = _resourcePath + DSP() + fs.GetVar("engine_resource_path").ValueS();
-	std::string appWriteDir = _resourcePath + DSP() + this->GetApplicationId();
-	std::string appLogDir = appWriteDir + DSP() + fs.GetVar("log_path").ValueS();
-	std::string appConfigPath = appWriteDir + DSP() + fs.GetVar("config_path").ValueS();
-
-	SetWriteDirectory(_workingDirectoryPath);
-
-	PHYSFS_mkdir(_resourcePath.c_str());
-	PHYSFS_mkdir(engineResources.c_str());
-	PHYSFS_mkdir(appWriteDir.c_str());
-	PHYSFS_mkdir(appLogDir.c_str());
-	PHYSFS_mkdir(appConfigPath.c_str());
-
-	PHYSFS_mount((_workingDirectoryPath + DSP() + _resourcePath).c_str(), NULL, 0);
-	PHYSFS_mount((_workingDirectoryPath + DSP() + engineResources).c_str(), NULL, 0);
-	PHYSFS_mount((_workingDirectoryPath + DSP() + appWriteDir).c_str(), NULL, 0);
-
-	SetWriteDirectory(_workingDirectoryPath + DSP() + appWriteDir);
+	m_argc = argc;
+	m_argv = argv;
 }
 
 Application::~Application()
 {
 }
 
-bool Application::Init(const std::string  &title, uint32_t width, uint32_t height)
+bool Application::Init(const std::string  &title)
 {
-	_appContext->_timer = timer_ptr(new Timer());
+	GetContext().p_timer = timer_ptr(new Timer());
+	GetContext().p_fileSystem = new FileSystem(m_argv[0]);
+	GetContext().p_settingsManager = new ApplicationSettingsManager();
+	GetContext().p_logger = new Logger(0);
+	GetContext().p_window = new ApplicationWindow();
 
-	auto normalizedWorkingDirectory = std::string(_argv[0]);
+	InitFileSystemAndLoadConfig();
 
-#ifdef _WIN32
-	normalizedWorkingDirectory = boost::filesystem::canonical(normalizedWorkingDirectory).string();
-	boost::replace_all(normalizedWorkingDirectory, "/", "\\");
-#endif
+	GetContext().GetLogger()->SetTimestampedLogFile();
 
-	if (!PHYSFS_init(normalizedWorkingDirectory.c_str()))
+	if(InitWindowAndOpenGL(title))
 	{
-		std::cout << "PHYSFS_init() failed: " << PHYSFS_getLastError() << std::endl;
+		GetContext().GetLogger()->log(LOG_ERROR, "Failed to initialize ApplicationWindow.");
+	}
+	
+	if (!GetContext().IsInitialized())
+		throw "Failed to initialize app context.";
+
+	return true;
+}
+
+
+static void printSearchPath(void *data, const char *pathItem)
+{
+	printf("[%s] is in the search path.\n", pathItem);
+}
+
+void Application::InitFileSystemAndLoadConfig()
+{
+	///set working directory to where the binary is.
+	auto workingDirectory = GetContext().GetFileSystem()->GetWorkingDirectory();
+	GetContext().GetFileSystem()->SetWriteDirectory(workingDirectory);
+
+	///create directory for application
+	auto applicationDirectory = Path(GetApplicationId());
+
+	if(!GetContext().GetFileSystem()->CreateDirectory(applicationDirectory))
+	{
+		printf("%s\n", "Failed to create directory for current application.");
+		exit(-1);
+	}
+
+ 	PHYSFS_getSearchPathCallback(printSearchPath, NULL);
+
+	GetContext().GetFileSystem()->SetWriteDirectory(applicationDirectory);
+	GetContext().GetFileSystem()->AddSearchDirectory(applicationDirectory);
+
+ 	// ...
+ 	PHYSFS_getSearchPathCallback(printSearchPath, NULL);
+	
+	auto & fileSystemVars = GetContext().GetApplicationSettingsManager()->GetGroup("filesystem");
+	
+	Path logPath(fileSystemVars.GetVar("log_path").ValueS());
+	Path configPath(fileSystemVars.GetVar("config_path").ValueS());
+
+	GetContext().GetFileSystem()->CreateDirectory(logPath);
+	GetContext().GetFileSystem()->CreateDirectory(configPath);
+
+	///REFACTOR: Magic strings
+	Path configFilePath = configPath;
+	configFilePath.append("config.cfg");
+	if(!GetContext().GetApplicationSettingsManager()->LoadSettings(configFilePath))
+		GetContext().GetApplicationSettingsManager()->WriteSettings(configFilePath);
+}
+
+bool Application::InitWindowAndOpenGL(const std::string & title)
+{
+	int32_t width = GetContext().GetApplicationSettingsManager()->GetGroup("video").GetVar("window_width").ValueI(),
+		height = GetContext().GetApplicationSettingsManager()->GetGroup("video").GetVar("window_height").ValueI();
+	
+	GetContext().GetLogger()->log(LOG_LOG, "Trying to initialize ApplicationWindow, dimensions %ix%i", width, height);
+	if (!GetContext().GetWindow()->Init(title, width, height))
+	{
+		delete GetContext().p_window;
+		GetContext().p_window = nullptr;
 		return false;
 	}
 
-	OutputPhysFSVersions();
+	GetContext().GetWindow()->SigWindowClosed().connect(sigc::mem_fun(this, &Application::OnWindowClose));
 
-	_workingDirectoryPath = PHYSFS_getBaseDir();
-	PHYSFS_mount(_workingDirectoryPath.c_str(), NULL, 0);
+	///REFACTOR: Opengl initialization should have it's own place, worst case: extract method.
+	GetContext().p_openGLUtil = new OpenGLUtil();
 
-	boost::replace_all(_workingDirectoryPath, PHYSFS_getDirSeparator(), DSP());
-	RemoveFromEnd(_workingDirectoryPath, DSP());
-
-	printf("Working Directory: %s\n", _workingDirectoryPath.c_str());
-
-	InitSettings();
-	ApplySettings();
-
-	_appContext->_logger = new Logger(this, 0);
-	_appContext->_window = new Window();
-
-	if (!_appContext->_window->Init(title, width, height))
+	if (!GetContext().GetOpenGLUtil()->load_extensions())
 	{
-		delete _appContext->_window;
-		_appContext->_window = nullptr;
+		delete GetContext().p_window;
 		return false;
 	}
 
-	_appContext->_window->SigWindowClosed().connect(sigc::mem_fun(this, &Application::OnWindowClose));
+#if 0
 
-	this->_appContext->_glUtil = new OpenGLUtil(_appContext->_logger);
-
-	if (!this->_appContext->_glUtil->load_extensions())
-	{
-		delete _appContext->_window;
-		return false;
-	}
-
-#ifdef _DEBUG_OGL
 	if (glDebugMessageCallback) {
 		std::cout << "Register OpenGL debug callback " << std::endl;
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
@@ -209,61 +132,24 @@ bool Application::Init(const std::string  &title, uint32_t width, uint32_t heigh
 		std::cout << "glDebugMessageCallback not available" << std::endl;
 #endif
 
-	_appContext->_logger->log(LOG_CRITICAL, "Shading language: %s", (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
-
-	if (!_appContext->IsInitialized())
-		throw "Failed to initialize app context.";
-
-	return true;
+	GetContext().GetLogger()->log(LOG_CRITICAL, "Shading language: %s", (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
 }
 
 void Application::Exit()
 {
-	_appContext->_logger->log(LOG_LOG, "Exitting.");
+	///REFACTOR: or fix, definitelly not everything gets destroyed.
+	GetContext().GetLogger()->log(LOG_LOG, "Exitting.");
 
-	Window::DestroyWindow(_appContext->_window);
-	delete _appContext->_logger;
+	ApplicationWindow::DestroyWindow(GetContext().p_window);
+	delete GetContext().GetLogger();
 
-	if (!PHYSFS_deinit())
-		std::cout << "PHYSFS_deinit() failed!\n reason: " << PHYSFS_getLastError() << "." << std::endl;
+	if (GetContext().GetFileSystem())
+		delete GetContext().GetFileSystem();
 
-	_appContext->_timer = nullptr;
-}
-
-AppContext * Application::Ctx()
-{
-	return _appContext;
-}
-
-std::string Application::GetAbsoluteResourcePath()
-{
-	return _resourcePath;
-}
-
-std::string Application::GetAbsoluteWorkingDirectoryPath()
-{
-	return _workingDirectoryPath;
+	GetContext().p_timer = nullptr;
 }
 
 VarGroup & Application::GetEngineVars()
 {
-	return *this;
-}
-
-VarGroup & Application::GetAppVars()
-{
-	return this->GetGroup(this->GetApplicationId().c_str());
-}
-
-void Application::LoadSettings(VarGroup & group, const std::string & settingsFile, Logger * log)
-{
-	char * buf;
-	uint32_t len;
-	len = helpers::read(settingsFile.c_str(), buf);
-
-	if (len > 0)
-	{
-		VarJsonReader reader(log);
-		reader.Load(buf, len, group);
-	}
+	return *GetContext().GetApplicationSettingsManager();
 }

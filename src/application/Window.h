@@ -4,11 +4,11 @@ void KeyEvent(GLFWwindow * wnd, int32_t key, int32_t scan_code, int32_t action, 
 void MouseMoveEvent(GLFWwindow * wnd, double x, double y);
 void MouseKeyEvent(GLFWwindow * wnd, int32_t button, int32_t action, int32_t mod);
 void MouseScrollEvent(GLFWwindow * wnd, double sx, double sy);
-void WindowResize(GLFWwindow * wnd, int32_t w, int32_t h);
-void WindowClose(GLFWwindow * wnd);
+void ApplicationWindowResize(GLFWwindow * wnd, int32_t w, int32_t h);
+void ApplicationWindowClose(GLFWwindow * wnd);
 void TextEvent(GLFWwindow * wnd, uint32_t scan_code);
 
-class Window
+class ApplicationWindow
 {
 protected:
 	GLFWwindow * _window;
@@ -41,11 +41,11 @@ public: ///signals
 	sigc::signal<void, uint32_t> & SigTextEvent();
 
 public:
-	static std::map<GLFWwindow*, Window*> _windows;
-	static void DestroyWindow(Window * wnd);
+	static std::map<GLFWwindow*, ApplicationWindow*> _windows;
+	static void DestroyWindow(ApplicationWindow * wnd);
 
-	Window();
-	virtual ~Window();
+	ApplicationWindow();
+	virtual ~ApplicationWindow();
 
 	bool Init(const std::string  &title, uint32_t width, uint32_t height, uint32_t r = 8, uint32_t g = 8, uint32_t b = 8, uint32_t alpha = 8, uint32_t depth = 24, uint32_t stencil = 8);
 	bool GetKey(uint32_t key);

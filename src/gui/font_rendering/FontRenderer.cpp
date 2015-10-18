@@ -8,11 +8,10 @@
 #include "FontRenderer.h"
 #include <boost/algorithm/string.hpp>
 
-FontRenderer::FontRenderer(AppContext* ctx)
+FontRenderer::FontRenderer()
 {
-	this->_appContext = ctx;
-	this->_guiEnvironment = _appContext->_guiEnv;
-	this->_logger = _appContext->_logger;
+	this->_guiEnvironment = GetContext().GetGUIEnvironment();
+	this->_logger = GetContext().GetLogger();
 
 	FT_Error err = FT_Init_FreeType(&_ftLib);
 

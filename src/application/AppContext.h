@@ -1,33 +1,40 @@
-#pragma once
+#ifndef APP_CONTEXT_H
+#define APP_CONTEXT_H
 
-#include "Window.h"
-#include "opengl/OpenGLUtil.h"
-#include "gui/GUIEnvironment.h"
-#include "utility/Logger.h"
-#include "utility/Timer.h"
-#include "InputHandler.h"
+#include "ForwardDecl.h"
+#include <boost/core/noncopyable.hpp>
 
-struct AppContext
+class AppContext;
+AppContext & GetContext();
+
+class AppContext: private boost::noncopyable
 {
-	AppContext()
-	{
-		_window = nullptr;
-		_guiEnv = nullptr;
-		_timer = nullptr;
-		_logger = nullptr;
-		_glUtil = nullptr;
-		_input = nullptr;
-	}
+protected:
+	AppContext();
+	virtual ~AppContext();
+public:
+	friend class Application;
+	static AppContext & Instance();
+	bool IsInitialized();
 
-	bool IsInitialized()
-	{
-		return _window && _glUtil && _timer && _logger;
-	}
+	Logger * GetLogger();
+	ApplicationWindow * GetWindow();
+	OpenGLUtil * GetOpenGLUtil();
+	GUIEnvironment * GetGUIEnvironment();
+	TimerPtr GetTimer();
+	InputHandler * GetInputHandler();
+	ApplicationSettingsManager * GetApplicationSettingsManager();
+	FileSystem * GetFileSystem();
 
-	Window* _window;
-	OpenGLUtil * _glUtil;
-	GUIEnvironment* _guiEnv;
-	timer_ptr   _timer;
-	Logger* _logger;
-	InputHandler* _input;
+protected:
+	ApplicationWindow * p_window;
+	OpenGLUtil * p_openGLUtil;
+	GUIEnvironment * p_guiEnv;
+	TimerPtr p_timer;
+	Logger * p_logger; 
+	InputHandler * p_inputHandler;
+	ApplicationSettingsManager * p_settingsManager;
+	FileSystem * p_fileSystem;
 };
+
+#endif

@@ -180,12 +180,12 @@ class Launcher(Frame):
         self.check_vars = {}
         self.check_buttons = {}
         self.addCheckButtons([
-            ["BoostBS", (1,"Build boost build system?")],
+            ["BoostBS", (0,"Build boost build system?")],
             ["BoostBCP", (0,"Build boost bcp tool?")],
-            ["Boost", (1,"Build boost?")],
-            ["Other", (1,"Build other libraries?")],
+            ["Boost", (0,"Build boost?")],
+            ["Other", (0,"Build other libraries?")],
             ["Engine", (1,"Build engine!")],
-            ["Copy", (1, "Copy all lib.")]
+            ["Copy", (0, "Copy all lib.")]
             ])
         
         w = Label(self, text="Thread count:")
@@ -237,7 +237,8 @@ class Launcher(Frame):
 
 def main():
     root = Tk()
-    root.geometry("250x150+300+400")
+    root.geometry("250x200+10+10")
+    root.resizable(0,0)
     app = Launcher(root)
     root.mainloop()  
 

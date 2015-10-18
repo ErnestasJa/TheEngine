@@ -33,7 +33,7 @@ GUIColorPicker::GUIColorPicker(GUIEnvironment* env, Rect2D<int> dimensions, bool
 	picker->SetParent(this);
 	picker->SetListening(true);
 
-	image_loader* ldr = new image_loader(env->GetContext()->_logger);
+	image_loader* ldr = new image_loader();
 	TexturePtr cursorTex = share(new Texture());
 	cursorTex->Init(ldr->load("res/gui/images/cpcurs.png"));
 	cursor = new GUIImage(env, Rect2D<int>(cursorPos.x, cursorPos.y, 8, 8), cursorTex);

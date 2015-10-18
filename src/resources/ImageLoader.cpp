@@ -6,11 +6,12 @@
 #include "opengl/Texture.h"
 
 #include "utility/Logger.h"
+#include "core/FileSystem.h"
 
-image_loader::image_loader(Logger * l) : _logger(l)
+image_loader::image_loader()
 {
-	add_loader(new png_loader(l));
-	add_loader(new tgaloader(l));
+	add_loader(new png_loader());
+	add_loader(new tgaloader());
 }
 
 image_loader::~image_loader()
@@ -30,39 +31,46 @@ void image_loader::add_loader(iimage_loader * loader)
 		m_loaders.push_back(loader);
 }
 
-image_ptr image_loader::load(const std::string & file)
+image_ptr image_loader::load(const Path & filePath)
 {
 	resource<image> res;
-	res = this->get_resource(file);
+	res = this->get_resource(filePath);
 
 	if (res._resource)
 	{
-		_logger->log(LOG_LOG, "Found image in cache, skipping loading.");
+		GetContext().GetLogger()->log(LOG_LOG, "Found image in cache, skipping loading.");
 		return res._resource;
 	}
 
-	std::string ext = file.substr(file.find_last_of('.'));
-	_logger->log(LOG_LOG, "Image extension: '%s'", ext.c_str());
+	std::string ext = filePath.extension().generic_string();
+	GetContext().GetLogger()->log(LOG_LOG, "Image extension: '%s'", ext.c_str());
+	auto fileSystem = GetContext().GetFileSystem();
 
-	if (PHYSFS_exists(file.c_str()))
+	if (fileSystem->OpenRead(filePath))
+	{
 		for (iimage_loader * l : m_loaders)
 		{
 			if (l->check_by_extension(ext))
 			{
-				char * buf;
-				uint32_t len = helpers::read(file, buf);
+				FilePtr file = fileSystem->OpenRead(filePath);
 
-				if (len != 0)
+				if(file)
 				{
-					_logger->log(LOG_LOG, "Image file size: %u", len);
+					ByteBufferPtr buffer = file->Read();
 
-					res._path = file;
-					res._resource = image_ptr(l->load(buf, len));
-					this->add_resource(res);
-					return res._resource;
+					if (buffer->size() != 0)
+					{
+						GetContext().GetLogger()->log(LOG_LOG, "Image file size: %u", buffer->size());
+
+						res._path = filePath;
+						res._resource = image_ptr(l->load(buffer->data(), buffer->size()));
+						this->add_resource(res);
+						return res._resource;
+					}
 				}
 			}
 		}
+	}
 
 	return nullptr;
 }

@@ -28,14 +28,11 @@ protected:
 #pragma pack(pop)   /* restore original alignment from stack */
 
 	virtual image * loadUncompressedTGA(void * buffer, const uint32_t size);
-
 	HEADER m_header;
-
-	Logger * _logger;
 
 public:
 
-	tgaloader(Logger * l);
+	tgaloader();
 	virtual ~tgaloader();
 
 	virtual image_ptr load(void * buffer, const uint32_t size);

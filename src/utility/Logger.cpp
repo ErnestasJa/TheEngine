@@ -1,44 +1,53 @@
 #include "Precomp.h"
 
 #include "utility/Logger.h"
-#include "application/Application.h"
+#include "application/AppContext.h"
+#include "application/SettingsManager.h"
 #include "utility/Timer.h"
+#include "core/FileSystem.h"
 
-Logger::Logger(Application *app, int verbosity)
+
+Logger::Logger(int verbosity)
 {
 	m_verbosity = verbosity;
-	m_app = app;
-
-	std::string fname = app->GetGroup("filesystem").GetVar("log_path").ValueS();
-	fname += "/";
-	fname += helpers::to_str(m_app->Ctx()->_timer->get_real_time());
-	fname += "_log.txt";
-
-	//open it
-	m_logfile = PHYSFS_openWrite(fname.c_str());
 	log(LOG_DEBUG, "Logger initialised...");
 }
 
 Logger::~Logger()
 {
 	log(LOG_DEBUG, "Logger is terminating...");
-	PHYSFS_flush(m_logfile);
-	PHYSFS_close(m_logfile);
 }
 
-void Logger::log(loglevel lev, const char* st, ...)
+void Logger::log(loglevel lev, const char* formatString, ...)
 {
-	m_app->Ctx()->_timer->tick();
-	char buf[256];
-	va_list l;
-	va_start(l, st);
-	vsnprintf(buf, 256, st, l);
-	va_end(l);
-	std::string message = "";
+	va_list variableArgumentList;
+  	va_start(variableArgumentList, formatString);
+	std::string logMessage = FormatMessage(lev, formatString, variableArgumentList);
+	va_end(variableArgumentList);
 
-	//message+="["+timestamp()+"] ";
-	message += helpers::to_str(m_app->Ctx()->_timer->get_time()) + " ";
-	//add importance info
+	if(m_logfile)
+		m_logfile->Write((void*)logMessage.c_str(), logMessage.size());
+	
+	printf("%s", logMessage.c_str());
+}
+
+void Logger::SetLogFile(FilePtr file)
+{
+	m_logfile = file;
+}
+
+void Logger::SetTimestampedLogFile()
+{
+	m_logfile = GetContext().GetFileSystem()->OpenWrite(GenerateLogFileName());
+}
+
+std::string Logger::FormatMessage(loglevel lev, const char* formatString, va_list & variableArgumentList)
+{
+	char buffer[256];
+	vsnprintf(buffer, 256, formatString, variableArgumentList);
+
+	std::string message = GenerateTimestamp() + " ";
+
 	switch (lev)
 	{
 	case LOG_LOG:
@@ -60,20 +69,17 @@ void Logger::log(loglevel lev, const char* st, ...)
 		break;
 	}
 
-	message.append(buf);
+	message.append(buffer);
 	message.append("\n");
-	//std::pair<debuglevel,std::string> p(lev,message);
-	//outputs.push_back(p);
-	PHYSFS_write(m_logfile, message.c_str(), message.size(), 1);
 
-	printf("%s", message.c_str());
+	return message;
 }
 
-std::string Logger::timestamp()
+std::string Logger::GenerateTimestamp()
 {
+	GetContext().GetTimer()->tick();
 	std::string stamp = "";
-
-	uint32_t t = m_app->Ctx()->_timer->get_time() / 1000;
+	uint32_t t = GetContext().GetTimer()->get_time() / 1000;
 
 	uint32_t h, m, s;
 
@@ -94,4 +100,11 @@ std::string Logger::timestamp()
 	stamp += helpers::to_str(s);
 
 	return stamp;
+}
+
+Path Logger::GenerateLogFileName()
+{
+	Path logPath = GetContext().GetApplicationSettingsManager()->GetGroup("filesystem").GetVar("log_path").ValueS();
+	logPath.append(helpers::to_str(GetContext().GetTimer()->get_real_time()) + "_log.txt");
+	return logPath;
 }
