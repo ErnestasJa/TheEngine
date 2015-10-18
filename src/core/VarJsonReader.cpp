@@ -6,13 +6,13 @@
 #include "core/VarGroup.h"
 #include "utility/Logger.h"
 #include "application/AppContext.h"
+#include "core/FileSystem.h"
 
 
-VarJsonReader::VarJsonReader(AppContext * appContext)
+VarJsonReader::VarJsonReader()
 {
-	m_appContext = appContext;
-	m_logger = appContext->logger;
-	m_fileSystem = appContext->fileSystem;
+	m_logger = GetContext().GetLogger();
+	m_fileSystem = GetContext().GetFileSystem();
 }
 
 VarJsonReader::~VarJsonReader()
@@ -48,7 +48,7 @@ bool VarJsonReader::Read(const Path & fileName, VarGroup & group)
 }
 
 void BuildGroup(VarGroup & group, Json::Value & parentValue);
-void WriteFile(const Path & fileName, const std::string & jsonString, AppContext * appContext);
+void WriteFile(const Path & fileName, const std::string & jsonString);
 
 bool VarJsonReader::Write(const Path & fileName, VarGroup & group)
 {
@@ -60,14 +60,14 @@ bool VarJsonReader::Write(const Path & fileName, VarGroup & group)
 
 	std::string buf = writer.write(root);
 
-	WriteFile(fileName, buf, m_appContext);
+	WriteFile(fileName, buf);
 
 	return true;
 }
 
-void WriteFile(const Path & fileName, const std::string & jsonString, AppContext * appContext)
+void WriteFile(const Path & fileName, const std::string & jsonString)
 {
-	FilePtr file = appContext->fileSystem->OpenWrite(fileName);
+	FilePtr file = GetContext().GetFileSystem()->OpenWrite(fileName);
 	
 	if(file && file->IsOpen())
 	{

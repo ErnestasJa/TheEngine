@@ -3,10 +3,10 @@
 #include "Camera.h"
 #include "application/AppContext.h"
 #include "opengl/AABB.h"
+#include "application/Window.h"
 
-Camera::Camera(AppContext* ctx, const glm::vec3 &pos, const glm::vec3 &target, const glm::vec3 &up, float aspect_ratio, float field_of_view, float near_z, float far_z)
+Camera::Camera(const glm::vec3 &pos, const glm::vec3 &target, const glm::vec3 &up, float aspect_ratio, float field_of_view, float near_z, float far_z)
 {
-	_appContext = ctx;
 	m_fps = true;
 	m_pos = pos;
 	m_rot = glm::toQuat(glm::inverse(glm::lookAt(pos, target, up)));
@@ -157,10 +157,11 @@ void Camera::Update(float dt)
 
 	if (m_fps)
 	{
-		glm::ivec2 s = _appContext->_window->GetWindowSize();
-		m_current_mouse_pos = _appContext->_window->GetMousePos();
-		_appContext->_window->SetMousePos(s / 2);
-		m_last_mouse_pos = _appContext->_window->GetMousePos();
+		auto window = GetContext().GetWindow();
+		glm::ivec2 s = window->GetWindowSize();
+		m_current_mouse_pos = window->GetMousePos();
+		window->SetMousePos(s / 2);
+		m_last_mouse_pos = window->GetMousePos();
 		HandleMouse();
 
 		m_look = glm::vec3(m_rot*glm::vec3(0, 0, -1));

@@ -34,7 +34,6 @@ private:
 	FT_Library _ftLib;
 	FT_Face _ftFace;
 
-	AppContext* _appContext;
 	Logger* _logger;
 	GUIEnvironment* _guiEnvironment;
 
@@ -56,7 +55,7 @@ private:
 	GLuint _VAO;
 	GLuint _VBO;
 public:
-	FontRenderer(AppContext* ctx);
+	FontRenderer();
 
 	~FontRenderer();
 

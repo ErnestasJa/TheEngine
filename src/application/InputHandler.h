@@ -7,12 +7,12 @@ struct KeyInfo
 	uint32_t *mods;
 };
 
-class Window;
+class ApplicationWindow;
 
 class InputHandler
 {
 public:
-	InputHandler(Window* win);
+	InputHandler(ApplicationWindow * win);
 	virtual ~InputHandler();
 
 	bool IsKeyDown(uint32_t keyCode);

@@ -1,6 +1,6 @@
 #include "Precomp.h"
-
 #include "OpenGLUtil.h"
+#include "application/AppContext.h"
 #include "utility/Logger.h"
 
 #if defined(__MINGW32__) || defined(_WIN32)
@@ -11,11 +11,9 @@
 #include "GL/glxext.h"
 #endif
 
-#include <assert.h>
-
-OpenGLUtil::OpenGLUtil(Logger * l)
+OpenGLUtil::OpenGLUtil()
 {
-	_logger = l;
+
 }
 
 OpenGLUtil::~OpenGLUtil()
@@ -39,11 +37,7 @@ bool OpenGLUtil::check_and_output_errors()
 
 	while ((err = glGetError()) != GL_NO_ERROR)
 	{
-		_logger->log(LOG_ERROR, "GL_ERROR: %s", gl_error_to_string(err).c_str());
-
-		///
-		//assert(err==GL_NO_ERROR);
-
+		GetContext().GetLogger()->log(LOG_ERROR, "GL_ERROR: %s", gl_error_to_string(err).c_str());
 		ret = true;
 	}
 

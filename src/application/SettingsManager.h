@@ -10,16 +10,13 @@ class AppContext;
 class ApplicationSettingsManager: public VarGroup
 {
 public:
-	ApplicationSettingsManager(AppContext * appContext);
+	ApplicationSettingsManager();
 	virtual ~ApplicationSettingsManager();
 	bool LoadSettings(const Path & fileName);
 	bool WriteSettings(const Path & fileName);
 
 private:
 	void InitSettings();
-
-private:
-	AppContext * m_appContext;
 };
 
 #endif

@@ -9,9 +9,8 @@
 
 Path GetPhysFSWorkingDirectory();
 
-FileSystem::FileSystem(AppContext * appContext, const char * argv)
+FileSystem::FileSystem(const char * argv)
 {
-	m_appContext = appContext;
 	PHYSFS_init(argv);
 	m_workingDirectory = GetPhysFSWorkingDirectory();
 	PHYSFS_mount(m_workingDirectory.generic_string().c_str(), NULL, 0);
@@ -87,7 +86,7 @@ bool FileSystem::CreateDirectory(const Path & path)
 
 	if(returnCode == 0)
 	{
-		m_appContext->logger->log(LOG_LOG, "Failed to create directory, error: %s", PHYSFS_getLastError());
+		GetContext().GetLogger()->log(LOG_LOG, "Failed to create directory, error: %s", PHYSFS_getLastError());
 		//printf("Failed to create directory, error: %s\n", PHYSFS_getLastError());
 	}
 

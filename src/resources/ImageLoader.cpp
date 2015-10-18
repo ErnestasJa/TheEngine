@@ -6,11 +6,12 @@
 #include "opengl/Texture.h"
 
 #include "utility/Logger.h"
+#include "core/FileSystem.h"
 
-image_loader::image_loader(AppContext * appContext) : m_appContext(appContext)
+image_loader::image_loader()
 {
-	add_loader(new png_loader(appContext));
-	add_loader(new tgaloader(appContext));
+	add_loader(new png_loader());
+	add_loader(new tgaloader());
 }
 
 image_loader::~image_loader()
@@ -37,13 +38,13 @@ image_ptr image_loader::load(const Path & filePath)
 
 	if (res._resource)
 	{
-		m_appContext->logger->log(LOG_LOG, "Found image in cache, skipping loading.");
+		GetContext().GetLogger()->log(LOG_LOG, "Found image in cache, skipping loading.");
 		return res._resource;
 	}
 
 	std::string ext = filePath.extension().generic_string();
-	m_appContext->logger->log(LOG_LOG, "Image extension: '%s'", ext.c_str());
-	auto fileSystem = m_appContext->fileSystem;
+	GetContext().GetLogger()->log(LOG_LOG, "Image extension: '%s'", ext.c_str());
+	auto fileSystem = GetContext().GetFileSystem();
 
 	if (fileSystem->OpenRead(filePath))
 	{
@@ -59,7 +60,7 @@ image_ptr image_loader::load(const Path & filePath)
 
 					if (buffer->size() != 0)
 					{
-						m_appContext->logger->log(LOG_LOG, "Image file size: %u", buffer->size());
+						GetContext().GetLogger()->log(LOG_LOG, "Image file size: %u", buffer->size());
 
 						res._path = filePath;
 						res._resource = image_ptr(l->load(buffer->data(), buffer->size()));

@@ -2,12 +2,14 @@
 
 #include "utility/Logger.h"
 #include "application/AppContext.h"
+#include "application/SettingsManager.h"
 #include "utility/Timer.h"
+#include "core/FileSystem.h"
 
-Logger::Logger(AppContext * appContext, int verbosity)
+
+Logger::Logger(int verbosity)
 {
 	m_verbosity = verbosity;
-	m_appContext = appContext;
 	log(LOG_DEBUG, "Logger initialised...");
 }
 
@@ -36,7 +38,7 @@ void Logger::SetLogFile(FilePtr file)
 
 void Logger::SetTimestampedLogFile()
 {
-	m_logfile = m_appContext->fileSystem->OpenWrite(GenerateLogFileName());
+	m_logfile = GetContext().GetFileSystem()->OpenWrite(GenerateLogFileName());
 }
 
 std::string Logger::FormatMessage(loglevel lev, const char* formatString, va_list & variableArgumentList)
@@ -75,9 +77,9 @@ std::string Logger::FormatMessage(loglevel lev, const char* formatString, va_lis
 
 std::string Logger::GenerateTimestamp()
 {
-	m_appContext->timer->tick();
+	GetContext().GetTimer()->tick();
 	std::string stamp = "";
-	uint32_t t = m_appContext->timer->get_time() / 1000;
+	uint32_t t = GetContext().GetTimer()->get_time() / 1000;
 
 	uint32_t h, m, s;
 
@@ -102,7 +104,7 @@ std::string Logger::GenerateTimestamp()
 
 Path Logger::GenerateLogFileName()
 {
-	Path logPath = m_appContext->settingsManager->GetGroup("filesystem").GetVar("log_path").ValueS();
-	logPath.append(helpers::to_str(m_appContext->timer->get_real_time()) + "_log.txt");
+	Path logPath = GetContext().GetApplicationSettingsManager()->GetGroup("filesystem").GetVar("log_path").ValueS();
+	logPath.append(helpers::to_str(GetContext().GetTimer()->get_real_time()) + "_log.txt");
 	return logPath;
 }

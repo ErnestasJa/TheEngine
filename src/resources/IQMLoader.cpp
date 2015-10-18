@@ -6,10 +6,9 @@
 #include "utility/Util.h"
 #include "utility/Logger.h"
 
-iqmloader::iqmloader(AppContext * appContext)
+iqmloader::iqmloader()
 {
-	m_appContext = appContext;
-	m_logger = appContext->logger;
+	m_logger = GetContext().GetLogger();
 }
 
 void iqmloader::load_header(const char* data, iqmheader & header)

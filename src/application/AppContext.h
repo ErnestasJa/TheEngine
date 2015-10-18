@@ -1,78 +1,40 @@
-#pragma once
+#ifndef APP_CONTEXT_H
+#define APP_CONTEXT_H
 
-#include "Window.h"
-#include "opengl/OpenGLUtil.h"
-#include "gui/GUIEnvironment.h"
-#include "utility/Logger.h"
-#include "utility/Timer.h"
-#include "InputHandler.h"
-#include "SettingsManager.h"
-#include "core/FileSystem.h"
+#include "ForwardDecl.h"
+#include <boost/core/noncopyable.hpp>
 
-///REFACTOR: make it a bit more of a class rather than hybrid struct+class.
-class AppContext
+class AppContext;
+AppContext & GetContext();
+
+class AppContext: private boost::noncopyable
 {
-
+protected:
+	AppContext();
+	virtual ~AppContext();
 public:
-	AppContext()
-	{
-		_window = nullptr;
-		_guiEnv = nullptr;
-		_timer = nullptr;
-		_logger = nullptr;
-		_glUtil = nullptr;
-		_input = nullptr;
-		settingsManager = nullptr;
-		fileSystem = nullptr;
-	}
+	friend class Application;
+	static AppContext & Instance();
+	bool IsInitialized();
 
-	bool IsInitialized()
-	{
-		return _window && _glUtil && _timer && _logger && settingsManager && fileSystem;
-	}
+	Logger * GetLogger();
+	ApplicationWindow * GetWindow();
+	OpenGLUtil * GetOpenGLUtil();
+	GUIEnvironment * GetGUIEnvironment();
+	TimerPtr GetTimer();
+	InputHandler * GetInputHandler();
+	ApplicationSettingsManager * GetApplicationSettingsManager();
+	FileSystem * GetFileSystem();
 
-
-	//pointless underscores, refactor places where they are used later.
-	union 
-	{
-		Window* window;
-		Window* _window;
-	};
-
-
-	union 
-	{
-		OpenGLUtil * glUtil;
-		OpenGLUtil * _glUtil;
-	};
-
-
-	union 
-	{
-		GUIEnvironment* guiEnv;
-		GUIEnvironment* _guiEnv;
-	};
-
-
-	union 
-	{
-		timer_ptr   timer;
-		timer_ptr   _timer;
-	};
-
-	union 
-	{
-		Logger* logger; 
-		Logger* _logger;
-	};
-
-
-	union 
-	{
-		InputHandler* input;
-		InputHandler* _input;
-	};
-
-	ApplicationSettingsManager * settingsManager;
-	FileSystem * fileSystem;
+protected:
+	ApplicationWindow * p_window;
+	OpenGLUtil * p_openGLUtil;
+	GUIEnvironment * p_guiEnv;
+	TimerPtr p_timer;
+	Logger * p_logger; 
+	InputHandler * p_inputHandler;
+	ApplicationSettingsManager * p_settingsManager;
+	FileSystem * p_fileSystem;
 };
+
+#endif

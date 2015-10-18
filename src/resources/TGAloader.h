@@ -1,7 +1,6 @@
 #pragma once
 
 #include "IImageLoader.h"
-class AppContext;
 class Logger;
 class tgaloader : public iimage_loader
 {
@@ -31,11 +30,9 @@ protected:
 	virtual image * loadUncompressedTGA(void * buffer, const uint32_t size);
 	HEADER m_header;
 
-	AppContext * m_appContext;
-
 public:
 
-	tgaloader(AppContext * appContext);
+	tgaloader();
 	virtual ~tgaloader();
 
 	virtual image_ptr load(void * buffer, const uint32_t size);

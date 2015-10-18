@@ -10,10 +10,9 @@ class AppContext;
 class image_loader : public resource_cache<image>
 {
 protected:
-	AppContext * m_appContext;
 	vector<iimage_loader*> m_loaders;
 public:
-	image_loader(AppContext * appContext);
+	image_loader();
 	virtual ~image_loader();
 
 	virtual void add_loader(iimage_loader * loader);

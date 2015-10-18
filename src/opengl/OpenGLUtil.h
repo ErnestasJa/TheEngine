@@ -1,12 +1,9 @@
 #pragma once
 
-class Logger;
 class OpenGLUtil
 {
-protected:
-	Logger * _logger;
 public:
-	OpenGLUtil(Logger * l);
+	OpenGLUtil();
 	virtual ~OpenGLUtil();
 
 	bool load_extensions();

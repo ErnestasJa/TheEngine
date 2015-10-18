@@ -85,6 +85,7 @@ add_library(engine STATIC
 ./application/SettingsManager.cpp
 ./application/Window.cpp
 ./application/InputHandler.cpp
+./application/AppContext.cpp
 ./application/Application.cpp
 ./resources/ResourceCache.cpp
 ./resources/PNGLoader.cpp

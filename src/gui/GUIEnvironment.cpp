@@ -11,11 +11,9 @@
 #include "application/Window.h"
 #include "application/AppContext.h"
 
-GUIEnvironment::GUIEnvironment(AppContext* ctx) :GUIElement(nullptr, Rect2D<int>(0, 0, ctx->_window->GetWindowSize().x, ctx->_window->GetWindowSize().y))
+GUIEnvironment::GUIEnvironment() :GUIElement(nullptr, Rect2D<int>(0, 0, GetContext().GetWindow()->GetWindowSize().x, GetContext().GetWindow()->GetWindowSize().y))
 {
-	m_context = ctx;
-	ctx->_guiEnv = this;
-	this->m_window = ctx->_window;
+	this->m_window = GetContext().GetWindow();
 
 	_sig_mouse_move = m_window->SigMouseMoved().connect(sigc::mem_fun(this, &GUIEnvironment::on_mouse_moved));
 	_sig_mouse_button = m_window->SigMouseKey().connect(sigc::mem_fun(this, &GUIEnvironment::on_mouse_button));
@@ -50,12 +48,12 @@ GUIEnvironment::GUIEnvironment(AppContext* ctx) :GUIElement(nullptr, Rect2D<int>
 	skin->load("gui/skins/skin_default.xml");
 
 	skin_atlas = new Texture();
-	image_loader* imgl = new image_loader(ctx);
+	image_loader* imgl = new image_loader();
 	std::shared_ptr<image> img = std::shared_ptr<image>(imgl->load("gui/skins/skin_default2.png"));
 	skin_atlas->Init(img);
 	delete imgl;
 
-	m_font_renderer = new FontRenderer(ctx);
+	m_font_renderer = new FontRenderer();
 }
 
 GUIEnvironment::~GUIEnvironment()

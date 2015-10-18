@@ -3,6 +3,8 @@
 
 #include "utility/Plane3d.h"
 
+///REFACTOR: WTF HAPPENED IN THIS FILE... WW3??!
+
 enum FRUSTUM_PLANES
 {
 	FP_TOP,
@@ -25,10 +27,11 @@ enum INTERSECT_RESULT
 class AppContext;
 class AABB;
 
+
 class Camera
 {
 public:
-	Camera(AppContext* ctx, const glm::vec3 &pos, const glm::vec3 &target, const glm::vec3 &up, float aspect_ratio = 1.777777f, float field_of_view = 45.0f, float near_z = 1.0f, float far_z = 4096.0f);
+	Camera(const glm::vec3 &pos, const glm::vec3 &target, const glm::vec3 &up, float aspect_ratio = 1.777777f, float field_of_view = 45.0f, float near_z = 1.0f, float far_z = 4096.0f);
 	virtual ~Camera();
 
 	virtual glm::mat4 & GetProjectionMat();
@@ -97,11 +100,9 @@ protected:
 	glm::quat m_rot;
 
 	glm::ivec2 m_last_mouse_pos, m_current_mouse_pos;
-
 	glm::vec3 m_translation;
 
 	bool m_fps;
-	AppContext* _appContext;
 };
 
 typedef std::shared_ptr<Camera> CameraPtr;

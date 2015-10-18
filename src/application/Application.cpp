@@ -1,14 +1,15 @@
 #include "Precomp.h"
 
-#include "application/Window.h"
+#include "Window.h"
 #include "utility/Timer.h"
 #include "utility/Logger.h"
 #include "utility/StringUtil.h"
-
 #include "boost/filesystem/path.hpp"
 #include "boost/filesystem/operations.hpp"
-
+#include "core/FileSystem.h"
 #include "Application.h"
+#include "SettingsManager.h"
+#include "opengl/OpenGLUtil.h"
 
 #define DSP() "/"
 
@@ -16,7 +17,6 @@ Application::Application(int32_t argc, const char ** argv)
 {
 	m_argc = argc;
 	m_argv = argv;
-	m_appContext = new AppContext();
 }
 
 Application::~Application()
@@ -25,22 +25,22 @@ Application::~Application()
 
 bool Application::Init(const std::string  &title)
 {
-	m_appContext->timer = timer_ptr(new Timer());
-	m_appContext->fileSystem = new FileSystem(m_appContext, m_argv[0]);
-	m_appContext->settingsManager = new ApplicationSettingsManager(m_appContext);
-	m_appContext->logger = new Logger(m_appContext, 0);
-	m_appContext->window = new Window();
+	GetContext().p_timer = timer_ptr(new Timer());
+	GetContext().p_fileSystem = new FileSystem(m_argv[0]);
+	GetContext().p_settingsManager = new ApplicationSettingsManager();
+	GetContext().p_logger = new Logger(0);
+	GetContext().p_window = new ApplicationWindow();
 
 	InitFileSystemAndLoadConfig();
 
-	m_appContext->logger->SetTimestampedLogFile();
+	GetContext().GetLogger()->SetTimestampedLogFile();
 
 	if(InitWindowAndOpenGL(title))
 	{
-		m_appContext->logger->log(LOG_ERROR, "Failed to initialize window.");
+		GetContext().GetLogger()->log(LOG_ERROR, "Failed to initialize ApplicationWindow.");
 	}
 	
-	if (!m_appContext->IsInitialized())
+	if (!GetContext().IsInitialized())
 		throw "Failed to initialize app context.";
 
 	return true;
@@ -55,13 +55,13 @@ static void printSearchPath(void *data, const char *pathItem)
 void Application::InitFileSystemAndLoadConfig()
 {
 	///set working directory to where the binary is.
-	auto workingDirectory = m_appContext->fileSystem->GetWorkingDirectory();
-	m_appContext->fileSystem->SetWriteDirectory(workingDirectory);
+	auto workingDirectory = GetContext().GetFileSystem()->GetWorkingDirectory();
+	GetContext().GetFileSystem()->SetWriteDirectory(workingDirectory);
 
 	///create directory for application
 	auto applicationDirectory = Path(GetApplicationId());
 
-	if(!m_appContext->fileSystem->CreateDirectory(applicationDirectory))
+	if(!GetContext().GetFileSystem()->CreateDirectory(applicationDirectory))
 	{
 		printf("%s\n", "Failed to create directory for current application.");
 		exit(-1);
@@ -69,48 +69,48 @@ void Application::InitFileSystemAndLoadConfig()
 
  	PHYSFS_getSearchPathCallback(printSearchPath, NULL);
 
-	m_appContext->fileSystem->SetWriteDirectory(applicationDirectory);
-	m_appContext->fileSystem->AddSearchDirectory(applicationDirectory);
+	GetContext().GetFileSystem()->SetWriteDirectory(applicationDirectory);
+	GetContext().GetFileSystem()->AddSearchDirectory(applicationDirectory);
 
  	// ...
  	PHYSFS_getSearchPathCallback(printSearchPath, NULL);
 	
-	auto & fileSystemVars = m_appContext->settingsManager->GetGroup("filesystem");
+	auto & fileSystemVars = GetContext().GetApplicationSettingsManager()->GetGroup("filesystem");
 	
 	Path logPath(fileSystemVars.GetVar("log_path").ValueS());
 	Path configPath(fileSystemVars.GetVar("config_path").ValueS());
 
-	m_appContext->fileSystem->CreateDirectory(logPath);
-	m_appContext->fileSystem->CreateDirectory(configPath);
+	GetContext().GetFileSystem()->CreateDirectory(logPath);
+	GetContext().GetFileSystem()->CreateDirectory(configPath);
 
 	///REFACTOR: Magic strings
 	Path configFilePath = configPath;
 	configFilePath.append("config.cfg");
-	if(!m_appContext->settingsManager->LoadSettings(configFilePath))
-		m_appContext->settingsManager->WriteSettings(configFilePath);
+	if(!GetContext().GetApplicationSettingsManager()->LoadSettings(configFilePath))
+		GetContext().GetApplicationSettingsManager()->WriteSettings(configFilePath);
 }
 
 bool Application::InitWindowAndOpenGL(const std::string & title)
 {
-	int32_t width = m_appContext->settingsManager->GetGroup("video").GetVar("window_width").ValueI(),
-		height = m_appContext->settingsManager->GetGroup("video").GetVar("window_height").ValueI();
+	int32_t width = GetContext().GetApplicationSettingsManager()->GetGroup("video").GetVar("window_width").ValueI(),
+		height = GetContext().GetApplicationSettingsManager()->GetGroup("video").GetVar("window_height").ValueI();
 	
-	m_appContext->logger->log(LOG_LOG, "Trying to initialize window, dimensions %ix%i", width, height);
-	if (!m_appContext->window->Init(title, width, height))
+	GetContext().GetLogger()->log(LOG_LOG, "Trying to initialize ApplicationWindow, dimensions %ix%i", width, height);
+	if (!GetContext().GetWindow()->Init(title, width, height))
 	{
-		delete m_appContext->window;
-		m_appContext->window = nullptr;
+		delete GetContext().p_window;
+		GetContext().p_window = nullptr;
 		return false;
 	}
 
-	m_appContext->window->SigWindowClosed().connect(sigc::mem_fun(this, &Application::OnWindowClose));
+	GetContext().GetWindow()->SigWindowClosed().connect(sigc::mem_fun(this, &Application::OnWindowClose));
 
 	///REFACTOR: Opengl initialization should have it's own place, worst case: extract method.
-	this->m_appContext->glUtil = new OpenGLUtil(m_appContext->logger);
+	GetContext().p_openGLUtil = new OpenGLUtil();
 
-	if (!this->m_appContext->glUtil->load_extensions())
+	if (!GetContext().GetOpenGLUtil()->load_extensions())
 	{
-		delete m_appContext->window;
+		delete GetContext().p_window;
 		return false;
 	}
 
@@ -132,34 +132,24 @@ bool Application::InitWindowAndOpenGL(const std::string & title)
 		std::cout << "glDebugMessageCallback not available" << std::endl;
 #endif
 
-	m_appContext->logger->log(LOG_CRITICAL, "Shading language: %s", (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
+	GetContext().GetLogger()->log(LOG_CRITICAL, "Shading language: %s", (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
 }
 
 void Application::Exit()
 {
 	///REFACTOR: or fix, definitelly not everything gets destroyed.
-	m_appContext->logger->log(LOG_LOG, "Exitting.");
+	GetContext().GetLogger()->log(LOG_LOG, "Exitting.");
 
-	Window::DestroyWindow(m_appContext->window);
-	delete m_appContext->logger;
+	ApplicationWindow::DestroyWindow(GetContext().p_window);
+	delete GetContext().GetLogger();
 
-	if (m_appContext->fileSystem)
-		delete m_appContext->fileSystem;
+	if (GetContext().GetFileSystem())
+		delete GetContext().GetFileSystem();
 
-	m_appContext->timer = nullptr;
-}
-
-AppContext * Application::GetContext()
-{
-	return m_appContext;
-}
-
-AppContext * Application::Ctx()
-{
-	return m_appContext;
+	GetContext().p_timer = nullptr;
 }
 
 VarGroup & Application::GetEngineVars()
 {
-	return *m_appContext->settingsManager;
+	return *GetContext().GetApplicationSettingsManager();
 }

@@ -11,7 +11,7 @@ class AppContext;
 class FileSystem
 {
 public:
-	FileSystem(AppContext * appContext, const char * argv);
+	FileSystem(const char * argv);
 	virtual ~FileSystem();
 
 	bool SetWriteDirectory(const Path & path);
@@ -26,7 +26,6 @@ public:
 	FilePtr OpenRead(const Path & path);
 
 private:	
-	AppContext * m_appContext;
 	Path m_writeDirectory, m_workingDirectory;
 	vector<Path> m_searchDirectories;
 };

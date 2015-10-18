@@ -4,8 +4,9 @@
 #include "glm.hpp"
 
 #include "application/AppContext.h"
+#include "utility/Logger.h"
 
-tgaloader::tgaloader(AppContext * appContext) : m_appContext(appContext)
+tgaloader::tgaloader()
 {
 }
 
@@ -21,7 +22,7 @@ image_ptr tgaloader::load(void * buffer, const uint32_t size)
 	if (m_header.datatypecode == 2)/// load the uncompressed TGA
 		return image_ptr(this->loadUncompressedTGA(buffer, size));
 	else
-		printf("bad tga header: %i\n", (int)m_header.datatypecode);
+		GetContext().GetLogger()->log(LOG_WARN, "bad tga header: %i\n", (int)m_header.datatypecode);
 
 	return image_ptr(NULL);
 }
@@ -32,7 +33,7 @@ image * tgaloader::loadUncompressedTGA(void * buffer, const uint32_t size)
 	uint8_t components = m_header.bitsperpixel / 8;
 	if (m_header.width <= 0 || m_header.height <= 0 || (components != 3 && components != 4))
 	{
-		m_appContext->logger->log(LOG_LOG, "Ooops, something is wrong with image: %i, %i, %i\n", (int)m_header.width, (int)m_header.height, (int)m_header.bitsperpixel);
+		GetContext().GetLogger()->log(LOG_LOG, "Ooops, something is wrong with image: %i, %i, %i\n", (int)m_header.width, (int)m_header.height, (int)m_header.bitsperpixel);
 		return 0;
 	}
 

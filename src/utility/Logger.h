@@ -18,7 +18,7 @@ class AppContext;
 class Logger
 {
 public:
-	Logger(AppContext *app, int verbosity); //to be decided
+	Logger(int verbosity); //to be decided
 	//verbosity 0: all output
 	//verbosity 1: only warnings and errors
 	//verbosity 2: only errors
@@ -31,7 +31,6 @@ public:
 
 private:
 	int m_verbosity;
-	AppContext * m_appContext;
 	FilePtr m_logfile;
 	//vector< std::pair<debuglevel,std::string> > outputs; //wrapped outputs for easy output
 

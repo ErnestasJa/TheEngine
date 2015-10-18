@@ -1,11 +1,9 @@
 #include "Precomp.h"
-#include "AppContext.h"
 #include "SettingsManager.h"
 
 
-ApplicationSettingsManager::ApplicationSettingsManager(AppContext * appContext) : VarGroup("settings")
+ApplicationSettingsManager::ApplicationSettingsManager() : VarGroup("settings")
 {
-	m_appContext = appContext;
 	InitSettings();		
 }
 
@@ -16,13 +14,13 @@ ApplicationSettingsManager::~ApplicationSettingsManager()
 
 bool ApplicationSettingsManager::LoadSettings(const Path & fileName)
 {
-	VarJsonReader reader(m_appContext);
+	VarJsonReader reader;
 	return reader.Read(fileName, *this);
 }
 
 bool ApplicationSettingsManager::WriteSettings(const Path & fileName)
 {
-	VarJsonReader jsonWriter(m_appContext); // whoa whoa, it can write..
+	VarJsonReader jsonWriter; // whoa whoa, it can write..
 	return jsonWriter.Write(fileName, *this);
 }
 

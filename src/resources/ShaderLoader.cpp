@@ -1,10 +1,12 @@
 #include "Precomp.h"
 #include "ShaderLoader.h"
 #include "utility/Logger.h"
+#include "application/AppContext.h"
+#include "core/FileSystem.h"
+#include "boost/filesystem/path.hpp"
 
-shader_loader::shader_loader(Logger * l)
+shader_loader::shader_loader()
 {
-	_logger = l;
 }
 
 shader_loader::~shader_loader()
@@ -12,101 +14,113 @@ shader_loader::~shader_loader()
 	//dtor
 }
 
-ShaderPtr shader_loader::load(const std::string & vertex_file, const std::string & fragment_file)
+ShaderPtr shader_loader::load(const Path & vertex_file_name, const Path & fragment_file_name)
 {
-	resource<Shader> res;
-
-	///not sure about this one.
-	std::string res_name = vertex_file.substr(0, vertex_file.rfind('.')) + fragment_file.substr(0, fragment_file.rfind('.'));
-
-	res = this->get_resource(res_name);
+	Path resourceName = vertex_file_name.filename().generic_string() + fragment_file_name.filename().generic_string();
+	
+	resource<Shader> res = this->get_resource(resourceName);
 
 	if (res._resource)
 	{
-		_logger->log(LOG_LOG, "Found shader in cache, skipping loading.");
+		GetContext().GetLogger()->log(LOG_LOG, "Shader returned from cache.");
 		return res._resource;
 	}
 
-	char * vsh = NULL;
-	char * fsh = NULL;
+	FilePtr vertexFile = GetContext().GetFileSystem()->OpenRead(vertex_file_name);
+	FilePtr fragmentFile = GetContext().GetFileSystem()->OpenRead(fragment_file_name);
 
-	if (!helpers::read(vertex_file, vsh)) return ShaderPtr();
-	if (!helpers::read(fragment_file, fsh)) return ShaderPtr();
-
-	_logger->log(LOG_LOG, "Shader name: %s", res_name.c_str());
-	Shader * sh = new Shader(res_name, vsh, fsh, "");
-	sh->Compile();
-	sh->link();
-
-	if (sh->program)
+	if(!vertexFile->IsOpen() || !fragmentFile->IsOpen())
 	{
-		res._resource = ShaderPtr(sh);
-		res._path = res_name;
+		return ShaderPtr();
+	}
+
+	GetContext().GetLogger()->log(LOG_LOG, "Shader resource name: %s", resourceName.generic_string().c_str());
+
+	ByteBufferPtr vertexBuffer = vertexFile->Read();
+	ByteBufferPtr fragmentBuffer = fragmentFile->Read();
+
+	Shader * shader = new Shader(resourceName.generic_string(), (char*)vertexBuffer->data(), (char*)fragmentBuffer->data(), "");
+	shader->Compile();
+	shader->link();
+
+	if (shader->program)
+	{
+		res._resource = ShaderPtr(shader);
+		res._path = resourceName;
 		this->add_resource(res);
 	}
 
-	delete[] vsh;
-	delete[] fsh;
-
 	if (res._resource)
-		_logger->log(LOG_LOG, "Shader '%s' loaded.", res_name.c_str());
+		GetContext().GetLogger()->log(LOG_LOG, "Shader '%s' loaded.", resourceName.c_str());
 
 	return res._resource;
 }
 
-ShaderPtr shader_loader::load(const std::string & file)
+ShaderPtr shader_loader::load(const Path & fileName)
 {
 	resource<Shader> res;
 
-	res = this->get_resource(file);
+	res = this->get_resource(fileName);
 
 	if (res._resource)
 	{
-		_logger->log(LOG_LOG, "Found shader in cache, skipping loading.");
+		GetContext().GetLogger()->log(LOG_LOG, "Found shader in cache, skipping loading.");
 		return res._resource;
 	}
 
-	char * vsh = NULL;
-	char * fsh = NULL;
-	char * gsh = NULL;
-	bool geom = true;
-	if (!helpers::read(file + ".vert", vsh)) return ShaderPtr();
-	if (!helpers::read(file + ".frag", fsh)) return ShaderPtr();
-	if (!helpers::read(file + ".geom", gsh)) geom = false;
+	FilePtr vertexFile = GetContext().GetFileSystem()->OpenRead(Path(fileName).replace_extension(".vert"));
+	ByteBufferPtr vertexBuffer = vertexFile->Read();
 
-	std::string sh_name = file.substr(file.rfind("/") + 1);
-	_logger->log(LOG_LOG, "Shader name: %s", sh_name.c_str());
-	Shader * sh = nullptr;
-	if (geom)
+	FilePtr fragmentFile = GetContext().GetFileSystem()->OpenRead(Path(fileName).replace_extension(".frag"));
+	ByteBufferPtr fragmentBuffer = fragmentFile->Read();
+
+	FilePtr geometryFile = GetContext().GetFileSystem()->OpenRead(Path(fileName).replace_extension(".geom"));
+	ByteBufferPtr geometryBuffer = geometryFile->Read();
+
+	if(vertexBuffer)
 	{
-		sh = new Shader(sh_name, vsh, fsh, gsh);
+		GetContext().GetLogger()->log(LOG_LOG, "Vertex shader: %s", (char*)vertexBuffer->data());
+	}
+	
+	if(fragmentBuffer)
+	{
+		GetContext().GetLogger()->log(LOG_LOG, "Fragment shader: %s", (char*)fragmentBuffer->data());
+	}
+
+	Path resourceName = fileName.filename();
+	GetContext().GetLogger()->log(LOG_LOG, "Shader name: %s", resourceName.generic_string().c_str());
+
+	Shader * sh = nullptr;
+
+	if(!vertexBuffer && !fragmentBuffer)
+		return res._resource;
+
+	if (geometryBuffer)
+	{
+		sh = new Shader(resourceName.generic_string(), (char*)vertexBuffer->data(), (char*)fragmentBuffer->data(), (char*)geometryBuffer->data());
 	}
 	else
 	{
-		sh = new Shader(sh_name, vsh, fsh);
+		sh = new Shader(resourceName.generic_string(), (char*)vertexBuffer->data(), (char*)fragmentBuffer->data());
 	}
+
 	sh->Compile();
-	//sh->link();
 
 	if (sh->program)
 	{
 		res._resource = ShaderPtr(sh);
-		res._path = file;
+		res._path = fileName;
 		this->add_resource(res);
 	}
 
-	delete[] vsh;
-	delete[] fsh;
-	if (geom)
-		delete[] gsh;
 
 	if (res._resource)
-		_logger->log(LOG_LOG, "Shader '%s' loaded.", file.c_str());
+		GetContext().GetLogger()->log(LOG_LOG, "Shader '%s' loaded.", fileName.generic_string().c_str());
 
 	return res._resource;
 }
 
-ShaderPtr shader_loader::get_shader_by_name(const std::string & name)
+ShaderPtr shader_loader::get_shader_by_name(const Path & name)
 {
 	for (resource<Shader> & res : m_resources)
 	{
