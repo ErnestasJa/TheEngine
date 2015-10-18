@@ -113,7 +113,7 @@ ByteBufferPtr File::ReadText(uint32_t length)
 		buffer->resize(length+1);
 		uint32_t bytesRead = PHYSFS_read(m_fileHandle, (char *)buffer->data(), length, 1) * length;
 		buffer->resize(bytesRead+1);
-		buffer->data()[bytesRead]='/0';
+		buffer->data()[bytesRead]='\0';
 	
 		return share(buffer);
 	}
