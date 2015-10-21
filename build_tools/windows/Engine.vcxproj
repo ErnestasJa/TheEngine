@@ -159,11 +159,18 @@
     <ClInclude Include="..\..\src\application\Application.h" />
     <ClInclude Include="..\..\src\application\ApplicationLauncher.h" />
     <ClInclude Include="..\..\src\application\InputHandler.h" />
+    <ClInclude Include="..\..\src\application\SettingsManager.h" />
     <ClInclude Include="..\..\src\application\Window.h" />
     <ClInclude Include="..\..\src\Config.h" />
+    <ClInclude Include="..\..\src\core\EFileMode.h" />
+    <ClInclude Include="..\..\src\core\File.h" />
+    <ClInclude Include="..\..\src\core\FileSystem.h" />
+    <ClInclude Include="..\..\src\core\IFile.h" />
+    <ClInclude Include="..\..\src\core\PathTools.h" />
     <ClInclude Include="..\..\src\core\Var.h" />
     <ClInclude Include="..\..\src\core\VarGroup.h" />
     <ClInclude Include="..\..\src\core\VarJsonReader.h" />
+    <ClInclude Include="..\..\src\ForwardDecl.h" />
     <ClInclude Include="..\..\src\gui\custom_elements\GUIColorPicker.h" />
     <ClInclude Include="..\..\src\gui\custom_elements\ToggleGroup.h" />
     <ClInclude Include="..\..\src\gui\font_rendering\Font.h" />
@@ -228,10 +235,14 @@
     <ClInclude Include="..\..\src\utility\Vector.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\application\AppContext.cpp" />
     <ClCompile Include="..\..\src\application\Application.cpp" />
     <ClCompile Include="..\..\src\application\ApplicationLauncher.cpp" />
     <ClCompile Include="..\..\src\application\InputHandler.cpp" />
+    <ClCompile Include="..\..\src\application\SettingsManager.cpp" />
     <ClCompile Include="..\..\src\application\Window.cpp" />
+    <ClCompile Include="..\..\src\core\File.cpp" />
+    <ClCompile Include="..\..\src\core\FileSystem.cpp" />
     <ClCompile Include="..\..\src\core\Var.cpp" />
     <ClCompile Include="..\..\src\core\VarGroup.cpp" />
     <ClCompile Include="..\..\src\core\VarJsonReader.cpp" />
@@ -280,6 +291,7 @@
     <ClCompile Include="..\..\src\resources\IQMLoader.cpp" />
     <ClCompile Include="..\..\src\resources\MeshLoader.cpp" />
     <ClCompile Include="..\..\src\resources\PNGLoader.cpp" />
+    <ClCompile Include="..\..\src\resources\ResourceCache.cpp" />
     <ClCompile Include="..\..\src\resources\ShaderLoader.cpp" />
     <ClCompile Include="..\..\src\resources\TGAloader.cpp" />
     <ClCompile Include="..\..\src\scenegraph\Camera.cpp" />

@@ -42,7 +42,7 @@ bool Application::InitSimple(const std::string  &title)
 	InitFileSystem();
 	LoadConfig();
 
-	if(InitWindowAndOpenGL(title))
+	if(!InitWindowAndOpenGL(title))
 	{
 		GetContext().GetLogger()->log(LOG_ERROR, "Failed to initialize ApplicationWindow.");
 	}
@@ -76,7 +76,8 @@ bool Application::InitFileSystem()
 
  	PHYSFS_getSearchPathCallback(printSearchPath, NULL);
 
-	GetContext().GetFileSystem()->SetWriteDirectory(applicationDirectory);
+	Path appendedPath = Path(workingDirectory).append(applicationDirectory.generic_string());
+	GetContext().GetFileSystem()->SetWriteDirectory(appendedPath);
 	GetContext().GetFileSystem()->AddSearchDirectory(applicationDirectory);
 
  	// ...

@@ -76,3 +76,13 @@ ApplicationSettingsManager * AppContext::GetApplicationSettingsManager()
 {
 	return p_settingsManager;
 }
+
+void AppContext::SetInputHandler(InputHandler* inputHandler)
+{
+	p_inputHandler = inputHandler;
+}
+
+void AppContext::SetGUIEnvironment(GUIEnvironment* guiEnvironment)
+{
+	p_guiEnv = guiEnvironment;
+}

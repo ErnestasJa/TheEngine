@@ -26,6 +26,8 @@ public:
 	ApplicationSettingsManager * GetApplicationSettingsManager();
 	FileSystem * GetFileSystem();
 
+	void SetInputHandler(InputHandler* inputHandler);
+	void SetGUIEnvironment(GUIEnvironment* guiEnvironment);
 protected:
 	ApplicationWindow * p_window;
 	OpenGLExtensionLoader * p_openGLExtensionLoader;

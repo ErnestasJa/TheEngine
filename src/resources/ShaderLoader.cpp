@@ -77,6 +77,7 @@ ShaderPtr shader_loader::load(const Path & fileName)
 	FilePtr geometryFile = GetContext().GetFileSystem()->OpenRead(Path(fileName).replace_extension(".geom"));
 	ByteBufferPtr geometryBuffer = geometryFile->ReadText();
 
+#if 0
 	if(vertexBuffer)
 	{
 		GetContext().GetLogger()->log(LOG_LOG, "Vertex shader: %s", (char*)vertexBuffer->data());
@@ -86,6 +87,12 @@ ShaderPtr shader_loader::load(const Path & fileName)
 	{
 		GetContext().GetLogger()->log(LOG_LOG, "Fragment shader: %s", (char*)fragmentBuffer->data());
 	}
+
+	if (geometryBuffer)
+	{
+		GetContext().GetLogger()->log(LOG_LOG, "Geometry shader: %s", (char*)geometryBuffer->data());
+	}
+#endif
 
 	Path resourceName = fileName.filename();
 	GetContext().GetLogger()->log(LOG_LOG, "Shader name: %s", resourceName.generic_string().c_str());
