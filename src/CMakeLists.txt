@@ -43,7 +43,7 @@ include_directories(
 
 add_library(engine STATIC 
 
-./opengl/OpenGLUtil.cpp
+./opengl/OpenGLExtensionLoader.cpp
 ./opengl/IBufferObject.cpp
 ./opengl/BufferObject.cpp
 ./opengl/RenderBufferObject.cpp

@@ -3,7 +3,7 @@
 #include "application/AppContext.h"
 #include "utility/Logger.h"
 #include "opengl/Shader.h"
-#include "opengl/OpenGLUtil.h"
+#include "opengl/OpenGLExtensionLoader.h"
 #include "gui/GUIEnvironment.h"
 #include "FontRenderer.h"
 #include <boost/algorithm/string.hpp>

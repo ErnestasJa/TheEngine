@@ -1,10 +1,10 @@
 #pragma once
 
-class OpenGLUtil
+class OpenGLExtensionLoader
 {
 public:
-	OpenGLUtil();
-	virtual ~OpenGLUtil();
+	OpenGLExtensionLoader();
+	virtual ~OpenGLExtensionLoader();
 
 	bool load_extensions();
 	bool check_and_output_errors();

@@ -19,7 +19,7 @@ public:
 
 	Logger * GetLogger();
 	ApplicationWindow * GetWindow();
-	OpenGLUtil * GetOpenGLUtil();
+	OpenGLExtensionLoader * GetOpenGLExtensionLoader();
 	GUIEnvironment * GetGUIEnvironment();
 	TimerPtr GetTimer();
 	InputHandler * GetInputHandler();
@@ -28,7 +28,7 @@ public:
 
 protected:
 	ApplicationWindow * p_window;
-	OpenGLUtil * p_openGLUtil;
+	OpenGLExtensionLoader * p_openGLExtensionLoader;
 	GUIEnvironment * p_guiEnv;
 	TimerPtr p_timer;
 	Logger * p_logger; 

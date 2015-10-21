@@ -14,21 +14,26 @@ class Application
 public:
 	Application(int32_t argc, const char ** argv);
 	virtual ~Application();
+
 	virtual bool Init() = 0;
 	virtual bool Update() = 0;
-	virtual void Exit() = 0;
+	virtual bool Exit() = 0;
+
 	virtual void OnWindowClose() = 0;
 	virtual std::string GetApplicationId() = 0;
-	[[deprecated]] VarGroup & GetEngineVars();
 
-protected:
+	
+	bool DestroyContext();
+	
+	///Call this one func..
 	bool InitSimple(const std::string & title);
+	///.. Or call these manually
+	bool InitContextBasics();
 	bool InitFileSystem();
 	bool InitWindowAndOpenGL(const std::string & title);
 	bool LoadConfig();
 
-private:
-	bool DestroyContext();
+	[[deprecated]] VarGroup & GetEngineVars();
 
 protected:
 	///make argv, argc private and add get/set for them.

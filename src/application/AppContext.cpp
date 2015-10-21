@@ -12,7 +12,7 @@ AppContext::AppContext()
 	p_guiEnv = nullptr;
 	p_timer = nullptr;
 	p_logger = nullptr;
-	p_openGLUtil = nullptr;
+	p_openGLExtensionLoader = nullptr;
 	p_inputHandler = nullptr;
 	p_settingsManager = nullptr;
 	p_fileSystem = nullptr;
@@ -33,7 +33,7 @@ AppContext & AppContext::Instance()
 
 bool AppContext::IsInitialized()
 {
-	return p_window && p_timer && p_logger && p_settingsManager && p_fileSystem && p_openGLUtil;
+	return p_window && p_timer && p_logger && p_settingsManager && p_fileSystem && p_openGLExtensionLoader;
 }
 
 
@@ -52,9 +52,9 @@ ApplicationWindow * AppContext::GetWindow()
 	return p_window;
 }
 
-OpenGLUtil * AppContext::GetOpenGLUtil()
+OpenGLExtensionLoader * AppContext::GetOpenGLExtensionLoader()
 {
-	return p_openGLUtil;
+	return p_openGLExtensionLoader;
 }
 
 GUIEnvironment * AppContext::GetGUIEnvironment()

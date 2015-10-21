@@ -9,7 +9,7 @@
 #include "core/FileSystem.h"
 #include "Application.h"
 #include "SettingsManager.h"
-#include "opengl/OpenGLUtil.h"
+#include "opengl/OpenGLExtensionLoader.h"
 
 #define DSP() "/"
 
@@ -25,7 +25,7 @@ Application::~Application()
 
 
 
-bool Application::InitSimple(const std::string  &title)
+bool Application::InitContextBasics()
 {
 	GetContext().p_timer = timer_ptr(new Timer());
 	GetContext().p_fileSystem = new FileSystem(m_argv[0]);
@@ -33,7 +33,12 @@ bool Application::InitSimple(const std::string  &title)
 	GetContext().p_logger = new Logger(0);
 	GetContext().p_window = new ApplicationWindow();
 
+	return true;
+}
 
+bool Application::InitSimple(const std::string  &title)
+{
+	InitContextBasics();
 	InitFileSystem();
 	LoadConfig();
 
@@ -120,16 +125,15 @@ bool Application::InitWindowAndOpenGL(const std::string & title)
 	GetContext().GetWindow()->SigWindowClosed().connect(sigc::mem_fun(this, &Application::OnWindowClose));
 
 	///REFACTOR: Opengl initialization should have it's own place, worst case: extract method.
-	GetContext().p_openGLUtil = new OpenGLUtil();
+	GetContext().p_openGLExtensionLoader = new OpenGLExtensionLoader();
 
-	if (!GetContext().GetOpenGLUtil()->load_extensions())
+	if (!GetContext().GetOpenGLExtensionLoader()->load_extensions())
 	{
 		delete GetContext().p_window;
 		return false;
 	}
 
 #if 0
-
 	if (glDebugMessageCallback) {
 		std::cout << "Register OpenGL debug callback " << std::endl;
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
@@ -161,9 +165,9 @@ bool Application::DestroyContext()
 		delete GetContext().p_guiEnv;
 	}
 
-	if(GetContext().p_openGLUtil)
+	if(GetContext().p_openGLExtensionLoader)
 	{
-		delete GetContext().p_openGLUtil;
+		delete GetContext().p_openGLExtensionLoader;
 	}
 
 	if(GetContext().p_window)

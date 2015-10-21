@@ -1,5 +1,5 @@
 #include "Precomp.h"
-#include "OpenGLUtil.h"
+#include "OpenGLExtensionLoader.h"
 #include "application/AppContext.h"
 #include "utility/Logger.h"
 
@@ -11,16 +11,16 @@
 #include "GL/glxext.h"
 #endif
 
-OpenGLUtil::OpenGLUtil()
+OpenGLExtensionLoader::OpenGLExtensionLoader()
 {
 
 }
 
-OpenGLUtil::~OpenGLUtil()
+OpenGLExtensionLoader::~OpenGLExtensionLoader()
 {
 }
 
-bool OpenGLUtil::load_extensions()
+bool OpenGLExtensionLoader::load_extensions()
 {
 	if (glxwInit() != 0)
 		return false;
@@ -29,7 +29,7 @@ bool OpenGLUtil::load_extensions()
 }
 
 // TODO (serengeor#1#): log this
-bool OpenGLUtil::check_and_output_errors()
+bool OpenGLExtensionLoader::check_and_output_errors()
 {
 	uint32_t err = GL_NO_ERROR;
 
@@ -44,7 +44,7 @@ bool OpenGLUtil::check_and_output_errors()
 	return ret;
 }
 
-std::string OpenGLUtil::gl_error_to_string(uint32_t error)
+std::string OpenGLExtensionLoader::gl_error_to_string(uint32_t error)
 {
 	switch (error)
 	{
@@ -69,7 +69,7 @@ std::string OpenGLUtil::gl_error_to_string(uint32_t error)
 	}
 }
 
-std::string OpenGLUtil::gl_fbo_error_to_string(uint32_t error)
+std::string OpenGLExtensionLoader::gl_fbo_error_to_string(uint32_t error)
 {
 	std::string r;
 	switch (error)

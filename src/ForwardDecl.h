@@ -15,7 +15,7 @@ class GUIEnvironment;
 class IFile;
 class InputHandler;
 class Logger;
-class OpenGLUtil;
+class OpenGLExtensionLoader;
 class Timer;
 class VarGroup;
 
