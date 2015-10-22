@@ -15,19 +15,19 @@ tgaloader::~tgaloader()
 	//dtor
 }
 
-image_ptr tgaloader::load(void * buffer, const uint32_t size)
+ImagePtr tgaloader::Load(void * buffer, const uint32_t size)
 {
 	memcpy(&m_header, buffer, this->getHeaderSize());
 
 	if (m_header.datatypecode == 2)/// load the uncompressed TGA
-		return image_ptr(this->loadUncompressedTGA(buffer, size));
+		return ImagePtr(this->loadUncompressedTGA(buffer, size));
 	else
 		GetContext().GetLogger()->log(LOG_WARN, "bad tga header: %i\n", (int)m_header.datatypecode);
 
-	return image_ptr(NULL);
+	return ImagePtr(NULL);
 }
 
-image * tgaloader::loadUncompressedTGA(void * buffer, const uint32_t size)
+Image * tgaloader::loadUncompressedTGA(void * buffer, const uint32_t size)
 {
 	//memcpy(&tga.header, buffer, this->getHeaderSize());
 	uint8_t components = m_header.bitsperpixel / 8;
@@ -52,18 +52,18 @@ image * tgaloader::loadUncompressedTGA(void * buffer, const uint32_t size)
 
 	if (data)
 	{
-		image * r = new image();
-		r->data = data;
-		r->num_channels = components;
-		r->width = m_header.width;
-		r->height = m_header.height;
-		return r;
+		Image * image = new Image();
+		image->data = data;
+		image->num_channels = components;
+		image->width = m_header.width;
+		image->height = m_header.height;
+		return image;
 	}
 
 	return nullptr;
 }
 
-bool tgaloader::check_by_extension(const std::string & ext)
+bool tgaloader::CheckByExtension(const std::string & ext)
 {
 	return ext == "tga" || ext == ".tga";
 }

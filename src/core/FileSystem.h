@@ -25,7 +25,7 @@ public:
 	FilePtr OpenWrite(const Path & path);
 	FilePtr OpenRead(const Path & path);
 
-	static Path FileSystem::MakePosix(const Path& path);
+	static Path MakePosix(const Path& path);
 
 private:	
 	Path m_writeDirectory, m_workingDirectory;

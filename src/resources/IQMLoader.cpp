@@ -1,29 +1,34 @@
 #include "Precomp.h"
 #include "IQM.h"
-#include "IQMloader.h"
+#include "IQMLoader.h"
 #include "opengl/Mesh.h"
 #include "opengl/BufferObject.h"
 #include "utility/Util.h"
 #include "utility/Logger.h"
 
-iqmloader::iqmloader()
+IQMLoader::IQMLoader()
 {
 	m_logger = GetContext().GetLogger();
 }
 
-void iqmloader::load_header(const char* data, iqmheader & header)
+IQMLoader::~IQMLoader()
+{
+	m_logger = nullptr;
+}
+
+void IQMLoader::load_header(const char* data, iqmheader & header)
 {
 	memcpy((void*)&header, (void*)data, sizeof(header));
 }
 
-bool iqmloader::check_by_extension(const std::string & ext)
+bool IQMLoader::CheckByExtension(const std::string & ext)
 {
 	return ext == "iqm" || ext == ".iqm";
 }
 
-std::shared_ptr<Mesh> iqmloader::load(const char* data, const uint32_t size)
+MeshPtr IQMLoader::Load(const char* data, const uint32_t size)
 {
-	std::shared_ptr<Mesh> glmesh;
+	MeshPtr glmesh;
 	iqmheader head;
 
 	load_header(data, head);
@@ -36,7 +41,7 @@ std::shared_ptr<Mesh> iqmloader::load(const char* data, const uint32_t size)
 		return glmesh;
 	}
 
-	glmesh = std::shared_ptr<Mesh>(new Mesh());
+	glmesh = MeshPtr(new Mesh());
 
 	auto positions = new BufferObject<glm::vec3>();
 	auto texcoords = new BufferObject<glm::vec2>();
@@ -138,7 +143,7 @@ std::shared_ptr<Mesh> iqmloader::load(const char* data, const uint32_t size)
 	return glmesh;
 }
 
-void iqmloader::loadiqmanims(std::shared_ptr<Mesh> m, const char* data, iqmheader & header)
+void IQMLoader::loadiqmanims(std::shared_ptr<Mesh> m, const char* data, iqmheader & header)
 {
 	if (header.num_poses != header.num_joints) return;
 

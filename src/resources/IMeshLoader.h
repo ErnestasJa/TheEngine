@@ -1,15 +1,15 @@
 #ifndef IMESH_LOADER_H
 #define IMESH_LOADER_H
 
-struct Mesh;
+class Mesh;
 typedef std::shared_ptr<Mesh> MeshPtr;
-class imesh_loader
+class IMeshLoader
 {
 public:
-	virtual ~imesh_loader();
+	virtual ~IMeshLoader();
 
-	virtual MeshPtr load(const char* data, const uint32_t size) = 0;
-	virtual bool check_by_extension(const std::string & ext) = 0;
+	virtual MeshPtr Load(const char* data, const uint32_t size) = 0;
+	virtual bool CheckByExtension(const std::string & ext) = 0;
 protected:
 private:
 };

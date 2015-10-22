@@ -1,26 +1,26 @@
 #include "Precomp.h"
-#include "MeshLoader.h"
-#include "IQMloader.h"
-#include "opengl/Mesh.h"
 #include "application/AppContext.h"
+#include "MeshLoader.h"
+#include "IQMLoader.h"
+#include "opengl/Mesh.h"
 #include "utility/Logger.h"
 #include "core/FileSystem.h"
 #include "boost/filesystem/path.hpp"
 
-mesh_loader::mesh_loader()
+MeshLoader::MeshLoader()
 {
-	add_loader(new iqmloader());
+	AddLoader(new IQMLoader());
 }
 
-mesh_loader::~mesh_loader()
+MeshLoader::~MeshLoader()
 {
-	for (imesh_loader * l : m_loaders)
+	for (IMeshLoader * l : m_loaders)
 		delete l;
 }
 
-void mesh_loader::add_loader(imesh_loader * loader)
+void MeshLoader::AddLoader(IMeshLoader * loader)
 {
-	auto it = std::find_if(m_loaders.begin(), m_loaders.end(), [&loader](imesh_loader * l)
+	auto it = std::find_if(m_loaders.begin(), m_loaders.end(), [&loader](IMeshLoader * l)
 	{
 		return l == loader;
 	});
@@ -29,7 +29,7 @@ void mesh_loader::add_loader(imesh_loader * loader)
 		m_loaders.push_back(loader);
 }
 
-MeshPtr mesh_loader::load(const Path & fileName)
+MeshPtr MeshLoader::Load(const Path & fileName)
 {
 	bool found_usable_loader = false;
 	resource<Mesh> res;
@@ -46,9 +46,9 @@ MeshPtr mesh_loader::load(const Path & fileName)
 
 	///REFACTOR: Search loader by extension func, return loader. Then try loading.
 	if (GetContext().GetFileSystem()->FileExists(fileName.c_str()))
-		for (imesh_loader * l : m_loaders)
+		for (IMeshLoader * l : m_loaders)
 		{
-			if (l->check_by_extension(ext))
+			if (l->CheckByExtension(ext))
 			{
 				found_usable_loader = true;
 
@@ -60,7 +60,7 @@ MeshPtr mesh_loader::load(const Path & fileName)
 					GetContext().GetLogger()->log(LOG_LOG, "Mesh file size: %u", buffer->size());
 
 					res._path = fileName;
-					res._resource = MeshPtr(l->load((const char*)buffer->data(), buffer->size()));
+					res._resource = MeshPtr(l->Load((const char*)buffer->data(), buffer->size()));
 					this->add_resource(res);
 					res._resource->Init();
 					return res._resource;

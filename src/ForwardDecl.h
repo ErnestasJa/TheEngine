@@ -13,13 +13,23 @@ class ApplicationWindow;
 class FileSystem;
 class GUIEnvironment;
 class IFile;
+class Image;
+class ImageLoader;
 class InputHandler;
 class Logger;
+class Mesh;
+class MeshLoader;
 class OpenGLExtensionLoader;
+class ResourceManager;
+class Shader;
+class ShaderLoader;
 class Timer;
 class VarGroup;
 
 typedef std::shared_ptr<IFile> FilePtr;
+typedef std::shared_ptr<Image> ImagePtr;
+typedef std::shared_ptr<Mesh> MeshPtr;
+typedef std::shared_ptr<Shader> ShaderPtr;
 typedef std::shared_ptr<Timer> TimerPtr;
 
 namespace boost

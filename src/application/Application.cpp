@@ -9,9 +9,8 @@
 #include "core/FileSystem.h"
 #include "Application.h"
 #include "SettingsManager.h"
+#include "resources/ResourceManager.h"
 #include "opengl/OpenGLExtensionLoader.h"
-
-#define DSP() "/"
 
 Application::Application(int32_t argc, const char ** argv)
 {
@@ -21,9 +20,8 @@ Application::Application(int32_t argc, const char ** argv)
 
 Application::~Application()
 {
+
 }
-
-
 
 bool Application::InitContextBasics()
 {
@@ -32,6 +30,7 @@ bool Application::InitContextBasics()
 	GetContext().p_settingsManager = new ApplicationSettingsManager();
 	GetContext().p_logger = new Logger(0);
 	GetContext().p_window = new ApplicationWindow();
+	GetContext().p_resourceManager = new ResourceManager();
 
 	return true;
 }
@@ -53,12 +52,6 @@ bool Application::InitSimple(const std::string  &title)
 	return true;
 }
 
-
-static void printSearchPath(void *data, const char *pathItem)
-{
-	printf("[%s] is in the search path.\n", pathItem);
-}
-
 bool Application::InitFileSystem()
 {
 	///set working directory to where the binary is.
@@ -74,17 +67,13 @@ bool Application::InitFileSystem()
 		exit(-1);
 	}
 
- 	PHYSFS_getSearchPathCallback(printSearchPath, NULL);
-
 	Path appendedPath = Path(workingDirectory).append(applicationDirectory.generic_string());
 	GetContext().GetFileSystem()->SetWriteDirectory(appendedPath);
 	GetContext().GetFileSystem()->AddSearchDirectory(applicationDirectory);
 
- 	// ...
- 	PHYSFS_getSearchPathCallback(printSearchPath, NULL);
-	
+
 	auto & fileSystemVars = GetContext().GetApplicationSettingsManager()->GetGroup("filesystem");
-	
+
 	Path logPath(fileSystemVars.GetVar("log_path").ValueS());
 	Path configPath(fileSystemVars.GetVar("config_path").ValueS());
 

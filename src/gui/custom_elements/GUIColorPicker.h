@@ -1,6 +1,7 @@
 #ifndef GUICOLORPICKER_H
 #define GUICOLORPICKER_H
 
+#include "ForwardDecl.h"
 #include "gui/GUIElement.h"
 
 template <typename T>
@@ -12,7 +13,6 @@ class GUIEditBox;
 class GUIButton;
 class GUIPane;
 class GUISlider;
-class image;
 class Texture;
 
 class GUIColorPicker :public GUIElement
@@ -26,7 +26,7 @@ private:
 	GUIButton *btnSet;
 	GUIEditBox *ebR, *ebG, *ebB;
 	GUISlider *sat, *val;
-	std::shared_ptr<image> imgBuf;
+	ImagePtr imgBuf;
 	std::shared_ptr<Texture> texBuf;
 
 	void UpdateValues();

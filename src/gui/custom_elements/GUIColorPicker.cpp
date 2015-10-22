@@ -24,7 +24,7 @@ GUIColorPicker::GUIColorPicker(GUIEnvironment* env, Rect2D<int> dimensions, bool
 		bg->SetListening(false);
 	}
 
-	imgBuf = share(new image());
+	imgBuf = share(new Image());
 	imgBuf->Init(dimensions.w, dimensions.h, 3);
 	texBuf = share(new Texture());
 	texBuf->Init(imgBuf);
@@ -33,9 +33,9 @@ GUIColorPicker::GUIColorPicker(GUIEnvironment* env, Rect2D<int> dimensions, bool
 	picker->SetParent(this);
 	picker->SetListening(true);
 
-	image_loader* ldr = new image_loader();
+	ImageLoader* ldr = new ImageLoader();
 	TexturePtr cursorTex = share(new Texture());
-	cursorTex->Init(ldr->load("res/gui/images/cpcurs.png"));
+	cursorTex->Init(ldr->Load("res/gui/images/cpcurs.png"));
 	cursor = new GUIImage(env, Rect2D<int>(cursorPos.x, cursorPos.y, 8, 8), cursorTex);
 	cursor->SetParent(picker);
 	cursor->SetListening(false);

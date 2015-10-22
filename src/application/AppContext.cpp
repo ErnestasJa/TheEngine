@@ -16,6 +16,7 @@ AppContext::AppContext()
 	p_inputHandler = nullptr;
 	p_settingsManager = nullptr;
 	p_fileSystem = nullptr;
+	p_resourceManager = nullptr;
 }
 
 AppContext::~AppContext()
@@ -33,7 +34,7 @@ AppContext & AppContext::Instance()
 
 bool AppContext::IsInitialized()
 {
-	return p_window && p_timer && p_logger && p_settingsManager && p_fileSystem && p_openGLExtensionLoader;
+	return p_window && p_timer && p_logger && p_settingsManager && p_fileSystem && p_openGLExtensionLoader && p_resourceManager;
 }
 
 
@@ -55,6 +56,11 @@ ApplicationWindow * AppContext::GetWindow()
 OpenGLExtensionLoader * AppContext::GetOpenGLExtensionLoader()
 {
 	return p_openGLExtensionLoader;
+}
+
+ResourceManager * AppContext::GetResourceManager()
+{
+	return p_resourceManager;
 }
 
 GUIEnvironment * AppContext::GetGUIEnvironment()

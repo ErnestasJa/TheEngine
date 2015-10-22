@@ -1,19 +1,19 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
-class image
+class Image
 {
 public:
 	uint8_t * data;
 	uint32_t width, height, num_channels;
 
-	image()
+	Image()
 	{
 		data = nullptr;
 		width = 0, height = 0, num_channels = 0;
 	}
 
-	~image()
+	~Image()
 	{
 		if (data)
 			delete[] data;
@@ -60,6 +60,6 @@ public:
 	}
 };
 
-typedef std::shared_ptr<image> image_ptr;
+typedef std::shared_ptr<Image> ImagePtr;
 
-#endif // IMAGE_H
+#endif // Image_H

@@ -4,20 +4,22 @@
 #include "application/AppContext.h"
 
 class Mesh;
+typedef std::shared_ptr<Mesh> MeshPtr;
 struct iqmheader;
 class Logger;
 
-class iqmloader : public imesh_loader
+class IQMLoader : public IMeshLoader
 {
 private:
 	void load_header(const char* data, iqmheader & header);
 	void loadiqmanims(std::shared_ptr<Mesh> m, const char* data, iqmheader & header);
 	Logger * m_logger;
 public:
-	iqmloader();
+	IQMLoader();
+	virtual ~IQMLoader();
 
-	virtual std::shared_ptr<Mesh> load(const char* data, const uint32_t size);
-	virtual bool check_by_extension(const std::string & ext);
+	virtual MeshPtr Load(const char* data, const uint32_t size);
+	virtual bool CheckByExtension(const std::string & ext);
 
 private:
 };

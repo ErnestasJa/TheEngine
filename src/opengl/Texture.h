@@ -1,8 +1,8 @@
 #pragma once
 
+#include "ForwardDecl.h"
 #include "GLObject.h"
 
-class image;
 class Texture : public GLObject
 {
 public:
@@ -35,7 +35,7 @@ public:
 	Texture();
 	~Texture();
 
-	void Init(std::shared_ptr<image> img);
+	void Init(ImagePtr img);
 	void Init(const uint8_t * data, uint32_t target, uint32_t image_format, uint32_t internal_format, int32_t w, int32_t h);
 
 	void SetFilters(Texture::FILTER_MIN fmin, Texture::FILTER_MAG fmag);

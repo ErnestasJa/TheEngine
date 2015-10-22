@@ -87,6 +87,7 @@ add_library(engine STATIC
 ./application/InputHandler.cpp
 ./application/AppContext.cpp
 ./application/Application.cpp
+./resources/ResourceManager.cpp
 ./resources/ResourceCache.cpp
 ./resources/PNGLoader.cpp
 ./resources/MeshLoader.cpp

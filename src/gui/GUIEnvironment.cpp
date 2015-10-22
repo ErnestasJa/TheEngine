@@ -50,8 +50,8 @@ GUIEnvironment::GUIEnvironment() :GUIElement(nullptr, Rect2D<int>(0, 0, GetConte
 	skin->load("res/gui/skins/skin_default.xml");
 
 	skin_atlas = new Texture();
-	image_loader* imgl = new image_loader();
-	std::shared_ptr<image> img = std::shared_ptr<image>(imgl->load("res/gui/skins/skin_default2.png"));
+	ImageLoader * imgl = new ImageLoader();
+	auto img = std::shared_ptr<Image>(imgl->Load("res/gui/skins/skin_default2.png"));
 	skin_atlas->Init(img);
 	delete imgl;
 

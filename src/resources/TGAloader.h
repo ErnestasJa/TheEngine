@@ -2,7 +2,7 @@
 
 #include "IImageLoader.h"
 class Logger;
-class tgaloader : public iimage_loader
+class tgaloader : public IImageLoader
 {
 protected:
 
@@ -27,7 +27,7 @@ protected:
 
 #pragma pack(pop)   /* restore original alignment from stack */
 
-	virtual image * loadUncompressedTGA(void * buffer, const uint32_t size);
+	virtual Image * loadUncompressedTGA(void * buffer, const uint32_t size);
 	HEADER m_header;
 
 public:
@@ -35,10 +35,10 @@ public:
 	tgaloader();
 	virtual ~tgaloader();
 
-	virtual image_ptr load(void * buffer, const uint32_t size);
+	virtual ImagePtr Load(void * buffer, const uint32_t size);
 
 	///Check if the data is loadable
-	virtual bool check_by_extension(const std::string & ext);
+	virtual bool CheckByExtension(const std::string & ext);
 
 	virtual bool checkByHeader(void * hbuffer, const uint32_t hsize);
 

@@ -5,16 +5,16 @@
 #include "core/FileSystem.h"
 #include "boost/filesystem/path.hpp"
 
-shader_loader::shader_loader()
+ShaderLoader::ShaderLoader()
 {
 }
 
-shader_loader::~shader_loader()
+ShaderLoader::~ShaderLoader()
 {
 	//dtor
 }
 
-ShaderPtr shader_loader::load(const Path & vertex_file_name, const Path & fragment_file_name)
+ShaderPtr ShaderLoader::Load(const Path & vertex_file_name, const Path & fragment_file_name)
 {
 	Path resourceName = vertex_file_name.filename().generic_string() + fragment_file_name.filename().generic_string();
 	
@@ -56,7 +56,7 @@ ShaderPtr shader_loader::load(const Path & vertex_file_name, const Path & fragme
 	return res._resource;
 }
 
-ShaderPtr shader_loader::load(const Path & fileName)
+ShaderPtr ShaderLoader::Load(const Path & fileName)
 {
 	resource<Shader> res;
 
@@ -127,7 +127,7 @@ ShaderPtr shader_loader::load(const Path & fileName)
 	return res._resource;
 }
 
-ShaderPtr shader_loader::get_shader_by_name(const Path & name)
+ShaderPtr ShaderLoader::GetShaderByName(const Path & name)
 {
 	for (resource<Shader> & res : m_resources)
 	{

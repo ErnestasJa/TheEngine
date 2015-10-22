@@ -8,21 +8,21 @@
 #include "utility/Logger.h"
 #include "core/FileSystem.h"
 
-image_loader::image_loader()
+ImageLoader::ImageLoader()
 {
-	add_loader(new png_loader());
-	add_loader(new tgaloader());
+	AddLoader(new png_loader());
+	AddLoader(new tgaloader());
 }
 
-image_loader::~image_loader()
+ImageLoader::~ImageLoader()
 {
-	for (iimage_loader * l : m_loaders)
+	for (IImageLoader * l : m_loaders)
 		delete l;
 }
 
-void image_loader::add_loader(iimage_loader * loader)
+void ImageLoader::AddLoader(IImageLoader * loader)
 {
-	auto it = std::find_if(m_loaders.begin(), m_loaders.end(), [&loader](iimage_loader * l)
+	auto it = std::find_if(m_loaders.begin(), m_loaders.end(), [&loader](IImageLoader * l)
 	{
 		return l == loader;
 	});
@@ -31,10 +31,9 @@ void image_loader::add_loader(iimage_loader * loader)
 		m_loaders.push_back(loader);
 }
 
-image_ptr image_loader::load(const Path & filePath)
+ImagePtr ImageLoader::Load(const Path & filePath)
 {
-	resource<image> res;
-	res = this->get_resource(filePath);
+	auto res = this->get_resource(filePath);
 
 	if (res._resource)
 	{
@@ -48,9 +47,9 @@ image_ptr image_loader::load(const Path & filePath)
 
 	if (fileSystem->OpenRead(filePath))
 	{
-		for (iimage_loader * l : m_loaders)
+		for (IImageLoader * l : m_loaders)
 		{
-			if (l->check_by_extension(ext))
+			if (l->CheckByExtension(ext))
 			{
 				FilePtr file = fileSystem->OpenRead(filePath);
 
@@ -63,7 +62,7 @@ image_ptr image_loader::load(const Path & filePath)
 						GetContext().GetLogger()->log(LOG_LOG, "Image file size: %u", buffer->size());
 
 						res._path = filePath;
-						res._resource = image_ptr(l->load(buffer->data(), buffer->size()));
+						res._resource = l->Load(buffer->data(), buffer->size());
 						this->add_resource(res);
 						return res._resource;
 					}

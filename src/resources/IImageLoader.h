@@ -2,15 +2,13 @@
 
 #include "Image.h"
 
-class iimage_loader
+class IImageLoader
 {
 public:
-	iimage_loader();
-	virtual ~iimage_loader();
-
-	virtual image_ptr load(void * buffer, const uint32_t size) = 0;
-	virtual bool check_by_extension(const std::string & ext) = 0;
-
+	IImageLoader();
+	virtual ~IImageLoader();
+	virtual ImagePtr Load(void * buffer, const uint32_t size) = 0;
+	virtual bool CheckByExtension(const std::string & ext) = 0;
 protected:
 private:
 };

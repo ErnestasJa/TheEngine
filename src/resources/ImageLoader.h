@@ -4,17 +4,15 @@
 #include "ResourceCache.h"
 #include "application/AppContext.h"
 
-struct Texture;
-typedef std::shared_ptr<Texture> TexturePtr;
 class AppContext;
-class image_loader : public resource_cache<image>
+class ImageLoader : public resource_cache<Image>
 {
 protected:
-	vector<iimage_loader*> m_loaders;
+	vector<IImageLoader*> m_loaders;
 public:
-	image_loader();
-	virtual ~image_loader();
+	ImageLoader();
+	virtual ~ImageLoader();
 
-	virtual void add_loader(iimage_loader * loader);
-	virtual image_ptr load(const Path & file);
+	virtual void AddLoader(IImageLoader * loader);
+	virtual ImagePtr Load(const Path & file);
 };

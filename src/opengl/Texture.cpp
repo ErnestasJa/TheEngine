@@ -16,7 +16,7 @@ Texture::~Texture()
 	glDeleteTextures(1, &Id);
 }
 
-void Texture::Init(std::shared_ptr<image> img)
+void Texture::Init(ImagePtr img)
 {
 	glGenTextures(1, &Id);
 	glBindTexture(Type, Id);
