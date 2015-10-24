@@ -9,7 +9,7 @@ enum loglevel
 {
 	LOG_LOG = 0, //just logging
 	LOG_DEBUG, //output for debugging
-	LOG_WARN, //warnings
+	LOG_WARN, //warnings               ///Why the **** is this the only enum that has the word cut off half way..
 	LOG_ERROR, //errors
 	LOG_CRITICAL //we're fucked
 };

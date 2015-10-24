@@ -3,10 +3,12 @@
 #include "application/AppContext.h"
 #include "utility/Logger.h"
 #include "opengl/Shader.h"
+#include "resources/ResourceManager.h"
 #include "opengl/OpenGLExtensionLoader.h"
 #include "gui/GUIEnvironment.h"
 #include "FontRenderer.h"
 #include <boost/algorithm/string.hpp>
+#include <boost/filesystem/path.hpp>
 
 FontRenderer::FontRenderer()
 {
@@ -33,7 +35,7 @@ FontRenderer::FontRenderer()
 
 	glGenVertexArrays(1, &_VAO);
 	glGenBuffers(1, &_VBO);
-	_fontShader = Shader::LoadShader("res/engine/shaders/font");
+	_fontShader = GetContext().GetResourceManager()->LoadShader(Path("res/engine/shaders/font"));
 }
 
 FontRenderer::~FontRenderer()

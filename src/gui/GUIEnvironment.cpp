@@ -7,6 +7,7 @@
 #include "GUISkin.h"
 #include "resources/Image.h"
 #include "resources/ImageLoader.h"
+#include "resources/ResourceManager.h"
 #include "opengl/Texture.h"
 #include "application/Window.h"
 #include "application/AppContext.h"
@@ -38,7 +39,7 @@ GUIEnvironment::GUIEnvironment() :GUIElement(nullptr, Rect2D<int>(0, 0, GetConte
 	this->SetName("GUI_ENVIRONMENT");
 	last_char = ' ';
 
-	gui_shader = Shader::LoadShader("res/engine/shaders/gui_quad");
+	gui_shader = GetContext().GetResourceManager()->LoadShader("res/engine/shaders/gui_quad");
 	gui_quad = new GUIQuad();
 	gui_quad->Init();
 
@@ -66,7 +67,7 @@ GUIEnvironment::~GUIEnvironment()
 	_sig_key.disconnect();
 	_sig_text.disconnect();
 	delete m_font_renderer;
-	delete gui_shader;
+	gui_shader = nullptr;
 	delete gui_quad;
 }
 

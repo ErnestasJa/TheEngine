@@ -41,9 +41,8 @@ ShaderPtr ShaderLoader::Load(const Path & vertex_file_name, const Path & fragmen
 
 	Shader * shader = new Shader(resourceName.generic_string(), (char*)vertexBuffer->data(), (char*)fragmentBuffer->data(), "");
 	shader->Compile();
-	shader->link();
-
-	if (shader->program)
+	
+	if (shader->IsCompiledAndLinked())
 	{
 		res._resource = ShaderPtr(shader);
 		res._path = resourceName;
@@ -113,7 +112,7 @@ ShaderPtr ShaderLoader::Load(const Path & fileName)
 
 	sh->Compile();
 
-	if (sh->program)
+	if (sh->IsCompiledAndLinked())
 	{
 		res._resource = ShaderPtr(sh);
 		res._path = fileName;
@@ -131,7 +130,7 @@ ShaderPtr ShaderLoader::GetShaderByName(const Path & name)
 {
 	for (resource<Shader> & res : m_resources)
 	{
-		if (res._resource->name == name)
+		if (res._resource->GetName() == name)
 			return res._resource;
 	}
 

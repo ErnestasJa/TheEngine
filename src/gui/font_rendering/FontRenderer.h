@@ -12,6 +12,7 @@ class Logger;
 class GUIEnvironment;
 class Shader;
 
+typedef std::shared_ptr<Shader> ShaderPtr;
 typedef boost::unordered_map<std::string, FontFamily*> FontFamilyMap;
 
 struct SubLineInfo
@@ -43,7 +44,7 @@ private:
 
 	FontFamilyMap _fontFamilies;
 
-	Shader* _fontShader;
+	ShaderPtr _fontShader;
 	void _SetFontColor(const glm::vec4 &color);
 	Font* _CreateFont(const std::string &name, const std::string &filename, const int32_t &size = 12);
 	void _RenderString(const std::wstring &text, glm::ivec2 pos, const glm::vec4 &color);

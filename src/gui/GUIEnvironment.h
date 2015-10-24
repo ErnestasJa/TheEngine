@@ -22,6 +22,8 @@ class GUICheckbox;
 class GUISlider;
 class GUIImage;
 
+typedef std::shared_ptr<Shader> ShaderPtr;
+
 class GUIEnvironment : public GUIElement
 {
 public:
@@ -97,7 +99,7 @@ public:
 private:
 	GUISkin* skin;
 	Texture* skin_atlas;
-	Shader* gui_shader;
+	ShaderPtr gui_shader;
 
 	GUIQuad* gui_quad;
 	SlicedGUIQuad* sliced_quad;

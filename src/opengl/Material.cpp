@@ -46,7 +46,7 @@ void Material::LoadAndBindVars()
 	mat4_attr.clear();
 	mat3_attr.clear();
 
-	for (Binding & t : m_shader->bindings)
+	for (auto t : m_shader->GetBindings())
 	{
 		switch (t.Type)
 		{

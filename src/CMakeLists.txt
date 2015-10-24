@@ -53,6 +53,7 @@ add_library(engine STATIC
 ./opengl/Texture.cpp
 ./opengl/GLObject.cpp
 ./opengl/FrameBufferObject.cpp
+./opengl/Shader.cpp
 ./opengl/MVar.cpp
 ./opengl/Material.cpp
 ./utility/SimplexNoise.cpp
