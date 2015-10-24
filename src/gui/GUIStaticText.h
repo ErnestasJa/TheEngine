@@ -2,8 +2,6 @@
 
 #include "gui/GUIElement.h"
 
-class Quad;
-class Shader;
 template <typename T>
 class Rect2D;
 class GUIStaticText :public GUIElement

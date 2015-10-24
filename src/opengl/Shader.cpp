@@ -110,6 +110,8 @@ bool Shader::Link()
 			QueryAllBindingLocations();
 		}
 	}
+
+	return program != 0;
 }
 
 bool Shader::IsCompiledAndLinked()
@@ -129,7 +131,7 @@ int32_t Shader::getparam(const std::string & pname)
 
 Binding Shader::GetBinding(const std::string & pname) const
 {
-	for (Binding &t : bindings)
+	for (const Binding &t : bindings)
 	{
 		if (t.name == pname)
 			return t;

@@ -1,9 +1,9 @@
 #ifndef SHADER_LOADER_H
 #define SHADER_LOADER_H
 
-#include "opengl/Shader.h"
 #include "ResourceCache.h"
 #include "ForwardDecl.h"
+#include "boost/filesystem/path.hpp"
 
 class AppContext;
 class ShaderLoader : public resource_cache<Shader>

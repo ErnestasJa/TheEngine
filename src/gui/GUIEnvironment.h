@@ -1,10 +1,11 @@
 #pragma once
 
+#include "ForwardDecl.h"
+
 #include "GUIElement.h"
 #include "GUISkin.h"
 #include "font_rendering/FontRenderer.h"
 
-class Shader;
 class GUIQuad;
 class SlicedGUIQuad;
 class Texture;
@@ -21,8 +22,6 @@ class GUIEditBox;
 class GUICheckbox;
 class GUISlider;
 class GUIImage;
-
-typedef std::shared_ptr<Shader> ShaderPtr;
 
 class GUIEnvironment : public GUIElement
 {

@@ -1,8 +1,7 @@
 #ifndef SG_MVAR_H
 #define SG_MVAR_H
 
-class Shader;
-typedef std::shared_ptr<Shader> ShaderPtr;
+#include "ForwardDecl.h"
 
 template <class T>
 struct MVar
