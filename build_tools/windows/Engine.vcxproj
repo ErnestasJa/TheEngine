@@ -202,6 +202,7 @@
     <ClInclude Include="..\..\src\opengl\Material.h" />
     <ClInclude Include="..\..\src\opengl\Mesh.h" />
     <ClInclude Include="..\..\src\opengl\MVar.h" />
+    <ClInclude Include="..\..\src\opengl\OpenGLExtensionLoader.h" />
     <ClInclude Include="..\..\src\opengl\OpenGLUtil.h" />
     <ClInclude Include="..\..\src\opengl\Quad.h" />
     <ClInclude Include="..\..\src\opengl\RenderBufferObject.h" />
@@ -218,6 +219,7 @@
     <ClInclude Include="..\..\src\resources\MeshLoader.h" />
     <ClInclude Include="..\..\src\resources\PNGLoader.h" />
     <ClInclude Include="..\..\src\resources\ResourceCache.h" />
+    <ClInclude Include="..\..\src\resources\ResourceManager.h" />
     <ClInclude Include="..\..\src\resources\ShaderLoader.h" />
     <ClInclude Include="..\..\src\resources\SoundManager.h" />
     <ClInclude Include="..\..\src\resources\TGAloader.h" />
@@ -271,8 +273,9 @@
     <ClCompile Include="..\..\src\opengl\Material.cpp" />
     <ClCompile Include="..\..\src\opengl\Mesh.cpp" />
     <ClCompile Include="..\..\src\opengl\MVar.cpp" />
-    <ClCompile Include="..\..\src\opengl\OpenGLUtil.cpp" />
+    <ClCompile Include="..\..\src\opengl\OpenGLExtensionLoader.cpp" />
     <ClCompile Include="..\..\src\opengl\RenderBufferObject.cpp" />
+    <ClCompile Include="..\..\src\opengl\Shader.cpp" />
     <ClCompile Include="..\..\src\opengl\Texture.cpp" />
     <ClCompile Include="..\..\src\Precomp.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -292,6 +295,7 @@
     <ClCompile Include="..\..\src\resources\MeshLoader.cpp" />
     <ClCompile Include="..\..\src\resources\PNGLoader.cpp" />
     <ClCompile Include="..\..\src\resources\ResourceCache.cpp" />
+    <ClCompile Include="..\..\src\resources\ResourceManager.cpp" />
     <ClCompile Include="..\..\src\resources\ShaderLoader.cpp" />
     <ClCompile Include="..\..\src\resources\TGAloader.cpp" />
     <ClCompile Include="..\..\src\scenegraph\Camera.cpp" />
