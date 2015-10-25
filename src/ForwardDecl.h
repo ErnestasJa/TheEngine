@@ -10,6 +10,7 @@ namespace std
 class AppContext;
 class ApplicationSettingsManager;
 class ApplicationWindow;
+class Camera;
 class FileSystem;
 class GUIEnvironment;
 class IFile;
@@ -25,9 +26,12 @@ class Shader;
 class ShaderLoader;
 class Timer;
 class VarGroup;
+class Material;
 
+typedef std::shared_ptr<Camera> CameraPtr;
 typedef std::shared_ptr<IFile> FilePtr;
 typedef std::shared_ptr<Image> ImagePtr;
+typedef std::shared_ptr<Material> MaterialPtr;
 typedef std::shared_ptr<Mesh> MeshPtr;
 typedef std::shared_ptr<Shader> ShaderPtr;
 typedef std::shared_ptr<Timer> TimerPtr;

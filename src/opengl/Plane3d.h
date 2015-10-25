@@ -52,4 +52,4 @@ private:
 protected:
 };
 
-#endif // PLANE3D_H_INCLUDED
+#endif

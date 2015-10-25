@@ -1,7 +1,7 @@
-#ifndef SG_CAMERA_OBJECT_H
-#define SG_CAMERA_OBJECT_H
+#ifndef CAMERA_OBJECT_H
+#define CAMERA_OBJECT_H
 
-#include "utility/Plane3d.h"
+#include "Plane3d.h"
 
 ///REFACTOR: WTF HAPPENED IN THIS FILE... WW3??!
 
@@ -108,4 +108,4 @@ protected:
 
 typedef std::shared_ptr<Camera> CameraPtr;
 
-#endif // SG_CAMERA_OBJECT_H
+#endif

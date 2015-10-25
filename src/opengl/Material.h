@@ -30,15 +30,14 @@ struct Material
 	virtual void        SetMat4(const std::string & name, glm::mat4 value);
 	virtual void        SetMat3(const std::string & name, glm::mat3 value);
 
-	///-------------------------
-	vector< TexturePtr >       textures;
+private:
+	vector< TexturePtr >        textures;
 	vector< MVar<int32_t> >     int_attr;
 	vector< MVar<float> >       float_attr;
 	vector< MVar<glm::vec3> >   vec3f_attr;
 	vector< MVar<glm::mat4> >   mat4_attr;
 	vector< MVar<glm::mat3> >   mat3_attr;
 
-private:
 	ShaderPtr   m_shader;
 	uint32_t    m_id;
 };

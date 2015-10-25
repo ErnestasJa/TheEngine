@@ -151,7 +151,7 @@ void Shader::QueryAllBindingLocations()
 	int32_t total = -1;
 	glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &total);
 
-	printf("Binding count: %i\n", total);
+	GetContext().GetLogger()->log(LOG_LOG, "Binding count: %i\n", total);
 
 	for (int i = 0; i < total; ++i)
 	{
@@ -168,6 +168,6 @@ void Shader::QueryAllBindingLocations()
 		b.Type = Type;
 		bindings.push_back(b);
 
-		printf("Binding index=%i; name='%s'; Type=%i;\n", b.index, b.name.c_str(), b.Type);
+		GetContext().GetLogger()->log(LOG_LOG, "Binding index=%i; name='%s'; Type=%i;\n", b.index, b.name.c_str(), b.Type);
 	}
 }
