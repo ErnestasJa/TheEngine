@@ -27,13 +27,13 @@ ShaderBinding::~ShaderBinding()
 }
 
 ShaderBinding::ShaderBinding(ShaderBinding && other)
-:
-m_bindingIndex(other.m_bindingIndex),
-m_openGLType(other.m_openGLType),
-m_value(other.m_value),
-m_name(std::move(other.m_name))
+	:
+	m_bindingIndex(other.m_bindingIndex),
+	m_openGLType(other.m_openGLType),
+	m_value(other.m_value),
+	m_name(std::move(other.m_name))
 {
-	
+
 }
 
 ShaderBinding& ShaderBinding::operator=(ShaderBinding && other)
@@ -78,7 +78,7 @@ void ShaderBinding::Set(glm::vec4 value)
 
 void ShaderBinding::Update()
 {
-	if(m_value)
+	if (m_value)
 		m_value->Set(m_bindingIndex);
 	else
 		GetContext().GetLogger()->log(LOG_WARN, "UpdateBinding(): Binding '%s' has no value", m_name);

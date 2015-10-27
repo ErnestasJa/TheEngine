@@ -2,9 +2,6 @@
 #define GRIDMESH_H_INCLUDED
 
 #include "opengl/Mesh.h"
-#include "opengl/Shader.h"
-#include "opengl/BufferObject.h"
-#include "resources/ResourceCache.h"
 
 class GridMesh :public Mesh
 {

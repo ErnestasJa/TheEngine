@@ -201,6 +201,11 @@
     <ClInclude Include="..\..\src\opengl\GUIQuad.h" />
     <ClInclude Include="..\..\src\opengl\IBufferObject.h" />
     <ClInclude Include="..\..\src\opengl\Material.h" />
+    <ClInclude Include="..\..\src\opengl\material\IBindingValue.h" />
+    <ClInclude Include="..\..\src\opengl\material\Material.h" />
+    <ClInclude Include="..\..\src\opengl\material\Shader.h" />
+    <ClInclude Include="..\..\src\opengl\material\ShaderBinding.h" />
+    <ClInclude Include="..\..\src\opengl\material\TBindingValue.h" />
     <ClInclude Include="..\..\src\opengl\Mesh.h" />
     <ClInclude Include="..\..\src\opengl\MVar.h" />
     <ClInclude Include="..\..\src\opengl\OpenGLExtensionLoader.h" />
@@ -274,12 +279,12 @@
     <ClCompile Include="..\..\src\opengl\FrameBufferObject.cpp" />
     <ClCompile Include="..\..\src\opengl\GLObject.cpp" />
     <ClCompile Include="..\..\src\opengl\IBufferObject.cpp" />
-    <ClCompile Include="..\..\src\opengl\Material.cpp" />
+    <ClCompile Include="..\..\src\opengl\material\Shader.cpp" />
+    <ClCompile Include="..\..\src\opengl\material\ShaderBinding.cpp" />
+    <ClCompile Include="..\..\src\opengl\material\TBindingValue.cpp" />
     <ClCompile Include="..\..\src\opengl\Mesh.cpp" />
-    <ClCompile Include="..\..\src\opengl\MVar.cpp" />
     <ClCompile Include="..\..\src\opengl\OpenGLExtensionLoader.cpp" />
     <ClCompile Include="..\..\src\opengl\RenderBufferObject.cpp" />
-    <ClCompile Include="..\..\src\opengl\Shader.cpp" />
     <ClCompile Include="..\..\src\opengl\Texture.cpp" />
     <ClCompile Include="..\..\src\Precomp.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

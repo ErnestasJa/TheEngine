@@ -126,6 +126,7 @@ void Shader::Set()
 {
 	if(program!=Shader::currentProgram)
 	{
+		GetContext().GetLogger()->log(loglevel::LOG_LOG, "stuff is set");
 		glUseProgram(program);
 		Shader::currentProgram = program;
 	}
@@ -140,6 +141,17 @@ void Shader::Set()
 int32_t Shader::getparam(const std::string & pname)
 {
 	return  glGetUniformLocation(program, pname.c_str());
+}
+
+bool Shader::HasBinding(const std::string & name)
+{
+	for (ShaderBinding &t : m_bindings)
+	{
+		if (t.GetName() == name)
+			return true;
+	}
+
+	return false;
 }
 
 ShaderBinding & Shader::GetBinding(const std::string & pname)
