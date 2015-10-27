@@ -3,6 +3,9 @@
 #include "application/AppContext.h"
 #include "utility/Logger.h"
 
+
+uint32_t Shader::currentProgram = -1;
+
 void Shader::ShowCompilationInfo(uint32_t obj, const std::string & tname, const std::string & name)
 {
 	int32_t length = 0;
@@ -121,7 +124,17 @@ bool Shader::IsCompiledAndLinked()
 
 void Shader::Set()
 {
-	glUseProgram(program);
+	if(program!=Shader::currentProgram)
+	{
+		glUseProgram(program);
+		Shader::currentProgram = program;
+	}
+
+	for (ShaderBinding &t : m_bindings)
+	{
+		if (t.HasValue())
+			t.Update();
+	}
 }
 
 int32_t Shader::getparam(const std::string & pname)
@@ -129,15 +142,15 @@ int32_t Shader::getparam(const std::string & pname)
 	return  glGetUniformLocation(program, pname.c_str());
 }
 
-Binding Shader::GetBinding(const std::string & pname) const
+ShaderBinding & Shader::GetBinding(const std::string & pname)
 {
-	for (const Binding &t : bindings)
+	for (ShaderBinding &t : m_bindings)
 	{
-		if (t.name == pname)
+		if (t.GetName() == pname)
 			return t;
 	}
 
-	return Binding();
+	return m_nullBinding;
 }
 
 const std::string & Shader::GetName() const
@@ -147,8 +160,7 @@ const std::string & Shader::GetName() const
 
 void Shader::QueryAllBindingLocations()
 {
-	bindings.clear();
-	Binding b;
+	m_bindings.clear();
 
 	int32_t total = -1;
 	glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &total);
@@ -158,18 +170,12 @@ void Shader::QueryAllBindingLocations()
 	for (int i = 0; i < total; ++i)
 	{
 		int name_len = -1, num = -1;
-		GLenum Type = GL_ZERO;
+		GLenum type = GL_ZERO;
 		char name[100];
-		glGetActiveUniform(program, GLuint(i), sizeof(name) - 1,
-			&name_len, &num, &Type, name);
-		name[name_len] = 0;
-		GLuint location = glGetUniformLocation(program, name);
+		glGetActiveUniform(program, GLuint(i), sizeof(name) - 1, &name_len, &num, &type, name);
+		GLint location = glGetUniformLocation(program, name);
 
-		b.index = location;
-		b.name = name;
-		b.Type = Type;
-		bindings.push_back(b);
-
-		GetContext().GetLogger()->log(LOG_LOG, "Binding index=%i; name='%s'; Type=%i;\n", b.index, b.name.c_str(), b.Type);
+		m_bindings.push_back(ShaderBinding(location, name, type));
+		GetContext().GetLogger()->log(LOG_LOG, "Binding index=%i; Name='%s'; Type=%i;\n", location, name, type);
 	}
 }

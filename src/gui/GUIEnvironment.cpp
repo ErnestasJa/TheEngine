@@ -1,7 +1,6 @@
 #include "Precomp.h"
-
 #include "GUI.h"
-#include "opengl/Shader.h"
+#include "opengl/material/Shader.h"
 #include "opengl/GUIQuad.h"
 #include "opengl/SlicedGUIQuad.h"
 #include "GUISkin.h"

@@ -1,6 +1,6 @@
 #include "Precomp.h"
 #include "ShaderLoader.h"
-#include "opengl/Shader.h"
+#include "opengl/material/Shader.h"
 #include "utility/Logger.h"
 #include "application/AppContext.h"
 #include "core/FileSystem.h"

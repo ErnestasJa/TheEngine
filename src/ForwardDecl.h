@@ -13,6 +13,7 @@ class ApplicationWindow;
 class Camera;
 class FileSystem;
 class GUIEnvironment;
+class IBindingValue;
 class IFile;
 class Image;
 class ImageLoader;
@@ -30,11 +31,14 @@ class Material;
 
 typedef std::shared_ptr<Camera> CameraPtr;
 typedef std::shared_ptr<IFile> FilePtr;
+typedef std::shared_ptr<IBindingValue> IBindingValuePtr;
 typedef std::shared_ptr<Image> ImagePtr;
 typedef std::shared_ptr<Material> MaterialPtr;
 typedef std::shared_ptr<Mesh> MeshPtr;
 typedef std::shared_ptr<Shader> ShaderPtr;
 typedef std::shared_ptr<Timer> TimerPtr;
+
+typedef uint32_t GLEnum;
 
 namespace boost
 {

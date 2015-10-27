@@ -1,16 +1,10 @@
 #include "Precomp.h"
 
 #include "opengl/Quad.h"
-#include "opengl/Shader.h"
-
 #include "GUIEnvironment.h"
-
 #include "GUIButton.h"
-
 #include "GUIStaticText.h"
-
 #include "GUISkin.h"
-
 #include "GUIImage.h"
 
 GUIButton::GUIButton(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring text, bool colored, bool toggle, bool toggleStatus) : GUIElement(env, dimensions)

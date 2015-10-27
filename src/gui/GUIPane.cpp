@@ -1,10 +1,7 @@
 #include "Precomp.h"
 
 #include "opengl/Quad.h"
-#include "opengl/Shader.h"
-
 #include "GUIEnvironment.h"
-
 #include "GUIPane.h"
 
 GUIPane::GUIPane(GUIEnvironment* env, Rect2D<int> dimensions, bool draw) :GUIElement(env, dimensions)

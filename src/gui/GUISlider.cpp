@@ -2,12 +2,8 @@
 
 #include "utility/Util.h"
 #include "opengl/Quad.h"
-#include "opengl/Shader.h"
-
 #include "GUIEvent.h"
-
 #include "GUIEnvironment.h"
-
 #include "GUISlider.h"
 
 GUISlider::GUISlider(GUIEnvironment* env, Rect2D<int> dimensions, float min, float max, float pos, bool vertical) :GUIElement(env, dimensions)

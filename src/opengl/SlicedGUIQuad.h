@@ -1,7 +1,6 @@
 #pragma once
 
 #include "opengl/Mesh.h"
-#include "opengl/Shader.h"
 #include "utility/Rect2d.h"
 #include "opengl/BufferObject.h"
 #include "resources/ResourceCache.h"

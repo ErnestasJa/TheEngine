@@ -1,10 +1,7 @@
 #include "Precomp.h"
 
 #include "opengl/Quad.h"
-#include "opengl/Shader.h"
-
 #include "GUIEnvironment.h"
-
 #include "GUIStaticText.h"
 
 GUIStaticText::GUIStaticText(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring text, bool drawbackground) :GUIElement(env, dimensions)

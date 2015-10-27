@@ -8,12 +8,12 @@
 #include "opengl/FrameBufferObject.h"
 #include "opengl/GLObject.h"
 #include "opengl/IBufferObject.h"
-#include "opengl/MVar.h"
-#include "opengl/Material.h"
+#include "opengl/material/Shader.h"
+#include "opengl/material/IBindingValue.h"
+#include "opengl/material/ShaderBinding.h"
 #include "opengl/Mesh.h"
 #include "opengl/OpenGLExtensionLoader.h"
 #include "opengl/RenderBufferObject.h"
-#include "opengl/Shader.h"
 #include "opengl/Texture.h"
 
 /// If you think that I've missed some headers in the folder..

@@ -2,7 +2,7 @@
 #include "utility/Helpers.h"
 #include "application/AppContext.h"
 #include "utility/Logger.h"
-#include "opengl/Shader.h"
+#include "opengl/material/Shader.h"
 #include "resources/ResourceManager.h"
 #include "opengl/OpenGLExtensionLoader.h"
 #include "gui/GUIEnvironment.h"

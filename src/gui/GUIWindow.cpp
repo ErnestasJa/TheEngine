@@ -1,8 +1,5 @@
 #include "Precomp.h"
-
 #include "opengl/Quad.h"
-#include "opengl/Shader.h"
-
 #include "GUI.h"
 
 GUIWindow::GUIWindow(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring tittleBarText, bool clip, bool showClose, bool modal, bool draggable) :GUIElement(env, dimensions)
