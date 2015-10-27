@@ -193,6 +193,7 @@
     <ClInclude Include="..\..\src\gui\GUIWindow.h" />
     <ClInclude Include="..\..\src\opengl\AABB.h" />
     <ClInclude Include="..\..\src\opengl\BufferObject.h" />
+    <ClInclude Include="..\..\src\opengl\Camera.h" />
     <ClInclude Include="..\..\src\opengl\CubeMesh.h" />
     <ClInclude Include="..\..\src\opengl\FrameBufferObject.h" />
     <ClInclude Include="..\..\src\opengl\GLObject.h" />
@@ -203,7 +204,9 @@
     <ClInclude Include="..\..\src\opengl\Mesh.h" />
     <ClInclude Include="..\..\src\opengl\MVar.h" />
     <ClInclude Include="..\..\src\opengl\OpenGLExtensionLoader.h" />
+    <ClInclude Include="..\..\src\opengl\OpenGLInc.h" />
     <ClInclude Include="..\..\src\opengl\OpenGLUtil.h" />
+    <ClInclude Include="..\..\src\opengl\Plane3d.h" />
     <ClInclude Include="..\..\src\opengl\Quad.h" />
     <ClInclude Include="..\..\src\opengl\RenderBufferObject.h" />
     <ClInclude Include="..\..\src\opengl\Shader.h" />
@@ -220,10 +223,10 @@
     <ClInclude Include="..\..\src\resources\PNGLoader.h" />
     <ClInclude Include="..\..\src\resources\ResourceCache.h" />
     <ClInclude Include="..\..\src\resources\ResourceManager.h" />
+    <ClInclude Include="..\..\src\resources\ResourcesInc.h" />
     <ClInclude Include="..\..\src\resources\ShaderLoader.h" />
     <ClInclude Include="..\..\src\resources\SoundManager.h" />
     <ClInclude Include="..\..\src\resources\TGAloader.h" />
-    <ClInclude Include="..\..\src\scenegraph\Camera.h" />
     <ClInclude Include="..\..\src\utility\Bit.h" />
     <ClInclude Include="..\..\src\utility\Box3d.h" />
     <ClInclude Include="..\..\src\utility\Helpers.h" />
@@ -266,6 +269,7 @@
     <ClCompile Include="..\..\src\gui\GUIWindow.cpp" />
     <ClCompile Include="..\..\src\opengl\AABB.cpp" />
     <ClCompile Include="..\..\src\opengl\BufferObject.cpp" />
+    <ClCompile Include="..\..\src\opengl\Camera.cpp" />
     <ClCompile Include="..\..\src\opengl\CubeMesh.cpp" />
     <ClCompile Include="..\..\src\opengl\FrameBufferObject.cpp" />
     <ClCompile Include="..\..\src\opengl\GLObject.cpp" />
@@ -298,7 +302,6 @@
     <ClCompile Include="..\..\src\resources\ResourceManager.cpp" />
     <ClCompile Include="..\..\src\resources\ShaderLoader.cpp" />
     <ClCompile Include="..\..\src\resources\TGAloader.cpp" />
-    <ClCompile Include="..\..\src\scenegraph\Camera.cpp" />
     <ClCompile Include="..\..\src\utility\Helpers.cpp" />
     <ClCompile Include="..\..\src\utility\Logger.cpp" />
     <ClCompile Include="..\..\src\utility\SimplexNoise.cpp" />
