@@ -126,7 +126,7 @@ void Shader::Set()
 {
 	if(program!=Shader::currentProgram)
 	{
-		GetContext().GetLogger()->log(loglevel::LOG_LOG, "stuff is set");
+		//GetContext().GetLogger()->log(loglevel::LOG_LOG, "stuff is set");
 		glUseProgram(program);
 		Shader::currentProgram = program;
 	}
