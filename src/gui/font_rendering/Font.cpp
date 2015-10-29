@@ -6,7 +6,6 @@
 
 Font::Font(FT_Face face, int height, std::string name)
 {
-	this->avgheight = height;
 	this->name = name;
 
 	FT_Set_Pixel_Sizes(face, 0, height);
@@ -83,17 +82,17 @@ Font::Font(FT_Face face, int height, std::string name)
 			ox = 0;
 		}
 		glTexSubImage2D(GL_TEXTURE_2D, 0, ox, oy, g->bitmap.width, g->bitmap.rows, GL_RED, GL_UNSIGNED_BYTE, g->bitmap.buffer);
-		c[i].ax = g->advance.x >> 6;
-		c[i].ay = g->advance.y >> 6;
+		c[i].ax = (float)(g->advance.x >> 6);
+		c[i].ay = (float)(g->advance.y >> 6);
 
-		c[i].bw = g->bitmap.width;
-		c[i].bh = g->bitmap.rows;
+		c[i].bw = (float)g->bitmap.width;
+		c[i].bh = (float)g->bitmap.rows;
+				   
+		c[i].bl = (float)g->bitmap_left;
+		c[i].bt = (float)g->bitmap_top;
 
-		c[i].bl = g->bitmap_left;
-		c[i].bt = g->bitmap_top;
-
-		c[i].tx = ox / (float)w;
-		c[i].ty = oy / (float)h;
+		c[i].tx = (float)ox / (float)w;
+		c[i].ty = (float)oy / (float)h;
 
 		rowh = glm::max(rowh, g->bitmap.rows);
 		ox += g->bitmap.width + 1;

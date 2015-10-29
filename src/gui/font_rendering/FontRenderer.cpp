@@ -439,8 +439,8 @@ glm::vec2 FontRenderer::GetTextDimensions(const std::wstring & text)
 
 	_FormatTags(lineToDraw, text, inf);
 
-	int len = 0;
-	int height = 0;
+	float len = 0;
+	float height = 0;
 
 	FONT_FAMILY_TYPE currentStyle = _currentFamily->currentType;
 	bool canbold = _currentFamily->Has(FFT_BOLD);

@@ -11,6 +11,7 @@
 #include "SettingsManager.h"
 #include "resources/ResourceManager.h"
 #include "opengl/OpenGLExtensionLoader.h"
+#include "gui/GUI.h"
 
 Application::Application(int32_t argc, const char ** argv)
 {

@@ -5,7 +5,7 @@
 #include "boost/filesystem/path.hpp"
 
 #ifdef _WIN32
-#pragma warning "should be predefined somewhere in single include."
+#pragma message(": warning FS01: this should be predefined somewhere in single include.")
 #else
 #warning "should be predefined somewhere in single include."
 #endif
