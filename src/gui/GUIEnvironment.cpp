@@ -315,11 +315,10 @@ FontRenderer* GUIEnvironment::GetFontRenderer()
 	return m_font_renderer;
 }
 
-void GUIEnvironment::draw_gui_quad(Rect2D<int> dims, std::shared_ptr<Texture> tex, bool tile, bool multichannel)
+void GUIEnvironment::draw_gui_quad(Rect2D<int> dims, TexturePtr tex, bool tile, bool multichannel)
 {
 	Rect2D<float> scaled_dims = ScaleGUIRect(dims.as<float>());
 
-	gui_shader->Set();
 	tex->Set(0);
 
 	gui_quad->SetUV(skin->get_uv(gui_skin_whole_texture));
@@ -329,24 +328,21 @@ void GUIEnvironment::draw_gui_quad(Rect2D<int> dims, std::shared_ptr<Texture> te
 	M = glm::translate(M, glm::vec3(scaled_dims.x, scaled_dims.y, 0));
 	M = glm::scale(M, glm::vec3(scaled_dims.w, scaled_dims.h, 0));
 
-	glUniformMatrix4fv(gui_shader->getparam("M"), 1, GL_FALSE, glm::value_ptr(M));
-	glUniform1ui(gui_shader->getparam("coloured"), 0);
-	if (!multichannel)
-		glUniform1ui(gui_shader->getparam("singlechannel"), GL_TRUE);
-	else
-		glUniform1ui(gui_shader->getparam("singlechannel"), GL_FALSE);
-	glUniform1f(gui_shader->getparam("alpha"), 1.f);
+	SetBindingSafe(gui_shader, "M", M);
 
+	if (!multichannel)
+		SetBindingSafe(gui_shader, "singlechannel", GL_TRUE);
+
+	gui_shader->Set();
 	gui_quad->Render();
 
-	glBindTexture(GL_TEXTURE_2D, 0);
+	tex->Unset(0);
 }
 
 void GUIEnvironment::draw_gui_quad(Rect2D<int> dims, uint32_t style, bool tile)
 {
 	Rect2D<float> scaled_dims = ScaleGUIRect(dims.as<float>());
 
-	gui_shader->Set();
 	skin_atlas->Set(0);
 
 	gui_quad->SetUV(skin->get_uv(style));
@@ -356,37 +352,35 @@ void GUIEnvironment::draw_gui_quad(Rect2D<int> dims, uint32_t style, bool tile)
 	M = glm::translate(M, glm::vec3(scaled_dims.x, scaled_dims.y, 0));
 	M = glm::scale(M, glm::vec3(scaled_dims.w, scaled_dims.h, 0));
 
-	glUniformMatrix4fv(gui_shader->getparam("M"), 1, GL_FALSE, glm::value_ptr(M));
-	glUniform1ui(gui_shader->getparam("coloured"), 0);
+	SetBindingSafe(gui_shader, "M", M);
 
+	gui_shader->Set();
 	gui_quad->Render();
 
-	glBindTexture(GL_TEXTURE_2D, 0);
+	skin_atlas->Unset(0);
 }
 
 void GUIEnvironment::draw_gui_quad(Rect2D<int> dims, glm::vec4 col)
 {
 	Rect2D<float> scaled_dims = ScaleGUIRect(dims.as<float>());
 
-	gui_shader->Set();
-
 	glm::mat4 M = glm::mat4(1.0f);
 
 	M = glm::translate(M, glm::vec3(scaled_dims.x, scaled_dims.y, 0));
 	M = glm::scale(M, glm::vec3(scaled_dims.w, scaled_dims.h, 0));
 
-	glUniformMatrix4fv(gui_shader->getparam("M"), 1, GL_FALSE, glm::value_ptr(M));
-	glUniform1ui(gui_shader->getparam("coloured"), 1);
-	glUniform4fv(gui_shader->getparam("color"), 1, glm::value_ptr(col));
+	SetBindingSafe(gui_shader, "M", M);
+	SetBindingSafe(gui_shader, "coloured", GL_TRUE);
+	SetBindingSafe(gui_shader, "color", col);
 
+	gui_shader->Set();
 	gui_quad->Render();
 }
 
-void GUIEnvironment::draw_sliced_gui_quad(Rect2D<int> size, std::shared_ptr<Texture> tex, bool tile)
+void GUIEnvironment::draw_sliced_gui_quad(Rect2D<int> size, TexturePtr tex, bool tile)
 {
 	Rect2D<float> scaled_dims = ScaleGUIRect(size.as<float>());
 
-	gui_shader->Set();
 	tex->Set(0);
 
 	glm::mat4 M = glm::mat4(1.0f);
@@ -394,19 +388,18 @@ void GUIEnvironment::draw_sliced_gui_quad(Rect2D<int> size, std::shared_ptr<Text
 	M = glm::translate(M, glm::vec3(scaled_dims.x, scaled_dims.y, 0));
 	M = glm::scale(M, glm::vec3(scaled_dims.w, scaled_dims.h, 0));
 
-	glUniformMatrix4fv(gui_shader->getparam("M"), 1, GL_FALSE, glm::value_ptr(M));
-	glUniform1ui(gui_shader->getparam("coloured"), 0);
+	SetBindingSafe(gui_shader, "M", M);
 	sliced_quad->SetRatio(glm::vec2(size.w, size.h));
+	gui_shader->Set();
 	sliced_quad->Render();
 
-	glBindTexture(GL_TEXTURE_2D, 0);
+	tex->Unset(0);
 }
 
 void GUIEnvironment::draw_sliced_gui_quad(Rect2D<int> size, uint32_t style)
 {
 	Rect2D<float> scaled_dims = ScaleGUIRect(size.as<float>());
 
-	gui_shader->Set();
 	skin_atlas->Set(0);
 
 	sliced_quad->SetRatio(glm::vec2(size.w, size.h), skin->get_margin(style));
@@ -417,28 +410,27 @@ void GUIEnvironment::draw_sliced_gui_quad(Rect2D<int> size, uint32_t style)
 	M = glm::translate(M, glm::vec3(scaled_dims.x, scaled_dims.y, 0));
 	M = glm::scale(M, glm::vec3(scaled_dims.w, scaled_dims.h, 0));
 
-	glUniformMatrix4fv(gui_shader->getparam("M"), 1, GL_FALSE, glm::value_ptr(M));
-	glUniform1ui(gui_shader->getparam("coloured"), 0);
-	glUniform1f(gui_shader->getparam("alpha"), 0.9f);
+	SetBindingSafe(gui_shader, "M", M);
+	SetBindingSafe(gui_shader, "alpha", 0.9f);
+	gui_shader->Set();
 	sliced_quad->Render();
 
-	glBindTexture(GL_TEXTURE_2D, 0);
+	skin_atlas->Unset(0);
 }
 
 void GUIEnvironment::draw_sliced_gui_quad(Rect2D<int> size, glm::vec4 col)
 {
 	Rect2D<float> scaled_dims = ScaleGUIRect(size.as<float>());
 
-	gui_shader->Set();
-
 	glm::mat4 M = glm::mat4(1.0f);
 
 	M = glm::translate(M, glm::vec3(scaled_dims.x, scaled_dims.y, 0));
 	M = glm::scale(M, glm::vec3(scaled_dims.w, scaled_dims.h, 0));
 
-	glUniformMatrix4fv(gui_shader->getparam("M"), 1, GL_FALSE, glm::value_ptr(M));
-	glUniform1ui(gui_shader->getparam("coloured"), 1);
-	glUniform4fv(gui_shader->getparam("color"), 1, glm::value_ptr(col));
+	SetBindingSafe(gui_shader, "M", M);
+	SetBindingSafe(gui_shader, "coloured", GL_TRUE);
+	SetBindingSafe(gui_shader, "color", col);
 	sliced_quad->SetRatio(glm::vec2(size.w, size.h));
+	gui_shader->Set();
 	sliced_quad->Render();
 }

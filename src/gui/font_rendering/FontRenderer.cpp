@@ -279,8 +279,8 @@ void FontRenderer::_RenderString(const std::wstring &text, glm::ivec2 pos, const
 	_pos.x = -1 + _pos.x*sx;
 	_pos.y = 1 - _pos.y*sy - _currentFont->avgheight*sy;
 
-	_fontShader->Set();
 	_SetFontColor(color);
+	_fontShader->Set();
 
 	/* Use the Texture containing the atlas */
 	glBindTexture(GL_TEXTURE_2D, _currentFont->tex);
@@ -428,7 +428,7 @@ void FontRenderer::RenderString(const std::wstring &text, const glm::ivec2 &pos,
 
 void FontRenderer::_SetFontColor(const glm::vec4 &color)
 {
-	glUniform4fv(_fontShader->getparam("color"), 1, glm::value_ptr(color));
+	SetBindingSafe(_fontShader, "color", color);
 }
 
 glm::vec2 FontRenderer::GetTextDimensions(const std::wstring & text)
