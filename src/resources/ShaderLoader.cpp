@@ -17,7 +17,7 @@ ShaderLoader::~ShaderLoader()
 ShaderPtr ShaderLoader::Load(const Path & vertex_file_name, const Path & fragment_file_name)
 {
 	Path resourceName = vertex_file_name.filename().generic_string() + fragment_file_name.filename().generic_string();
-	
+
 	resource<Shader> res = this->get_resource(resourceName);
 
 	if (res._resource)
@@ -29,7 +29,7 @@ ShaderPtr ShaderLoader::Load(const Path & vertex_file_name, const Path & fragmen
 	FilePtr vertexFile = GetContext().GetFileSystem()->OpenRead(vertex_file_name);
 	FilePtr fragmentFile = GetContext().GetFileSystem()->OpenRead(fragment_file_name);
 
-	if(!vertexFile->IsOpen() || !fragmentFile->IsOpen())
+	if (!vertexFile->IsOpen() || !fragmentFile->IsOpen())
 	{
 		return ShaderPtr();
 	}
@@ -41,7 +41,7 @@ ShaderPtr ShaderLoader::Load(const Path & vertex_file_name, const Path & fragmen
 
 	Shader * shader = new Shader(resourceName.generic_string(), (char*)vertexBuffer->data(), (char*)fragmentBuffer->data(), "");
 	shader->Compile();
-	
+
 	if (shader->IsCompiledAndLinked())
 	{
 		res._resource = ShaderPtr(shader);
@@ -67,22 +67,33 @@ ShaderPtr ShaderLoader::Load(const Path & fileName)
 		return res._resource;
 	}
 
+	ByteBufferPtr vertexBuffer;
+	ByteBufferPtr fragmentBuffer;
+	ByteBufferPtr geometryBuffer;
+
 	FilePtr vertexFile = GetContext().GetFileSystem()->OpenRead(Path(fileName).replace_extension(".vert"));
-	ByteBufferPtr vertexBuffer = vertexFile->ReadText();
+	vertexBuffer = vertexFile->ReadText();
 
 	FilePtr fragmentFile = GetContext().GetFileSystem()->OpenRead(Path(fileName).replace_extension(".frag"));
-	ByteBufferPtr fragmentBuffer = fragmentFile->ReadText();
+	fragmentBuffer = fragmentFile->ReadText();
 
-	FilePtr geometryFile = GetContext().GetFileSystem()->OpenRead(Path(fileName).replace_extension(".geom"));
-	ByteBufferPtr geometryBuffer = geometryFile->ReadText();
+	if (GetContext().GetFileSystem()->FileExists(Path(fileName).replace_extension(".geom")))
+	{
+		FilePtr geometryFile = GetContext().GetFileSystem()->OpenRead(Path(fileName).replace_extension(".geom"));
+
+		if (geometryFile)
+		{
+			geometryBuffer = geometryFile->ReadText();
+		}
+	}
 
 #if 0
-	if(vertexBuffer)
+	if (vertexBuffer)
 	{
 		GetContext().GetLogger()->log(LOG_LOG, "Vertex shader: %s", (char*)vertexBuffer->data());
 	}
-	
-	if(fragmentBuffer)
+
+	if (fragmentBuffer)
 	{
 		GetContext().GetLogger()->log(LOG_LOG, "Fragment shader: %s", (char*)fragmentBuffer->data());
 	}
@@ -98,7 +109,7 @@ ShaderPtr ShaderLoader::Load(const Path & fileName)
 
 	Shader * sh = nullptr;
 
-	if(!vertexBuffer && !fragmentBuffer)
+	if (!vertexBuffer && !fragmentBuffer)
 		return res._resource;
 
 	if (geometryBuffer)
@@ -124,7 +135,7 @@ ShaderPtr ShaderLoader::Load(const Path & fileName)
 		GetContext().GetLogger()->log(LOG_LOG, "Shader '%s' loaded.", fileName.generic_string().c_str());
 
 	return res._resource;
-}
+	}
 
 ShaderPtr ShaderLoader::GetShaderByName(const Path & name)
 {
