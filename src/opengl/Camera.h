@@ -1,7 +1,7 @@
 #ifndef CAMERA_OBJECT_H
 #define CAMERA_OBJECT_H
 
-#include "Plane3d.h"
+#include "utility/Plane3d.h"
 
 ///REFACTOR: WTF HAPPENED IN THIS FILE... WW3??!
 

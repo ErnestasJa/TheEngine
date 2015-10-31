@@ -1,6 +1,6 @@
 #include "Precomp.h"
 
-#include "opengl/Quad.h"
+#include "opengl/geometry/Quad.h"
 #include "GUIEnvironment.h"
 #include "GUIStaticText.h"
 

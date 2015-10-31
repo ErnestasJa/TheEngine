@@ -1,7 +1,7 @@
 #include "Precomp.h"
 
 #include "utility/Util.h"
-#include "opengl/Quad.h"
+#include "opengl/geometry/Quad.h"
 #include "GUIEvent.h"
 #include "GUIEnvironment.h"
 #include "GUISlider.h"

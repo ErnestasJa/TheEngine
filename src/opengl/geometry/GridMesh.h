@@ -1,7 +1,7 @@
 #ifndef GRIDMESH_H_INCLUDED
 #define GRIDMESH_H_INCLUDED
 
-#include "opengl/Mesh.h"
+#include "../Mesh.h"
 
 class GridMesh :public Mesh
 {

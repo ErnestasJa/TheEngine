@@ -227,4 +227,4 @@ struct FrameBufferObject : public GLObject
 	}
 };
 
-typedef std::shared_ptr<FrameBufferObject> frame_BufferObject_ptr;
+typedef std::shared_ptr<FrameBufferObject> FrameBufferObjectPtr;

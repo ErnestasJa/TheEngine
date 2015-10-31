@@ -6,7 +6,7 @@
 #include "GUISkin.h"
 #include "font_rendering/FontRenderer.h"
 
-class GUIQuad;
+class Quad;
 class SlicedGUIQuad;
 class Texture;
 class ApplicationWindow;
@@ -100,7 +100,7 @@ private:
 	Texture* skin_atlas;
 	ShaderPtr gui_shader;
 
-	GUIQuad* gui_quad;
+	Quad* gui_quad;
 	SlicedGUIQuad* sliced_quad;
 
 	FontRenderer* m_font_renderer;

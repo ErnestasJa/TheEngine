@@ -1,8 +1,8 @@
 #include "Precomp.h"
 #include "GUI.h"
 #include "opengl/material/Shader.h"
-#include "opengl/GUIQuad.h"
-#include "opengl/SlicedGUIQuad.h"
+#include "opengl/geometry/Quad.h"
+#include "opengl/geometry/SlicedGUIQuad.h"
 #include "GUISkin.h"
 #include "resources/Image.h"
 #include "resources/ImageLoader.h"
@@ -39,8 +39,7 @@ GUIEnvironment::GUIEnvironment() :GUIElement(nullptr, Rect2D<int>(0, 0, GetConte
 	last_char = ' ';
 
 	gui_shader = GetContext().GetResourceManager()->LoadShader("res/engine/shaders/gui_quad");
-	gui_quad = new GUIQuad();
-	gui_quad->Init();
+	gui_quad = new Quad();
 
 	sliced_quad = new SlicedGUIQuad(glm::vec2(1), 8);
 	sliced_quad->Init();
@@ -328,10 +327,12 @@ void GUIEnvironment::draw_gui_quad(Rect2D<int> dims, TexturePtr tex, bool tile, 
 	M = glm::translate(M, glm::vec3(scaled_dims.x, scaled_dims.y, 0));
 	M = glm::scale(M, glm::vec3(scaled_dims.w, scaled_dims.h, 0));
 
+	SetBindingSafe(gui_shader, "tex", 0);
 	SetBindingSafe(gui_shader, "M", M);
-
-	if (!multichannel)
-		SetBindingSafe(gui_shader, "singlechannel", GL_TRUE);
+	SetBindingSafe(gui_shader, "singlechannel", !multichannel);
+	SetBindingSafe(gui_shader, "colored", GL_FALSE);
+	SetBindingSafe(gui_shader, "color", glm::vec4(0.f));
+	SetBindingSafe(gui_shader, "alpha", 1.0f);
 
 	gui_shader->Set();
 	gui_quad->Render();
@@ -352,7 +353,12 @@ void GUIEnvironment::draw_gui_quad(Rect2D<int> dims, uint32_t style, bool tile)
 	M = glm::translate(M, glm::vec3(scaled_dims.x, scaled_dims.y, 0));
 	M = glm::scale(M, glm::vec3(scaled_dims.w, scaled_dims.h, 0));
 
+	SetBindingSafe(gui_shader, "tex", 0);
 	SetBindingSafe(gui_shader, "M", M);
+	SetBindingSafe(gui_shader, "singlechannel", GL_FALSE);
+	SetBindingSafe(gui_shader, "colored", GL_FALSE);
+	SetBindingSafe(gui_shader, "color", glm::vec4(0.f));
+	SetBindingSafe(gui_shader, "alpha", 1.0f);
 
 	gui_shader->Set();
 	gui_quad->Render();
@@ -369,9 +375,12 @@ void GUIEnvironment::draw_gui_quad(Rect2D<int> dims, glm::vec4 col)
 	M = glm::translate(M, glm::vec3(scaled_dims.x, scaled_dims.y, 0));
 	M = glm::scale(M, glm::vec3(scaled_dims.w, scaled_dims.h, 0));
 
+	SetBindingSafe(gui_shader, "tex", 0);
 	SetBindingSafe(gui_shader, "M", M);
-	SetBindingSafe(gui_shader, "coloured", GL_TRUE);
+	SetBindingSafe(gui_shader, "singlechannel", GL_FALSE);
+	SetBindingSafe(gui_shader, "colored", GL_TRUE);
 	SetBindingSafe(gui_shader, "color", col);
+	SetBindingSafe(gui_shader, "alpha", 1.0f);
 
 	gui_shader->Set();
 	gui_quad->Render();
@@ -388,7 +397,13 @@ void GUIEnvironment::draw_sliced_gui_quad(Rect2D<int> size, TexturePtr tex, bool
 	M = glm::translate(M, glm::vec3(scaled_dims.x, scaled_dims.y, 0));
 	M = glm::scale(M, glm::vec3(scaled_dims.w, scaled_dims.h, 0));
 
+	SetBindingSafe(gui_shader, "tex", 0);
 	SetBindingSafe(gui_shader, "M", M);
+	SetBindingSafe(gui_shader, "singlechannel", GL_FALSE);
+	SetBindingSafe(gui_shader, "colored", GL_FALSE);
+	SetBindingSafe(gui_shader, "color", glm::vec4(0.f));
+	SetBindingSafe(gui_shader, "alpha", 1.0f);
+
 	sliced_quad->SetRatio(glm::vec2(size.w, size.h));
 	gui_shader->Set();
 	sliced_quad->Render();
@@ -410,8 +425,13 @@ void GUIEnvironment::draw_sliced_gui_quad(Rect2D<int> size, uint32_t style)
 	M = glm::translate(M, glm::vec3(scaled_dims.x, scaled_dims.y, 0));
 	M = glm::scale(M, glm::vec3(scaled_dims.w, scaled_dims.h, 0));
 
+	SetBindingSafe(gui_shader, "tex", 0);
 	SetBindingSafe(gui_shader, "M", M);
+	SetBindingSafe(gui_shader, "singlechannel", GL_FALSE);
+	SetBindingSafe(gui_shader, "colored", GL_FALSE);
+	SetBindingSafe(gui_shader, "color", glm::vec4(0.f));
 	SetBindingSafe(gui_shader, "alpha", 0.9f);
+
 	gui_shader->Set();
 	sliced_quad->Render();
 
@@ -427,9 +447,13 @@ void GUIEnvironment::draw_sliced_gui_quad(Rect2D<int> size, glm::vec4 col)
 	M = glm::translate(M, glm::vec3(scaled_dims.x, scaled_dims.y, 0));
 	M = glm::scale(M, glm::vec3(scaled_dims.w, scaled_dims.h, 0));
 
+	SetBindingSafe(gui_shader, "tex", 0);
 	SetBindingSafe(gui_shader, "M", M);
-	SetBindingSafe(gui_shader, "coloured", GL_TRUE);
+	SetBindingSafe(gui_shader, "singlechannel", GL_FALSE);
+	SetBindingSafe(gui_shader, "colored", GL_TRUE);
 	SetBindingSafe(gui_shader, "color", col);
+	SetBindingSafe(gui_shader, "alpha", 1.f);
+
 	sliced_quad->SetRatio(glm::vec2(size.w, size.h));
 	gui_shader->Set();
 	sliced_quad->Render();

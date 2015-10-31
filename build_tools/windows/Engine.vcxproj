@@ -200,11 +200,14 @@
     <ClInclude Include="..\..\src\opengl\Camera.h" />
     <ClInclude Include="..\..\src\opengl\CubeMesh.h" />
     <ClInclude Include="..\..\src\opengl\FrameBufferObject.h" />
+    <ClInclude Include="..\..\src\opengl\geometry\CubeMesh.h" />
+    <ClInclude Include="..\..\src\opengl\geometry\GridMesh.h" />
+    <ClInclude Include="..\..\src\opengl\geometry\Plane3d.h" />
+    <ClInclude Include="..\..\src\opengl\geometry\Quad.h" />
+    <ClInclude Include="..\..\src\opengl\geometry\SlicedGUIQuad.h" />
     <ClInclude Include="..\..\src\opengl\GLObject.h" />
-    <ClInclude Include="..\..\src\opengl\GridMesh.h" />
     <ClInclude Include="..\..\src\opengl\GUIQuad.h" />
     <ClInclude Include="..\..\src\opengl\IBufferObject.h" />
-    <ClInclude Include="..\..\src\opengl\Material.h" />
     <ClInclude Include="..\..\src\opengl\material\IBindingValue.h" />
     <ClInclude Include="..\..\src\opengl\material\Material.h" />
     <ClInclude Include="..\..\src\opengl\material\Shader.h" />
@@ -215,10 +218,8 @@
     <ClInclude Include="..\..\src\opengl\OpenGLExtensionLoader.h" />
     <ClInclude Include="..\..\src\opengl\OpenGLInc.h" />
     <ClInclude Include="..\..\src\opengl\OpenGLUtil.h" />
-    <ClInclude Include="..\..\src\opengl\Plane3d.h" />
-    <ClInclude Include="..\..\src\opengl\Quad.h" />
     <ClInclude Include="..\..\src\opengl\RenderBufferObject.h" />
-    <ClInclude Include="..\..\src\opengl\Shader.h" />
+    <ClInclude Include="..\..\src\opengl\Renderer.h" />
     <ClInclude Include="..\..\src\opengl\SlicedGUIQuad.h" />
     <ClInclude Include="..\..\src\opengl\Texture.h" />
     <ClInclude Include="..\..\src\Precomp.h" />
@@ -240,7 +241,6 @@
     <ClInclude Include="..\..\src\utility\Box3d.h" />
     <ClInclude Include="..\..\src\utility\Helpers.h" />
     <ClInclude Include="..\..\src\utility\Logger.h" />
-    <ClInclude Include="..\..\src\utility\Plane3d.h" />
     <ClInclude Include="..\..\src\utility\Rect2d.h" />
     <ClInclude Include="..\..\src\utility\SimplexNoise.h" />
     <ClInclude Include="..\..\src\utility\StringUtil.h" />
@@ -279,8 +279,9 @@
     <ClCompile Include="..\..\src\opengl\AABB.cpp" />
     <ClCompile Include="..\..\src\opengl\BufferObject.cpp" />
     <ClCompile Include="..\..\src\opengl\Camera.cpp" />
-    <ClCompile Include="..\..\src\opengl\CubeMesh.cpp" />
     <ClCompile Include="..\..\src\opengl\FrameBufferObject.cpp" />
+    <ClCompile Include="..\..\src\opengl\geometry\CubeMesh.cpp" />
+    <ClCompile Include="..\..\src\opengl\geometry\Quad.cpp" />
     <ClCompile Include="..\..\src\opengl\GLObject.cpp" />
     <ClCompile Include="..\..\src\opengl\IBufferObject.cpp" />
     <ClCompile Include="..\..\src\opengl\material\Shader.cpp" />
@@ -289,6 +290,7 @@
     <ClCompile Include="..\..\src\opengl\Mesh.cpp" />
     <ClCompile Include="..\..\src\opengl\OpenGLExtensionLoader.cpp" />
     <ClCompile Include="..\..\src\opengl\RenderBufferObject.cpp" />
+    <ClCompile Include="..\..\src\opengl\Renderer.cpp" />
     <ClCompile Include="..\..\src\opengl\Texture.cpp" />
     <ClCompile Include="..\..\src\Precomp.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
