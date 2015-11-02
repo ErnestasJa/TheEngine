@@ -129,6 +129,10 @@ ShaderPtr ShaderLoader::Load(const Path & fileName)
 		res._path = fileName;
 		this->add_resource(res);
 	}
+	else
+	{
+		throw;
+	}
 
 
 	if (res._resource)

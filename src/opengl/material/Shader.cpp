@@ -52,7 +52,7 @@ bool Shader::CompileShaderObject(GLenum Type, uint32_t &obj, const std::string &
 }
 
 Shader::Shader(const std::string & name, const std::string & vsstr, const std::string & fsstr)
-	: name(name), vsstr(vsstr), fsstr(fsstr), program(0), vsobj(0), fsobj(0)
+	: name(name), vsstr(vsstr), fsstr(fsstr), program(0), vsobj(0), fsobj(0), gsobj(0)
 {
 }
 
