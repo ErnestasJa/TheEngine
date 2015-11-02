@@ -67,9 +67,9 @@ ShaderPtr ShaderLoader::Load(const Path & fileName)
 		return res._resource;
 	}
 
-	ByteBufferPtr vertexBuffer;
-	ByteBufferPtr fragmentBuffer;
-	ByteBufferPtr geometryBuffer;
+	ByteBufferPtr vertexBuffer = nullptr;
+	ByteBufferPtr fragmentBuffer = nullptr;
+	ByteBufferPtr geometryBuffer = nullptr;
 
 	FilePtr vertexFile = GetContext().GetFileSystem()->OpenRead(Path(fileName).replace_extension(".vert"));
 	vertexBuffer = vertexFile->ReadText();
@@ -135,7 +135,7 @@ ShaderPtr ShaderLoader::Load(const Path & fileName)
 		GetContext().GetLogger()->log(LOG_LOG, "Shader '%s' loaded.", fileName.generic_string().c_str());
 
 	return res._resource;
-	}
+}
 
 ShaderPtr ShaderLoader::GetShaderByName(const Path & name)
 {

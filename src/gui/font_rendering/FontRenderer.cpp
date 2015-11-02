@@ -46,6 +46,7 @@ FontRenderer::~FontRenderer()
 	//    }
 	_fontFamilies.clear();
 	FT_Done_FreeType(_ftLib);
+	_fontShader = nullptr;
 }
 
 Font* FontRenderer::_CreateFont(const std::string &name, const std::string &filename, const int32_t &size)

@@ -67,6 +67,7 @@ GUIEnvironment::~GUIEnvironment()
 	delete m_font_renderer;
 	gui_shader = nullptr;
 	delete gui_quad;
+	delete sliced_quad;
 }
 
 GUIStaticText* GUIEnvironment::AddGUIStaticText(Rect2D<int> dimensions, std::wstring text, bool drawbackground)

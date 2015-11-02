@@ -181,6 +181,11 @@ bool Application::DestroyContext()
 		delete GetContext().GetFileSystem();
 	}
 
+	if (GetContext().GetResourceManager())
+	{
+		delete GetContext().GetResourceManager();
+	}
+
 	GetContext().p_timer = nullptr;
 
 	return true;
