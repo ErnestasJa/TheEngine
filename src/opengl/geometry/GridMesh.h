@@ -46,7 +46,7 @@ public:
 		col->data.push_back(glm::vec4(0, 0, 1, 1));
 		col->data.push_back(glm::vec4(0, 0, 1, 1));
 
-		for (uint32_t i = 0; i <= size; i++)
+		for (uint32_t i = 0; i <= size/density; i++)
 		{
 			if (i != halfsize)
 			{
