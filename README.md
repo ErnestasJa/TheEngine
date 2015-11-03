@@ -4,8 +4,8 @@ Graphics rendering engine. Targeting opengl core 3.3 profile supporting hardware
 ##Main features:
 * Window creation (glfw3) and extension loading (glxw).
 * Image, mesh (iqm format), shader loading.
-* Rendering to FBOs, RBOs.
 * OOP impementation of opengl shader, texture and buffer objects.
+* OOP implementatio of render buffer and frame buffer objects.
 * Homebrew GUI renderer.
 * Predefined mesh geometry objects (Editor grid, GUI pane, 3d quad etc.).
 * Basic logging functionality.
