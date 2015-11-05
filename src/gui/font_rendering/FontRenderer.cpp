@@ -280,11 +280,12 @@ void FontRenderer::_RenderString(const std::wstring &text, glm::ivec2 pos, const
 	_pos.x = -1 + _pos.x*sx;
 	_pos.y = 1 - _pos.y*sy - _currentFont->avgheight*sy;
 
-	_SetFontColor(color);
-	_fontShader->Set();
-
 	/* Use the Texture containing the atlas */
 	glBindTexture(GL_TEXTURE_2D, _currentFont->tex);
+
+	_SetFontColor(color);
+	SetBindingSafe(_fontShader, "tex", 0);
+	_fontShader->Set();
 
 	glBindVertexArray(_VAO);
 

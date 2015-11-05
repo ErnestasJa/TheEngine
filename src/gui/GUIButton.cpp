@@ -131,4 +131,5 @@ void GUIButton::SetColors(const glm::vec4 & colorActive, const glm::vec4 & color
 	_colorHover = colorHover;
 	_colorClicked = colorClicked;
 	_colorDisabled = colorDisabled;
+	_colorCurrent = colorActive;
 }

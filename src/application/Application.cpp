@@ -124,7 +124,7 @@ bool Application::InitWindowAndOpenGL(const std::string & title)
 		return false;
 	}
 
-#if 0
+#if 1
 	if (glDebugMessageCallback) {
 		std::cout << "Register OpenGL debug callback " << std::endl;
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
@@ -142,6 +142,8 @@ bool Application::InitWindowAndOpenGL(const std::string & title)
 #endif
 
 	GetContext().GetLogger()->log(LOG_CRITICAL, "Shading language: %s", (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
+
+	return true;
 }
 
 bool Application::DestroyContext()

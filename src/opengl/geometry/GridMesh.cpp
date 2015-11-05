@@ -51,7 +51,9 @@ GridMesh::GridMesh(float density, uint32_t size, uint32_t gridlines, bool positi
 	col->data.push_back(glm::vec4(0, 0, 1, 1));
 	col->data.push_back(glm::vec4(0, 0, 1, 1));
 
-	for (uint32_t i = 0; i <= size / density; i++)
+	uint32_t end = positiveOnly ? halfsize : size;
+
+	for (uint32_t i = 0; i <= end / density; i++)
 	{
 		if (i != halfsize)
 		{
