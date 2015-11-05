@@ -473,6 +473,9 @@
     <ClCompile Include="..\..\src\opengl\geometry\Quad.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\opengl\geometry\GridMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\opengl\AABB.inl">

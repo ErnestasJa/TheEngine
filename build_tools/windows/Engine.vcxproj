@@ -281,6 +281,7 @@
     <ClCompile Include="..\..\src\opengl\Camera.cpp" />
     <ClCompile Include="..\..\src\opengl\FrameBufferObject.cpp" />
     <ClCompile Include="..\..\src\opengl\geometry\CubeMesh.cpp" />
+    <ClCompile Include="..\..\src\opengl\geometry\GridMesh.cpp" />
     <ClCompile Include="..\..\src\opengl\geometry\Quad.cpp" />
     <ClCompile Include="..\..\src\opengl\GLObject.cpp" />
     <ClCompile Include="..\..\src\opengl\IBufferObject.cpp" />
