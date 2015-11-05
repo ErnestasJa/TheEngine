@@ -38,7 +38,7 @@ void GUIButton::Render()
 {
 	if (_colored)
 	{
-		environment->draw_sliced_gui_quad(absolute_rect, _colorCurrent);
+		environment->draw_gui_quad(absolute_rect, _colorCurrent);
 	}
 	else
 	{
