@@ -89,11 +89,11 @@ GridMesh::GridMesh(float density, uint32_t size, uint32_t gridlines, bool positi
 			{
 				if (i != 0)
 				{
-					col->data.push_back(glm::vec4(0.75, 0.75, 0.75, 1));
-					col->data.push_back(glm::vec4(0.75, 0.75, 0.75, 1));
+					col->data.push_back(glm::vec4(0.85, 0.85, 0.85, 1));
+					col->data.push_back(glm::vec4(0.85, 0.85, 0.85, 1));
 
-					col->data.push_back(glm::vec4(0.75, 0.75, 0.75, 1));
-					col->data.push_back(glm::vec4(0.75, 0.75, 0.75, 1));
+					col->data.push_back(glm::vec4(0.85, 0.85, 0.85, 1));
+					col->data.push_back(glm::vec4(0.85, 0.85, 0.85, 1));
 				}
 			}
 		}
