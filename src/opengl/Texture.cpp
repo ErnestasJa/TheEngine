@@ -87,19 +87,19 @@ void Texture::Init(const uint8_t * data, uint32_t target, uint32_t image_format,
 	case GL_RED:
 	case GL_RGB:
 	case GL_BGR:
-		glPixelStorei(GL_UNPACK_ALIGNMENT, Texture::UNPACK_BYTE_ALIGNMENT);
+		glPixelStorei(GL_UNPACK_ALIGNMENT, (uint32_t)TextureUnpackAlignment::UNPACK_BYTE_ALIGNMENT);
 		break;
 
 	case GL_RG:
-		glPixelStorei(GL_UNPACK_ALIGNMENT, Texture::UNPACK_EVEN_BYTE_ALIGNMENT);
-		break;
-
-	case GL_DEPTH_COMPONENT:
-		glPixelStorei(GL_UNPACK_ALIGNMENT, Texture::UNPACK_BYTE_ALIGNMENT);
-		break;
-
-	default:
-		glPixelStorei(GL_UNPACK_ALIGNMENT, Texture::UNPACK_WORD_ALIGNMENT);
+		glPixelStorei(GL_UNPACK_ALIGNMENT, (uint32_t)TextureUnpackAlignment::UNPACK_EVEN_BYTE_ALIGNMENT);
+		break;							   
+										   
+	case GL_DEPTH_COMPONENT:			   
+		glPixelStorei(GL_UNPACK_ALIGNMENT, (uint32_t)TextureUnpackAlignment::UNPACK_BYTE_ALIGNMENT);
+		break;							   
+										   
+	default:							   
+		glPixelStorei(GL_UNPACK_ALIGNMENT, (uint32_t)TextureUnpackAlignment::UNPACK_WORD_ALIGNMENT);
 		break;
 	}
 
@@ -115,25 +115,25 @@ void Texture::Init(const uint8_t * data, uint32_t target, uint32_t image_format,
 	glBindTexture(Type, current);
 }
 
-void Texture::SetFilters(FILTER_MIN fmin, FILTER_MAG fmag)
+void Texture::SetFilters(TextureFilterMin fmin, TextureFilterMag fmag)
 {
 	if (current != Id)
 		glBindTexture(Type, Id);
 
-	glTexParameteri(Type, GL_TEXTURE_MAG_FILTER, fmag == FILTER_MAG_LINEAR ? GL_LINEAR : GL_NEAREST);
-	glTexParameteri(Type, GL_TEXTURE_MIN_FILTER, fmin == FILTER_MIN_LINEAR_MIPMAP ? GL_LINEAR_MIPMAP_LINEAR : (fmin == FILTER_MIN_NEAREST_MIPMAP ? GL_NEAREST_MIPMAP_NEAREST : (fmin == FILTER_MIN_LINEAR ? GL_LINEAR : GL_NEAREST)));
+	glTexParameteri(Type, GL_TEXTURE_MAG_FILTER, fmag == TextureFilterMag::FILTER_MAG_LINEAR ? GL_LINEAR : GL_NEAREST);
+	glTexParameteri(Type, GL_TEXTURE_MIN_FILTER, fmin == TextureFilterMin::FILTER_MIN_LINEAR_MIPMAP ? GL_LINEAR_MIPMAP_LINEAR : (fmin == TextureFilterMin::FILTER_MIN_NEAREST_MIPMAP ? GL_NEAREST_MIPMAP_NEAREST : (fmin == TextureFilterMin::FILTER_MIN_LINEAR ? GL_LINEAR : GL_NEAREST)));
 
 	if (current != Id)
 		glBindTexture(Type, current);
 }
 
-void Texture::SetClampMode(Texture::CLAMP x, Texture::CLAMP y)
+void Texture::SetClampMode(TextureClamp x, TextureClamp y)
 {
 	if (current != Id)
 		glBindTexture(Type, Id);
 
-	glTexParameteri(Type, GL_TEXTURE_WRAP_S, x == CLAMP_EDGE ? GL_CLAMP_TO_EDGE : (x == CLAMP_BORDER ? GL_CLAMP_TO_BORDER : GL_REPEAT));
-	glTexParameteri(Type, GL_TEXTURE_WRAP_T, y == CLAMP_EDGE ? GL_CLAMP_TO_EDGE : (y == CLAMP_BORDER ? GL_CLAMP_TO_BORDER : GL_REPEAT));
+	glTexParameteri(Type, GL_TEXTURE_WRAP_S, x == TextureClamp::CLAMP_EDGE ? GL_CLAMP_TO_EDGE : (x == TextureClamp::CLAMP_BORDER ? GL_CLAMP_TO_BORDER : GL_REPEAT));
+	glTexParameteri(Type, GL_TEXTURE_WRAP_T, y == TextureClamp::CLAMP_EDGE ? GL_CLAMP_TO_EDGE : (y == TextureClamp::CLAMP_BORDER ? GL_CLAMP_TO_BORDER : GL_REPEAT));
 
 	if (current != Id)
 		glBindTexture(Type, current);
@@ -150,12 +150,12 @@ void Texture::SetBorderColor(const glm::vec4 & color)
 		glBindTexture(Type, current);
 }
 
-void Texture::SetUnpackAlignment(Texture::UNPACK_ALIGNMENT alignment)
+void Texture::SetUnpackAlignment(TextureUnpackAlignment alignment)
 {
 	if (current != Id)
 		glBindTexture(Type, Id);
 
-	glPixelStorei(GL_UNPACK_ALIGNMENT, alignment);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, (uint32_t)alignment);
 
 	if (current != Id)
 		glBindTexture(Type, current);

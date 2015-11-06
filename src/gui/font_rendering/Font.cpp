@@ -46,8 +46,8 @@ Font::Font(FT_Face face, int height, std::string name)
 	h = helpers::MakePOT(h);
 
 	atlas->Init(nullptr, GL_TEXTURE_2D, GL_BGR, GL_RGB, w, h);
-	atlas->SetClampMode(Texture::CLAMP_EDGE, Texture::CLAMP_EDGE);
-	atlas->SetFilters(Texture::FILTER_MIN_NEAREST_MIPMAP, Texture::FILTER_MAG_LINEAR);
+	atlas->SetClampMode(TextureClamp::CLAMP_EDGE, TextureClamp::CLAMP_EDGE);
+	atlas->SetFilters(TextureFilterMin::FILTER_MIN_NEAREST_MIPMAP, TextureFilterMag::FILTER_MAG_LINEAR);
 
 	/* Paste all glyph bitmaps into the texture, remembering the offset */
 	int ox = 0;
