@@ -5,31 +5,31 @@
 
 enum class TextureFilterMin :uint32_t
 {
-	FILTER_MIN_NEAREST = 0,
-	FILTER_MIN_LINEAR,
-	FILTER_MIN_LINEAR_MIPMAP,
-	FILTER_MIN_NEAREST_MIPMAP
+	NEAREST = 0,
+	LINEAR,
+	LINEAR_MIPMAP,
+	NEAREST_MIPMAP
 };
 
 enum class TextureFilterMag :uint32_t
 {
-	FILTER_MAG_NEAREST = 0,
-	FILTER_MAG_LINEAR,
+	NEAREST = 0,
+	LINEAR,
 };
 
 enum class TextureClamp :uint32_t
 {
-	CLAMP_REPEAT = 0,
-	CLAMP_EDGE,
-	CLAMP_BORDER
+	REPEAT = 0,
+	EDGE,
+	BORDER
 };
 
 enum class TextureUnpackAlignment :uint32_t
 {
-	UNPACK_BYTE_ALIGNMENT = 1,
-	UNPACK_EVEN_BYTE_ALIGNMENT = 2,
-	UNPACK_WORD_ALIGNMENT = 4,
-	UNPACK_DOUBLE_WORD_ALIGNMENT = 8
+	BYTE = 1,
+	EVEN_BYTE = 2,
+	WORD = 4,
+	DOUBLE_WORD = 8
 };
 
 class Texture : public GLObject

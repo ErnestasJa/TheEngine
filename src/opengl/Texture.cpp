@@ -87,19 +87,19 @@ void Texture::Init(const uint8_t * data, uint32_t target, uint32_t image_format,
 	case GL_RED:
 	case GL_RGB:
 	case GL_BGR:
-		glPixelStorei(GL_UNPACK_ALIGNMENT, (uint32_t)TextureUnpackAlignment::UNPACK_BYTE_ALIGNMENT);
+		glPixelStorei(GL_UNPACK_ALIGNMENT, (uint32_t)TextureUnpackAlignment::BYTE);
 		break;
 
 	case GL_RG:
-		glPixelStorei(GL_UNPACK_ALIGNMENT, (uint32_t)TextureUnpackAlignment::UNPACK_EVEN_BYTE_ALIGNMENT);
+		glPixelStorei(GL_UNPACK_ALIGNMENT, (uint32_t)TextureUnpackAlignment::EVEN_BYTE);
 		break;							   
 										   
 	case GL_DEPTH_COMPONENT:			   
-		glPixelStorei(GL_UNPACK_ALIGNMENT, (uint32_t)TextureUnpackAlignment::UNPACK_BYTE_ALIGNMENT);
+		glPixelStorei(GL_UNPACK_ALIGNMENT, (uint32_t)TextureUnpackAlignment::BYTE);
 		break;							   
 										   
 	default:							   
-		glPixelStorei(GL_UNPACK_ALIGNMENT, (uint32_t)TextureUnpackAlignment::UNPACK_WORD_ALIGNMENT);
+		glPixelStorei(GL_UNPACK_ALIGNMENT, (uint32_t)TextureUnpackAlignment::WORD);
 		break;
 	}
 
@@ -120,8 +120,8 @@ void Texture::SetFilters(TextureFilterMin fmin, TextureFilterMag fmag)
 	if (current != Id)
 		glBindTexture(Type, Id);
 
-	glTexParameteri(Type, GL_TEXTURE_MAG_FILTER, fmag == TextureFilterMag::FILTER_MAG_LINEAR ? GL_LINEAR : GL_NEAREST);
-	glTexParameteri(Type, GL_TEXTURE_MIN_FILTER, fmin == TextureFilterMin::FILTER_MIN_LINEAR_MIPMAP ? GL_LINEAR_MIPMAP_LINEAR : (fmin == TextureFilterMin::FILTER_MIN_NEAREST_MIPMAP ? GL_NEAREST_MIPMAP_NEAREST : (fmin == TextureFilterMin::FILTER_MIN_LINEAR ? GL_LINEAR : GL_NEAREST)));
+	glTexParameteri(Type, GL_TEXTURE_MAG_FILTER, fmag == TextureFilterMag::LINEAR ? GL_LINEAR : GL_NEAREST);
+	glTexParameteri(Type, GL_TEXTURE_MIN_FILTER, fmin == TextureFilterMin::LINEAR_MIPMAP ? GL_LINEAR_MIPMAP_LINEAR : (fmin == TextureFilterMin::NEAREST_MIPMAP ? GL_NEAREST_MIPMAP_NEAREST : (fmin == TextureFilterMin::LINEAR ? GL_LINEAR : GL_NEAREST)));
 
 	if (current != Id)
 		glBindTexture(Type, current);
@@ -132,8 +132,8 @@ void Texture::SetClampMode(TextureClamp x, TextureClamp y)
 	if (current != Id)
 		glBindTexture(Type, Id);
 
-	glTexParameteri(Type, GL_TEXTURE_WRAP_S, x == TextureClamp::CLAMP_EDGE ? GL_CLAMP_TO_EDGE : (x == TextureClamp::CLAMP_BORDER ? GL_CLAMP_TO_BORDER : GL_REPEAT));
-	glTexParameteri(Type, GL_TEXTURE_WRAP_T, y == TextureClamp::CLAMP_EDGE ? GL_CLAMP_TO_EDGE : (y == TextureClamp::CLAMP_BORDER ? GL_CLAMP_TO_BORDER : GL_REPEAT));
+	glTexParameteri(Type, GL_TEXTURE_WRAP_S, x == TextureClamp::EDGE ? GL_CLAMP_TO_EDGE : (x == TextureClamp::BORDER ? GL_CLAMP_TO_BORDER : GL_REPEAT));
+	glTexParameteri(Type, GL_TEXTURE_WRAP_T, y == TextureClamp::EDGE ? GL_CLAMP_TO_EDGE : (y == TextureClamp::BORDER ? GL_CLAMP_TO_BORDER : GL_REPEAT));
 
 	if (current != Id)
 		glBindTexture(Type, current);
