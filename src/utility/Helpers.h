@@ -42,6 +42,8 @@ namespace helpers
 		return (int)wcstol(str, 0, 10);
 	}
 
+	inline float MakePOT(float v);
+
 #include "Helpers.inl"
 }
 

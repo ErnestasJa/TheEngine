@@ -28,6 +28,7 @@ class ShaderLoader;
 class Timer;
 class VarGroup;
 class Material;
+class Texture;
 
 typedef std::shared_ptr<Camera> CameraPtr;
 typedef std::shared_ptr<IFile> FilePtr;
@@ -35,6 +36,7 @@ typedef std::shared_ptr<IBindingValue> IBindingValuePtr;
 typedef std::shared_ptr<Image> ImagePtr;
 typedef std::shared_ptr<Material> MaterialPtr;
 typedef std::shared_ptr<Mesh> MeshPtr;
+typedef std::shared_ptr<Texture> TexturePtr;
 typedef std::shared_ptr<Shader> ShaderPtr;
 typedef std::shared_ptr<Timer> TimerPtr;
 

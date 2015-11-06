@@ -48,7 +48,7 @@ GUIEnvironment::GUIEnvironment() :GUIElement(nullptr, Rect2D<int>(0, 0, GetConte
 
 	skin->load("res/gui/skins/skin_default.xml");
 
-	skin_atlas = new Texture();
+	skin_atlas = share(new Texture());
 	ImageLoader * imgl = new ImageLoader();
 	auto img = std::shared_ptr<Image>(imgl->Load("res/gui/skins/skin_default2.png"));
 	skin_atlas->Init(img);
@@ -105,7 +105,7 @@ GUISlider* GUIEnvironment::AddGUISlider(Rect2D<int> dimensions, float min, float
 	return ret;
 }
 
-GUIImage* GUIEnvironment::AddGUIImage(Rect2D<int> dimensions, std::shared_ptr<Texture> tex, bool multichannel)
+GUIImage* GUIEnvironment::AddGUIImage(Rect2D<int> dimensions, TexturePtr tex, bool multichannel)
 {
 	auto ret = new GUIImage(this, dimensions, tex, multichannel);
 	ret->SetParent(this);

@@ -7,6 +7,7 @@
 #include "opengl/OpenGLExtensionLoader.h"
 #include "gui/GUIEnvironment.h"
 #include "FontRenderer.h"
+#include "opengl/Texture.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem/path.hpp>
 
@@ -281,8 +282,7 @@ void FontRenderer::_RenderString(const std::wstring &text, glm::ivec2 pos, const
 	_pos.y = 1 - _pos.y*sy - _currentFont->avgheight*sy;
 
 	/* Use the Texture containing the atlas */
-	glBindTexture(GL_TEXTURE_2D, _currentFont->tex);
-
+	_currentFont->atlas->Set(0);
 	_SetFontColor(color);
 	SetBindingSafe(_fontShader, "tex", 0);
 	_fontShader->Set();
