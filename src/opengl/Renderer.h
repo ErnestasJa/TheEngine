@@ -10,14 +10,14 @@ public:
 	Renderer(MaterialPtr defaultMaterial);
 	virtual ~Renderer();
 
-	bool Enable(GLEnum glCapability);
-	bool Enable(vector<GLEnum> glCapabilities);
-	bool Disable(GLEnum glCapability);
-	bool Disable(vector<GLEnum> glCapabilities);
-	bool SetMaterial(MaterialPtr material);
+	void Enable(GLEnum glCapability);
+	void Enable(vector<GLEnum> glCapabilities);
+	void Disable(GLEnum glCapability);
+	void Disable(vector<GLEnum> glCapabilities);
+	void SetMaterial(MaterialPtr material);
 	MaterialPtr GetMaterial();
 	MaterialPtr GetDefaultMaterial();
-	bool SetCamera(CameraPtr camera);
+	void SetCamera(CameraPtr camera);
 	CameraPtr GetCamera();
 	void SetClearColor(glm::vec4 color);
 	void SetClearColor(float r, float g, float b, float a);

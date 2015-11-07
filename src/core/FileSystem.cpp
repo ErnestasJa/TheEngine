@@ -16,7 +16,9 @@ FileSystem::FileSystem(const char * argv)
 
 	PHYSFS_init(path.c_str());
 	m_workingDirectory = GetPhysFSWorkingDirectory();
-	PHYSFS_mount(m_workingDirectory.generic_string().c_str(), NULL, 0);
+	auto test = m_workingDirectory.generic_string();
+	auto cstr = test.c_str();
+	PHYSFS_mount(cstr, NULL, 0);
 }
 
 FileSystem::~FileSystem()
@@ -28,7 +30,8 @@ FileSystem::~FileSystem()
 bool FileSystem::SetWriteDirectory(const Path & path)
 {
 	auto posixPath = MakePosix(path);
-	int32_t status = PHYSFS_setWriteDir(posixPath.generic_string().c_str());
+	auto genericString = posixPath.generic_string();
+	int32_t status = PHYSFS_setWriteDir(genericString.c_str());
 
 	if (status == 0)
 	{
@@ -51,7 +54,9 @@ Path FileSystem::GetWorkingDirectory()
 
 bool FileSystem::AddSearchDirectory(const Path & path)
 {
-	int32_t status = PHYSFS_mount(path.generic_string().c_str(), NULL, 0);
+	auto posixPath = MakePosix(path);
+	auto genericString = posixPath.generic_string();
+	int32_t status = PHYSFS_mount(genericString.c_str(), NULL, 0);
 
 	if (status == 0)
 	{
@@ -76,17 +81,20 @@ FilePtr FileSystem::OpenWrite(const Path & path)
 
 bool FileSystem::DirectoryExists(const Path & path)
 {
-	return PHYSFS_isDirectory(path.generic_string().c_str()) != 0;
+	auto genericString = path.generic_string();
+	return PHYSFS_isDirectory(genericString.c_str()) != 0;
 }
 
 bool FileSystem::FileExists(const Path & path)
 {
-	return PHYSFS_exists(path.generic_string().c_str()) != 0;
+	auto genericString = path.generic_string();
+	return PHYSFS_exists(genericString.c_str()) != 0;
 }
 
 bool FileSystem::CreateDirectory(const Path & path)
 {
-	int returnCode = PHYSFS_mkdir(path.generic_string().c_str()) != 0;
+	auto genericString = path.generic_string();
+	int returnCode = PHYSFS_mkdir(genericString.c_str()) != 0;
 
 	if (returnCode == 0)
 	{

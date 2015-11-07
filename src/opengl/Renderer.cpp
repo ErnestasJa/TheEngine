@@ -16,29 +16,29 @@ Renderer::~Renderer()
 
 }
 
-bool Renderer::Enable(GLEnum glCapability)
+void Renderer::Enable(GLEnum glCapability)
 {
 	glEnable(glCapability);
 }
 
-bool Renderer::Enable(vector<GLEnum> glCapabilities)
+void Renderer::Enable(vector<GLEnum> glCapabilities)
 {
 	for (GLEnum glCapability : glCapabilities)
 		glEnable(glCapability);
 }
 
-bool Renderer::Disable(GLEnum glCapability)
+void Renderer::Disable(GLEnum glCapability)
 {
 	glDisable(glCapability);
 }
 
-bool Renderer::Disable(vector<GLEnum> glCapabilities)
+void Renderer::Disable(vector<GLEnum> glCapabilities)
 {
 	for (GLEnum glCapability : glCapabilities)
 		glDisable(glCapability);
 }
 
-bool Renderer::SetMaterial(MaterialPtr material)
+void Renderer::SetMaterial(MaterialPtr material)
 {
 	m_activeMaterial = material;
 }
@@ -53,7 +53,7 @@ MaterialPtr Renderer::GetDefaultMaterial()
 	return m_defaultMaterial;
 }
 
-bool Renderer::SetCamera(CameraPtr camera)
+void Renderer::SetCamera(CameraPtr camera)
 {
 	m_activeCamera = camera;
 }

@@ -70,7 +70,7 @@ bool Application::InitFileSystem()
 
 	Path appendedPath = Path(workingDirectory).append(applicationDirectory.generic_string());
 	GetContext().GetFileSystem()->SetWriteDirectory(appendedPath);
-	GetContext().GetFileSystem()->AddSearchDirectory(applicationDirectory);
+	GetContext().GetFileSystem()->AddSearchDirectory(appendedPath);
 
 
 	auto & fileSystemVars = GetContext().GetApplicationSettingsManager()->GetGroup("filesystem");
