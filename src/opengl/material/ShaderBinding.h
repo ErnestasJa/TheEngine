@@ -18,6 +18,7 @@ public:
 	void Set(int32_t value);
 	void Set(glm::mat4x4 value);
 	void Set(glm::mat3x3 value);
+	void Set(glm::vec2 value);
 	void Set(glm::vec3 value);
 	void Set(glm::vec4 value);
 

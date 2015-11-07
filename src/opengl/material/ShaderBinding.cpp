@@ -66,6 +66,11 @@ void ShaderBinding::Set(glm::mat3x3 value)
 	m_value = share(new TBindingValue<glm::mat3x3>(value));
 }
 
+void ShaderBinding::Set(glm::vec2 value)
+{
+	m_value = share(new TBindingValue<glm::vec2>(value));
+}
+
 void ShaderBinding::Set(glm::vec3 value)
 {
 	m_value = share(new TBindingValue<glm::vec3>(value));
