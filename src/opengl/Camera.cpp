@@ -174,7 +174,7 @@ void Camera::Update(float dt)
 	m_up = glm::vec3(m_rot*glm::vec3(0, 1, 0));
 	m_right = glm::cross(m_look, m_up);
 
-	InitFrustum();
+	//InitFrustum();
 }
 
 void Camera::Walk(const float amount)

@@ -37,6 +37,7 @@ FontRenderer::FontRenderer()
 	glGenVertexArrays(1, &_VAO);
 	glGenBuffers(1, &_VBO);
 	_fontShader = GetContext().GetResourceManager()->LoadShader(Path("res/engine/shaders/font"));
+	printf("Font shader id:%d\n",_fontShader->GetProgramId());
 }
 
 FontRenderer::~FontRenderer()

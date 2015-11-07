@@ -26,7 +26,6 @@ void GUIStaticText::Render()
 {
 	if (this->m_draw_background)
 	{
-		glBindTexture(GL_TEXTURE_2D, 0);
 		environment->draw_gui_quad(absolute_rect, gui_skin_background);
 	}
 

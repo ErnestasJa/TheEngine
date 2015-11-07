@@ -33,6 +33,10 @@ public:
 	const vector<ShaderBinding> & GetBindings() const;
 	ShaderBinding & GetBinding(const std::string & name);
 	bool HasBinding(const std::string & name);
+	const uint32_t GetProgramId() const
+	{
+		return program;
+	}
 
 
 private:
