@@ -1,5 +1,12 @@
 #pragma once
 
+enum class TimerResolution
+{
+	NANOSECOND,
+	MICROSECOND,
+	MILLISECOND
+};
+
 class Timer
 {
 protected:
@@ -10,10 +17,15 @@ protected:
 
 	void update_real_time();
 
+	TimerResolution resolution;
+
 public:
 
 	Timer();
 	Timer(uint32_t begin_time);
+	Timer(uint32_t begin_time, TimerResolution resolution);
+	Timer(TimerResolution resolution);
+
 	virtual ~Timer();
 
 	uint32_t get_time();
