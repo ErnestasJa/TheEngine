@@ -9,16 +9,6 @@ enum class TimerResolution
 
 class Timer
 {
-protected:
-	uint32_t start_time;
-	uint32_t time;
-	uint32_t real_time;
-	uint32_t last_time;
-
-	void update_real_time();
-
-	TimerResolution resolution;
-
 public:
 
 	Timer();
@@ -36,6 +26,16 @@ public:
 	uint32_t get_real_time();
 
 	void tick();
+
+protected:
+	uint32_t get_system_real_time();
+
+protected:
+	uint32_t start_time;
+	uint32_t time;
+	uint32_t real_time;
+	uint32_t last_time;
+	TimerResolution resolution;
 };
 
 typedef std::shared_ptr<Timer> timer_ptr;
