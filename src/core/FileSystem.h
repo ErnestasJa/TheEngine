@@ -25,6 +25,8 @@ public:
 	FilePtr OpenWrite(const Path & path);
 	FilePtr OpenRead(const Path & path);
 
+	vector<Path> GetFilesInDirectory(const Path & directory);
+
 	static Path MakePosix(const Path& path);
 
 private:	
