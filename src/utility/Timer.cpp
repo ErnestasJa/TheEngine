@@ -6,26 +6,10 @@ typedef std::chrono::duration<uint32_t, std::milli> milliseconds;
 typedef std::chrono::duration<uint32_t, std::micro> microseconds;
 typedef std::chrono::duration<uint32_t, std::nano> nanoseconds;
 
-Timer::Timer()
+Timer::Timer(uint32_t begin_time, TimerResolution resolution)
 {
-	real_time = get_system_real_time();
-	set_time(0);
 	resolution = TimerResolution::MILLISECOND;
-}
-
-Timer::Timer(TimerResolution resolution):Timer()
-{
-	resolution = resolution;
-}
-
-Timer::Timer(uint32_t begin_time)
-{
 	set_time(begin_time);
-}
-
-Timer::Timer(uint32_t begin_time, TimerResolution resolution):Timer(begin_time)
-{
-	resolution = resolution;
 }
 
 Timer::~Timer()

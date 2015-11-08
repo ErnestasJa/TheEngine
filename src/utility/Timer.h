@@ -10,11 +10,7 @@ enum class TimerResolution
 class Timer
 {
 public:
-
-	Timer();
-	Timer(uint32_t begin_time);
-	Timer(uint32_t begin_time, TimerResolution resolution);
-	Timer(TimerResolution resolution);
+	Timer(uint32_t begin_time = 0, TimerResolution resolution = TimerResolution::MILLISECOND);
 
 	virtual ~Timer();
 
