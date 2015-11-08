@@ -8,7 +8,7 @@ typedef std::chrono::duration<uint32_t, std::nano> nanoseconds;
 
 Timer::Timer(uint32_t begin_time, TimerResolution resolution)
 {
-	resolution = TimerResolution::MILLISECOND;
+	this->resolution = resolution;
 	set_time(begin_time);
 }
 
