@@ -1,14 +1,14 @@
-#ifndef RENDERER_H
-#define RENDERER_H
+#ifndef RENDER_STATEMANAGER_H
+#define RENDER_STATEMANAGER_H
 
 #include "utility/Vector.h"
 #include "ForwardDecl.h"
 
-class Renderer
+class RenderStateManager
 {
 public:
-	Renderer(MaterialPtr defaultMaterial);
-	virtual ~Renderer();
+	RenderStateManager(MaterialPtr defaultMaterial);
+	virtual ~RenderStateManager();
 
 	void Enable(GLEnum glCapability);
 	void Enable(vector<GLEnum> glCapabilities);
