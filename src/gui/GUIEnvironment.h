@@ -55,6 +55,11 @@ public:
 	void OnKeyEvent(int32_t key, int32_t scan_code, int32_t action, int32_t mod);
 	void OnCharacterTyped(int32_t scan_code);
 
+	GUIElement* GetFocusElement();
+	GUIElement* GetHoverElement();
+	void SetFocusElement(GUIElement* element);
+	void SetHoverElement(GUIElement* element);
+
 	void SetModal(GUIElement* elem)
 	{
 		if (modal != elem)

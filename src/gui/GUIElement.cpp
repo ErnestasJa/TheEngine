@@ -213,7 +213,18 @@ void GUIElement::SetFocused(bool b)
 
 void GUIElement::SetVisible(bool b)
 {
-	this->visible = b;
+	if (this->IsHovered())
+	{
+		this->SetHovered(false);
+		environment->SetHoverElement(nullptr);
+	}
+
+	if (this->IsFocused())
+	{
+		this->SetFocused(false);
+		environment->SetFocusElement(nullptr);
+	}
+
 	if (modal)
 	{
 		if (b)
@@ -225,6 +236,9 @@ void GUIElement::SetVisible(bool b)
 			environment->RemoveModal();
 		}
 	}
+
+	this->visible = b;
+
 	for (GUIElement* e : children)
 		e->SetVisible(b);
 }

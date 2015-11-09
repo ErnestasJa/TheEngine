@@ -203,6 +203,23 @@ void GUIEnvironment::OnKeyEvent(int32_t key, int32_t scan_code, int32_t action, 
 	}
 }
 
+GUIElement* GUIEnvironment::GetFocusElement()
+{
+	return focus;
+}
+GUIElement* GUIEnvironment::GetHoverElement()
+{
+	return hover;
+}
+void GUIEnvironment::SetFocusElement(GUIElement* element)
+{
+	focus = element;
+}
+void GUIEnvironment::SetHoverElement(GUIElement* element)
+{
+	hover = element;
+}
+
 void GUIEnvironment::OnCharacterTyped(int32_t scan_code)
 {
 	this->last_char = (wchar_t)scan_code;
