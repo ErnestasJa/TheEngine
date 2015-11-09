@@ -9,7 +9,7 @@ class GUIStaticText;
 class GUIWindow :public GUIElement
 {
 private:
-	bool _clipping, _showClose, _modal, _dragging, _draggable;
+	bool _clipping, _showClose, _dragging, _draggable;
 
 	glm::mat4 m_transform;
 	GUIPane *_titlebar, *_background;

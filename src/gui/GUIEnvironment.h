@@ -31,28 +31,42 @@ public:
 	void update(float delta);
 	void Render();
 
+	bool IsGUIFocused()
+	{
+		return hover != nullptr&&hover != this;
+	}
+
 	virtual bool OnEvent(const GUIEvent & e);
-	bool is_on_hover(GUIElement *e);
-	bool is_on_focus(GUIElement *e);
 
-	void draw_gui_quad(Rect2D<int> size, std::shared_ptr<Texture> tex, bool tile = false, bool multichannel = true);
-	void draw_gui_quad(Rect2D<int> size, uint32_t style = gui_style::gui_skin_background, bool tile = false);
-	void draw_gui_quad(Rect2D<int> size, glm::vec4 col = glm::vec4(1.f));
+	void DrawGUIQuad(Rect2D<int> size, std::shared_ptr<Texture> tex, bool tile = false, bool multichannel = true);
+	void DrawGUIQuad(Rect2D<int> size, uint32_t style = gui_style::gui_skin_background, bool tile = false);
+	void DrawGUIQuad(Rect2D<int> size, glm::vec4 col = glm::vec4(1.f));
 
-	void draw_sliced_gui_quad(Rect2D<int> size, std::shared_ptr<Texture> tex, bool tile = false);
-	void draw_sliced_gui_quad(Rect2D<int> size, uint32_t style = gui_style::gui_skin_background);
-	void draw_sliced_gui_quad(Rect2D<int> size, glm::vec4 col = glm::vec4(1.f));
+	void DrawSlicedGUIQuad(Rect2D<int> size, std::shared_ptr<Texture> tex, bool tile = false);
+	void DrawSlicedGUIQuad(Rect2D<int> size, uint32_t style = gui_style::gui_skin_background);
+	void DrawSlicedGUIQuad(Rect2D<int> size, glm::vec4 col = glm::vec4(1.f));
 
-	void set_skin(GUISkin* skin);
+	glm::vec2 GetMousePosition();
+	glm::vec2 GetGUIScaling();
 
-	glm::vec2 get_mouse_pos();
-	glm::vec2 get_gui_scale();
+	void OnMouseMove(double x, double y);
+	void OnMouseClick(int32_t button, int32_t action, int32_t mod);
+	void OnMouseScroll(double sx, double sy);
+	void OnKeyEvent(int32_t key, int32_t scan_code, int32_t action, int32_t mod);
+	void OnCharacterTyped(int32_t scan_code);
 
-	void on_mouse_moved(double x, double y);
-	void on_mouse_button(int32_t button, int32_t action, int32_t mod);
-	void on_mouse_scroll(double sx, double sy);
-	void on_key_event(int32_t key, int32_t scan_code, int32_t action, int32_t mod);
-	void on_char_typed(int32_t scan_code);
+	void SetModal(GUIElement* elem)
+	{
+		if (modal != elem)
+		{
+			modal = elem;
+		}
+	}
+
+	void RemoveModal()
+	{
+		modal = nullptr;
+	}
 
 	const std::wstring &GetClipboard()
 	{
@@ -72,8 +86,8 @@ public:
 	template <typename T>
 	Rect2D<T> ScaleGUIRect(Rect2D<T> unscaled)
 	{
-		T gsx = get_gui_scale().x;
-		T gsy = get_gui_scale().y;
+		T gsx = GetGUIScaling().x;
+		T gsy = GetGUIScaling().y;
 		T px = -1 + unscaled.x*gsx + unscaled.w / 2 * gsx;
 		T py = 1 - unscaled.y*gsy - unscaled.h / 2 * gsy;
 		T sx = unscaled.w / 2 * gsx;
@@ -107,7 +121,7 @@ private:
 
 	sigc::connection _sig_mouse_move, _sig_mouse_button, _sig_mouse_scroll, _sig_key, _sig_text;
 
-	GUIElement *hover, *last_hover, *focus, *last_focus;
+	GUIElement *hover, *last_hover, *focus, *last_focus, *modal;
 
 	bool m_mouse_down, m_mouse_moved, m_mouse_dragged;
 

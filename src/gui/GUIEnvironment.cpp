@@ -17,17 +17,17 @@ GUIEnvironment::GUIEnvironment() :GUIElement(nullptr, Rect2D<int>(0, 0, GetConte
 
 	this->m_window = GetContext().GetWindow();
 
-	_sig_mouse_move = m_window->SigMouseMoved().connect(sigc::mem_fun(this, &GUIEnvironment::on_mouse_moved));
-	_sig_mouse_button = m_window->SigMouseKey().connect(sigc::mem_fun(this, &GUIEnvironment::on_mouse_button));
-	_sig_mouse_scroll = m_window->SigMouseScroll().connect(sigc::mem_fun(this, &GUIEnvironment::on_mouse_scroll));
-	_sig_key = m_window->SigKeyEvent().connect(sigc::mem_fun(this, &GUIEnvironment::on_key_event));
-	_sig_text = m_window->SigTextEvent().connect(sigc::mem_fun(this, &GUIEnvironment::on_char_typed));
+	_sig_mouse_move = m_window->SigMouseMoved().connect(sigc::mem_fun(this, &GUIEnvironment::OnMouseMove));
+	_sig_mouse_button = m_window->SigMouseKey().connect(sigc::mem_fun(this, &GUIEnvironment::OnMouseClick));
+	_sig_mouse_scroll = m_window->SigMouseScroll().connect(sigc::mem_fun(this, &GUIEnvironment::OnMouseScroll));
+	_sig_key = m_window->SigKeyEvent().connect(sigc::mem_fun(this, &GUIEnvironment::OnKeyEvent));
+	_sig_text = m_window->SigTextEvent().connect(sigc::mem_fun(this, &GUIEnvironment::OnCharacterTyped));
 
 	glm::ivec2 win_dims = m_window->GetWindowSize();
 	this->disp_w = win_dims.x;
 	this->disp_h = win_dims.y;
 
-	hover = last_hover = focus = last_focus = nullptr;
+	hover = last_hover = focus = last_focus = modal = nullptr;
 
 	m_mouse_down = m_mouse_dragged = m_mouse_moved = false;
 
@@ -156,7 +156,7 @@ bool GUIEnvironment::OnEvent(const GUIEvent & e)
 	GUI_END_ON_EVENT(e)
 }
 
-void GUIEnvironment::on_key_event(int32_t key, int32_t scan_code, int32_t action, int32_t mod)
+void GUIEnvironment::OnKeyEvent(int32_t key, int32_t scan_code, int32_t action, int32_t mod)
 {
 	//printf("Key event: Key:%i SC:%i Action:%i Mod:%i\n",key,scan_code,action,mod);
 
@@ -203,23 +203,24 @@ void GUIEnvironment::on_key_event(int32_t key, int32_t scan_code, int32_t action
 	}
 }
 
-void GUIEnvironment::on_char_typed(int32_t scan_code)
+void GUIEnvironment::OnCharacterTyped(int32_t scan_code)
 {
 	this->last_char = (wchar_t)scan_code;
 	if (focus != nullptr)
 		focus->OnEvent(GUIEvent(key_typed, this, focus));
 }
 
-void GUIEnvironment::on_mouse_moved(double x, double y)
+void GUIEnvironment::OnMouseMove(double x, double y)
 {
 	mouse_pos = glm::vec2(x, y);
 
-	GUIElement *target = GetElementFromPoint(mouse_pos.x, mouse_pos.y);
+	GUIElement *target = target = GetElementFromPoint(mouse_pos.x, mouse_pos.y);
 
 	//printf("Target name: %s @ %f %f\n", target != nullptr ? target->GetName().c_str() : "das is null", mouse_pos.x, mouse_pos.y);
 
 	//only update elements which are enabled,visible and accept events
 	if (target != nullptr)
+	{
 		if (target->IsEnabled() && target->IsVisible() && target->AcceptsEvents())
 		{
 			if (target != hover)
@@ -242,70 +243,72 @@ void GUIEnvironment::on_mouse_moved(double x, double y)
 				if (m_mouse_down)
 					focus->OnEvent(GUIEvent(mouse_dragged, this, focus));
 		}
-}
-
-void GUIEnvironment::on_mouse_button(int32_t button, int32_t action, int32_t mod)
-{
-	switch (button)
-	{
-	case GLFW_MOUSE_BUTTON_LEFT:
-		switch (action)
-		{
-		case GLFW_PRESS:
-			m_mouse_down = true;
-
-			//focusing
-			if (hover != focus)
-			{
-				if (focus != nullptr)
-				{
-					last_focus = focus;
-					GUI_FIRE_ELEMENT_EVENT(last_focus, GUIEvent(gui_event_type::element_focus_lost, this, last_focus))
-						last_focus->SetFocused(false);
-				}
-				focus = hover;
-				if (hover != this)
-				{
-					GUI_FIRE_ELEMENT_EVENT(focus, GUIEvent(gui_event_type::element_focused, this, focus))
-						focus->SetFocused(true);
-					focus->GetParent()->BringToFront(focus);
-				}
-				else
-					focus = nullptr;
-			}
-
-			if (focus != nullptr&&hover == focus)
-				focus->OnEvent(GUIEvent(mouse_pressed, this, focus));
-			break;
-		case GLFW_RELEASE:
-			m_mouse_down = false;
-			if (focus != nullptr&&hover == focus)
-				focus->OnEvent(GUIEvent(mouse_released, this, focus));
-			break;
-		default:
-			break;
-		}
-		break;
-	case GLFW_MOUSE_BUTTON_RIGHT:
-		break;
-	case GLFW_MOUSE_BUTTON_MIDDLE:
-		break;
-	default:
-		break;
 	}
 }
 
-void GUIEnvironment::on_mouse_scroll(double sx, double sy)
+void GUIEnvironment::OnMouseClick(int32_t button, int32_t action, int32_t mod)
+{
+	switch (action)
+	{
+	case GLFW_PRESS:
+		if (button == GLFW_MOUSE_BUTTON_LEFT)
+		{
+			m_mouse_down = true;
+		}
+
+		//focusing
+		if (hover != focus)
+		{
+			if (focus != nullptr)
+			{
+				last_focus = focus;
+				GUI_FIRE_ELEMENT_EVENT(last_focus, GUIEvent(gui_event_type::element_focus_lost, this, last_focus))
+					last_focus->SetFocused(false);
+			}
+			focus = hover;
+			if (hover != this)
+			{
+				GUI_FIRE_ELEMENT_EVENT(focus, GUIEvent(gui_event_type::element_focused, this, focus))
+					focus->SetFocused(true);
+				focus->GetParent()->BringToFront(focus);
+			}
+			else
+				focus = nullptr;
+		}
+
+		if (focus != nullptr&&hover == focus)
+		{
+			gui_event_type eventType = button == GLFW_MOUSE_BUTTON_LEFT ? left_mouse_pressed : button == GLFW_MOUSE_BUTTON_RIGHT ? right_mouse_pressed : middle_mouse_pressed;
+			focus->OnEvent(GUIEvent(eventType, this, focus));
+		}
+		break;
+	case GLFW_RELEASE:
+		if (button == GLFW_MOUSE_BUTTON_LEFT)
+		{
+			m_mouse_down = false;
+		}
+
+		if (focus != nullptr&&hover == focus)
+		{
+			gui_event_type eventType = button == GLFW_MOUSE_BUTTON_LEFT ? left_mouse_released : button == GLFW_MOUSE_BUTTON_RIGHT ? right_mouse_released : middle_mouse_released;
+			focus->OnEvent(GUIEvent(eventType, this, focus));
+		}
+		break;
+	default:break;
+	}
+}
+
+void GUIEnvironment::OnMouseScroll(double sx, double sy)
 {
 	return;
 }
 
-glm::vec2 GUIEnvironment::get_mouse_pos()
+glm::vec2 GUIEnvironment::GetMousePosition()
 {
 	return mouse_pos;
 }
 
-glm::vec2 GUIEnvironment::get_gui_scale()
+glm::vec2 GUIEnvironment::GetGUIScaling()
 {
 	return gui_scale;
 }
@@ -315,7 +318,7 @@ FontRenderer* GUIEnvironment::GetFontRenderer()
 	return m_font_renderer;
 }
 
-void GUIEnvironment::draw_gui_quad(Rect2D<int> dims, TexturePtr tex, bool tile, bool multichannel)
+void GUIEnvironment::DrawGUIQuad(Rect2D<int> dims, TexturePtr tex, bool tile, bool multichannel)
 {
 	Rect2D<float> scaled_dims = ScaleGUIRect(dims.as<float>());
 
@@ -341,7 +344,7 @@ void GUIEnvironment::draw_gui_quad(Rect2D<int> dims, TexturePtr tex, bool tile, 
 	tex->Unset(0);
 }
 
-void GUIEnvironment::draw_gui_quad(Rect2D<int> dims, uint32_t style, bool tile)
+void GUIEnvironment::DrawGUIQuad(Rect2D<int> dims, uint32_t style, bool tile)
 {
 	Rect2D<float> scaled_dims = ScaleGUIRect(dims.as<float>());
 
@@ -367,7 +370,7 @@ void GUIEnvironment::draw_gui_quad(Rect2D<int> dims, uint32_t style, bool tile)
 	skin_atlas->Unset(0);
 }
 
-void GUIEnvironment::draw_gui_quad(Rect2D<int> dims, glm::vec4 col)
+void GUIEnvironment::DrawGUIQuad(Rect2D<int> dims, glm::vec4 col)
 {
 	Rect2D<float> scaled_dims = ScaleGUIRect(dims.as<float>());
 
@@ -387,7 +390,7 @@ void GUIEnvironment::draw_gui_quad(Rect2D<int> dims, glm::vec4 col)
 	gui_quad->Render();
 }
 
-void GUIEnvironment::draw_sliced_gui_quad(Rect2D<int> size, TexturePtr tex, bool tile)
+void GUIEnvironment::DrawSlicedGUIQuad(Rect2D<int> size, TexturePtr tex, bool tile)
 {
 	Rect2D<float> scaled_dims = ScaleGUIRect(size.as<float>());
 
@@ -412,7 +415,7 @@ void GUIEnvironment::draw_sliced_gui_quad(Rect2D<int> size, TexturePtr tex, bool
 	tex->Unset(0);
 }
 
-void GUIEnvironment::draw_sliced_gui_quad(Rect2D<int> size, uint32_t style)
+void GUIEnvironment::DrawSlicedGUIQuad(Rect2D<int> size, uint32_t style)
 {
 	Rect2D<float> scaled_dims = ScaleGUIRect(size.as<float>());
 
@@ -439,7 +442,7 @@ void GUIEnvironment::draw_sliced_gui_quad(Rect2D<int> size, uint32_t style)
 	skin_atlas->Unset(0);
 }
 
-void GUIEnvironment::draw_sliced_gui_quad(Rect2D<int> size, glm::vec4 col)
+void GUIEnvironment::DrawSlicedGUIQuad(Rect2D<int> size, glm::vec4 col)
 {
 	Rect2D<float> scaled_dims = ScaleGUIRect(size.as<float>());
 

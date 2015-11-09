@@ -50,7 +50,7 @@ void GUIImage::SetCaption(const std::wstring& caption)
 
 void GUIImage::Render()
 {
-	environment->draw_gui_quad(absolute_rect, m_tex, false, m_multichannel);
+	environment->DrawGUIQuad(absolute_rect, m_tex, false, m_multichannel);
 
 	this->RenderChildren();
 }

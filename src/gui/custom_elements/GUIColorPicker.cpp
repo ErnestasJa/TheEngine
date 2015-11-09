@@ -12,7 +12,8 @@ GUIColorPicker::GUIColorPicker(GUIEnvironment* env, Rect2D<int> dimensions, bool
 	this->Type = GUIET_PANE;
 	environment = env;
 
-	colRGB = glm::vec4(255, 255, 255, 255); //white
+	primaryColor = secondaryColor = glm::vec4(255, 255, 255, 255); //white
+
 	colHSV = glm::vec3(0, 0, 1); //white
 
 	cursorPos = glm::vec2(0, 0);
@@ -56,8 +57,12 @@ GUIColorPicker::GUIColorPicker(GUIEnvironment* env, Rect2D<int> dimensions, bool
 	btnSet = new GUIButton(env, Rect2D<int>(picker->GetRelativeRect().w + 16, picker->GetRelativeRect().y + 104, 32, 16), L"['s]Set[s']");
 	btnSet->SetParent(picker);
 
+	btnSwitchColor = new GUIButton(env, Rect2D<int>(picker->GetRelativeRect().w + 16, picker->GetRelativeRect().y + 16, 32, 12), L"<->");
+	btnSwitchColor->SetParent(picker);
+
 	GenerateHSVMap(sat->get_value());
 	UpdateValues();
+	secondaryColor = primaryColor;
 	UpdateAbsolutePos();
 	this->SetListening(false);
 }
@@ -84,76 +89,100 @@ bool GUIColorPicker::OnEvent(const GUIEvent &e)
 {
 	GUI_BEGIN_ON_EVENT(e)
 
-		switch (e.GetType())
+	switch (e.GetType())
+	{
+	case left_mouse_pressed:
+	case mouse_dragged:
+		if (e.get_element() == picker)
 		{
-		case mouse_pressed:
-		case mouse_dragged:
-			if (e.get_element() == picker)
+			float mx = environment->GetMousePosition().x;
+			float my = environment->GetMousePosition().y;
+			if (picker->GetAbsoluteRect().is_point_inside(mx, my))
 			{
-				float mx = environment->get_mouse_pos().x;
-				float my = environment->get_mouse_pos().y;
-				if (picker->GetAbsoluteRect().is_point_inside(mx, my))
-				{
-					float x = mx - absolute_rect.x - picker->GetRelativeRect().x - 4;
-					float y = my - absolute_rect.y - picker->GetRelativeRect().y - 4;
-					cursorPos = glm::vec2(x, y);
-					cursor->Move(cursorPos);
-					//                cursor->GetRelativeRect().clip(picker->GetAbsoluteRect());
-					//                cursor->UpdateAbsolutePos();
+				float x = mx - absolute_rect.x - picker->GetRelativeRect().x - 4;
+				float y = my - absolute_rect.y - picker->GetRelativeRect().y - 4;
+				cursorPos = glm::vec2(x, y);
+				cursor->Move(cursorPos);
+				//                cursor->GetRelativeRect().clip(picker->GetAbsoluteRect());
+				//                cursor->UpdateAbsolutePos();
 
-					BringToFront(cursor);
-					UpdateValues();
-				}
+				BringToFront(cursor);
+
+				UpdateValues();
 			}
-			break;
-		case mouse_released:
-			break;
-		case mouse_moved:
-			break;
-		case button_pressed:
-			break;
-		case button_released:
-			if (e.get_element() == btnSet)
-			{
-				uint32_t r = helpers::wtoi(ebR->get_text().c_str());
-				uint32_t g = helpers::wtoi(ebG->get_text().c_str());
-				uint32_t b = helpers::wtoi(ebB->get_text().c_str());
-				colRGB = glm::vec4(r, g, b, 255);
-			}
-			break;
-		case scrollbar_changed:
-			GenerateHSVMap(sat->get_value());
-			UpdateValues();
-			break;
-		default:
-			break;
 		}
+		break;
+	case button_released:
+	{
+		if (e.get_element() == btnSet)
+		{
+			uint32_t r = helpers::wtoi(ebR->get_text().c_str());
+			uint32_t g = helpers::wtoi(ebG->get_text().c_str());
+			uint32_t b = helpers::wtoi(ebB->get_text().c_str());
+			primaryColor = glm::vec4(r, g, b, 255);
+		}
+
+		if (e.get_element() == btnSwitchColor)
+		{
+			glm::vec4 col = primaryColor;
+			primaryColor = secondaryColor;
+			secondaryColor = col;
+		}
+	}
+	break;
+	case scrollbar_changed:
+		GenerateHSVMap(sat->get_value());
+		UpdateValues();
+		break;
+	default:
+		break;
+	}
 
 	GUI_END_ON_EVENT(e)
 }
 
 void GUIColorPicker::UpdateValues()
 {
-	colRGB = imgBuf->GetPixel(cursorPos.x + 4, imgBuf->height - 1 - cursorPos.y - 4);
+	primaryColor = imgBuf->GetPixel(cursorPos.x + 4, imgBuf->height - 1 - cursorPos.y - 4);
 
-	ebR->SetText(helpers::to_wstr(colRGB.x));
-	ebG->SetText(helpers::to_wstr(colRGB.y));
-	ebB->SetText(helpers::to_wstr(colRGB.z));
+	ebR->SetText(helpers::to_wstr(primaryColor.x));
+	ebG->SetText(helpers::to_wstr(primaryColor.y));
+	ebB->SetText(helpers::to_wstr(primaryColor.z));
 }
 
-glm::vec4 GUIColorPicker::GetColorRGB()
+glm::vec4 GUIColorPicker::GetPrimaryColorRGB()
 {
-	return colRGB;
+	return primaryColor;
 }
 
-void GUIColorPicker::SetColorRGB(uint8_t r, uint8_t g, uint8_t b)
+glm::vec4 GUIColorPicker::GetPrimaryColorRGBGL()
 {
-	colRGB = glm::vec4(r, g, b, 255);
-	glm::vec3 hsv = helpers::rgb2hsv(r, g, b);
+	return 1.f / 255.f*primaryColor;
+}
+
+glm::vec4 GUIColorPicker::GetSecondaryColorRGB()
+{
+	return secondaryColor;
+}
+
+glm::vec4 GUIColorPicker::GetSecondaryColorRGBGL()
+{
+	return 1.f / 255.f*secondaryColor;
+}
+
+void GUIColorPicker::SetPrimaryColorRGB(uint8_t r, uint8_t g, uint8_t b)
+{
+	primaryColor = glm::vec4(r, g, b, 255);
+}
+
+void GUIColorPicker::SetSecondaryColorRGB(uint8_t r, uint8_t g, uint8_t b)
+{
+	secondaryColor = glm::vec4(r, g, b, 255);
 }
 
 void GUIColorPicker::Render()
 {
 	RenderChildren();
-	environment->draw_sliced_gui_quad(Rect2D<int>(absolute_rect.x + absolute_rect.w + 32, absolute_rect.y + 16, 32, 32), helpers::color255(colRGB.x, colRGB.y, colRGB.z, colRGB.w));
+	environment->DrawSlicedGUIQuad(Rect2D<int>(absolute_rect.x + absolute_rect.w + 24 + 4, absolute_rect.y + 16 + 4, 24, 24), helpers::color255(secondaryColor.r, secondaryColor.g, secondaryColor.b, secondaryColor.a));
+	environment->DrawSlicedGUIQuad(Rect2D<int>(absolute_rect.x + absolute_rect.w + 24, absolute_rect.y + 16, 24, 24), helpers::color255(primaryColor.r, primaryColor.g, primaryColor.b, primaryColor.a));
 }

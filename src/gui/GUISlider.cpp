@@ -37,13 +37,13 @@ void GUISlider::Render()
 {
 	if (m_vertical)
 	{
-		environment->draw_sliced_gui_quad(Rect2D<int>(absolute_rect.x + absolute_rect.w / 4, absolute_rect.y, absolute_rect.w / 2, absolute_rect.h), gui_skin_scroll_h_bg);
-		environment->draw_gui_quad(Rect2D<int>(absolute_rect.x, absolute_rect.y + m_slider_pos - 6, absolute_rect.w, 12), gui_skin_scroll_h_bar);
+		environment->DrawSlicedGUIQuad(Rect2D<int>(absolute_rect.x + absolute_rect.w / 4, absolute_rect.y, absolute_rect.w / 2, absolute_rect.h), gui_skin_scroll_h_bg);
+		environment->DrawGUIQuad(Rect2D<int>(absolute_rect.x, absolute_rect.y + m_slider_pos - 6, absolute_rect.w, 12), gui_skin_scroll_h_bar);
 	}
 	else
 	{
-		environment->draw_sliced_gui_quad(Rect2D<int>(absolute_rect.x, absolute_rect.y + absolute_rect.h / 4, absolute_rect.w, absolute_rect.h / 2), gui_skin_scroll_h_bg);
-		environment->draw_sliced_gui_quad(Rect2D<int>(absolute_rect.x + m_slider_pos - 6, absolute_rect.y, 12, absolute_rect.h), gui_skin_scroll_h_bar);
+		environment->DrawSlicedGUIQuad(Rect2D<int>(absolute_rect.x, absolute_rect.y + absolute_rect.h / 4, absolute_rect.w, absolute_rect.h / 2), gui_skin_scroll_h_bg);
+		environment->DrawSlicedGUIQuad(Rect2D<int>(absolute_rect.x + m_slider_pos - 6, absolute_rect.y, 12, absolute_rect.h), gui_skin_scroll_h_bar);
 	}
 
 	this->RenderChildren();
@@ -55,7 +55,7 @@ bool GUISlider::OnEvent(const GUIEvent & e)
 
 		switch (e.GetType())
 		{
-		case mouse_pressed:
+		case left_mouse_pressed:
 			handle_mouse();
 
 			if (m_cur_value != m_old_value)
@@ -85,7 +85,7 @@ void GUISlider::handle_mouse()
 {
 	if (m_vertical)
 	{
-		m_mouse_pos = environment->get_mouse_pos();
+		m_mouse_pos = environment->GetMousePosition();
 		m_slider_pos = (int)(m_mouse_pos.y - absolute_rect.y);
 
 		if (m_slider_pos >= absolute_rect.h)
@@ -98,7 +98,7 @@ void GUISlider::handle_mouse()
 	}
 	else
 	{
-		m_mouse_pos = environment->get_mouse_pos();
+		m_mouse_pos = environment->GetMousePosition();
 		m_slider_pos = (int)(m_mouse_pos.x - absolute_rect.x);
 
 		if (m_slider_pos >= absolute_rect.w)

@@ -37,7 +37,7 @@ FontRenderer::FontRenderer()
 	glGenVertexArrays(1, &_VAO);
 	glGenBuffers(1, &_VBO);
 	_fontShader = GetContext().GetResourceManager()->LoadShader(Path("res/engine/shaders/font"));
-	printf("Font shader id:%d\n",_fontShader->GetProgramId());
+	printf("Font shader id:%d\n", _fontShader->GetProgramId());
 }
 
 FontRenderer::~FontRenderer()
@@ -238,10 +238,20 @@ void FontRenderer::_FormatTags(TextLine &tl, std::wstring in, SubLineInfo inf)
 		boost::split(tagvals, tagvalsubstr, boost::is_any_of(L", "));
 
 		float r, g, b, a;
+
 		r = 1.f / 255.f*helpers::wtoi(tagvals[0].c_str());
 		g = 1.f / 255.f*helpers::wtoi(tagvals[1].c_str());
 		b = 1.f / 255.f*helpers::wtoi(tagvals[2].c_str());
-		a = 1.f / 255.f*helpers::wtoi(tagvals[3].c_str());
+
+		if (tagvals.size() == 4)
+		{
+			a = 1.f / 255.f*helpers::wtoi(tagvals[3].c_str());
+		}
+		else
+		{
+			a = 1.f;
+		}
+
 		inf.color = glm::vec4(r, g, b, a);
 	}
 	break;
@@ -272,7 +282,7 @@ void FontRenderer::_FormatTags(TextLine &tl, std::wstring in, SubLineInfo inf)
 
 void FontRenderer::_RenderString(const std::wstring &text, glm::ivec2 pos, const glm::vec4 &color)
 {
-	glm::vec2 gs = _guiEnvironment->get_gui_scale();
+	glm::vec2 gs = _guiEnvironment->GetGUIScaling();
 	float sx, sy;
 	sx = gs.x;
 	sy = gs.y;

@@ -61,7 +61,7 @@ void GUIEditBox::Render()
 		cur_style = gui_skin_input_disabled;
 	}
 
-	environment->draw_sliced_gui_quad(absolute_rect, gui_skin_input_disabled);
+	environment->DrawSlicedGUIQuad(absolute_rect, gui_skin_input_disabled);
 
 	glEnable(GL_SCISSOR_TEST);
 	glScissor(absolute_rect.x, environment->GetAbsoluteRect().h - (absolute_rect.y + absolute_rect.h), absolute_rect.w, absolute_rect.h);
@@ -110,8 +110,8 @@ bool GUIEditBox::OnEvent(const GUIEvent & e)
 		cur_style = gui_skin_input_active;
 		break;
 
-	case mouse_pressed:
-		//glm::vec2 mpos=environment->get_mouse_pos();
+	case left_mouse_pressed:
+		//glm::vec2 mpos=environment->GetMousePosition();
 
 		break;
 

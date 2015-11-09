@@ -1,5 +1,5 @@
 #pragma once
-enum gui_event_type
+enum gui_event_type :uint32_t
 {
 	// generic events
 	element_focused, element_focus_lost, element_hovered, element_exitted,
@@ -17,7 +17,10 @@ enum gui_event_type
 	window_dragged, window_closed,
 
 	// GUI Mouse events, pretty much internal
-	mouse_pressed, mouse_released, mouse_moved, mouse_dragged,
+	left_mouse_pressed, left_mouse_released,
+	right_mouse_pressed, right_mouse_released,
+	middle_mouse_pressed, middle_mouse_released,
+	mouse_moved, mouse_dragged,
 
 	// GUI Keyboard events
 	key_typed, key_pressed,

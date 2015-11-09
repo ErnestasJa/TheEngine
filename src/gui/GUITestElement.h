@@ -42,18 +42,18 @@ public:
 		case element_exitted:
 			this->event_listener->OnEvent(e);
 			break;
-		case mouse_pressed:
-			ds = environment->get_mouse_pos();
+		case left_mouse_pressed:
+			ds = environment->GetMousePosition();
 			if (dragging == false && absolute_rect.is_point_inside(ds.x, ds.y))
 				dragging = true;
-			this->event_listener->OnEvent(GUIEvent(mouse_pressed, this));
+			this->event_listener->OnEvent(GUIEvent(left_mouse_pressed, this));
 			break;
-		case mouse_released:
+		case left_mouse_released:
 			if (dragging) dragging = false;
-			this->event_listener->OnEvent(GUIEvent(mouse_released, this));
+			this->event_listener->OnEvent(GUIEvent(left_mouse_released, this));
 			break;
 		case mouse_dragged:
-			mp = environment->get_mouse_pos();
+			mp = environment->GetMousePosition();
 			dif.x = mp.x - ds.x;
 			dif.y = mp.y - ds.y;
 			this->move(glm::vec2(dif.x, dif.y), true);
@@ -68,8 +68,8 @@ public:
 	{
 		this->_transform = glm::mat4(1.0f);
 
-		float gsx = environment->get_gui_scale().x;
-		float gsy = environment->get_gui_scale().y;
+		float gsx = environment->GetGUIScaling().x;
+		float gsy = environment->GetGUIScaling().y;
 		float px = -1 + absolute_rect.x*gsx + absolute_rect.w / 2 * gsx;
 		float py = 1 - absolute_rect.y*gsy - absolute_rect.h / 2 * gsy;
 		float sx = absolute_rect.w / 2 * gsx;
@@ -108,7 +108,7 @@ public:
 			relative_rect.clip(par);
 		}
 		UpdateAbsolutePos();
-		ds = environment->get_mouse_pos();
+		ds = environment->GetMousePosition();
 	}
 };
 

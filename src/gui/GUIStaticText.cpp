@@ -26,7 +26,7 @@ void GUIStaticText::Render()
 {
 	if (this->m_draw_background)
 	{
-		environment->draw_gui_quad(absolute_rect, gui_skin_background);
+		environment->DrawSlicedGUIQuad(absolute_rect, gui_skin_background);
 	}
 
 	environment->GetFontRenderer()->RenderString(this->m_text, glm::ivec2(this->absolute_rect.x, this->absolute_rect.y), 0, _font);

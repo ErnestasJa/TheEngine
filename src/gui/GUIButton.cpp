@@ -38,11 +38,11 @@ void GUIButton::Render()
 {
 	if (_colored)
 	{
-		environment->draw_gui_quad(absolute_rect, _colorCurrent);
+		environment->DrawGUIQuad(absolute_rect, _colorCurrent);
 	}
 	else
 	{
-		environment->draw_sliced_gui_quad(absolute_rect, _toggled&&_toggling ? gui_skin_button_click : enabled ? _style : gui_skin_button_disabled);
+		environment->DrawSlicedGUIQuad(absolute_rect, _toggled&&_toggling ? gui_skin_button_click : enabled ? _style : gui_skin_button_disabled);
 	}
 
 	RenderChildren();
@@ -52,6 +52,11 @@ void GUIButton::SetText(const std::wstring &text)
 {
 	_textOverlay->SetText(text);
 	_textOverlay->UpdateAbsolutePos();
+}
+
+const std::wstring &GUIButton::GetText()
+{
+	return _textOverlay->get_text();
 }
 
 void GUIButton::SetImage(GUIImage* img)
@@ -88,12 +93,12 @@ bool GUIButton::OnEvent(const GUIEvent & e)
 			GUI_FIRE_EVENT(GUIEvent(element_exitted, this, this))
 				break;
 
-		case gui_event_type::mouse_pressed:
+		case gui_event_type::left_mouse_pressed:
 			_style = gui_skin_button_click;
 			GUI_FIRE_EVENT(GUIEvent(button_pressed, this, this))
 				break;
 
-		case gui_event_type::mouse_released:
+		case gui_event_type::left_mouse_released:
 			if (_toggling)
 				_toggled = !_toggled;
 			_style = hovered ? gui_skin_button_hover : gui_skin_button_active;

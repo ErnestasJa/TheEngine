@@ -1,5 +1,6 @@
 #include "Precomp.h"
 
+#include "gui/GUIEnvironment.h"
 #include "gui/GUIElement.h"
 
 static uint32_t _elementIdCounter = 0;
@@ -213,6 +214,17 @@ void GUIElement::SetFocused(bool b)
 void GUIElement::SetVisible(bool b)
 {
 	this->visible = b;
+	if (modal)
+	{
+		if (b)
+		{
+			environment->SetModal(this);
+		}
+		else
+		{
+			environment->RemoveModal();
+		}
+	}
 	for (GUIElement* e : children)
 		e->SetVisible(b);
 }
@@ -257,6 +269,11 @@ bool GUIElement::IsVisible()
 bool GUIElement::IsHovered()
 {
 	return this->hovered;
+}
+
+bool GUIElement::IsModal()
+{
+	return this->modal;
 }
 
 bool GUIElement::AcceptsEvents()

@@ -8,7 +8,11 @@ GUIWindow::GUIWindow(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring t
 
 	_clipping = clip;
 	_showClose = showClose;
-	_modal = modal;
+	this->modal = modal;
+	if (modal)
+	{
+		env->SetModal(this);
+	}
 	_draggable = draggable;
 
 	_dragging = false;
@@ -32,7 +36,7 @@ GUIWindow::GUIWindow(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring t
 
 	if (_showClose)
 	{
-		_closeButton = new GUIButton(env, Rect2D<int>(0, 0, 16, 16), L"['s]X[s']");
+		_closeButton = new GUIButton(env, Rect2D<int>(4, 0, 16, 16), L"['s]X[s']");
 		_closeButton->SetParent(_titlebar);
 		_closeButton->SetEventListener(this);
 		_closeButton->SetAlignment(HALIGN_RIGHT, VALIGN_CENTER);
@@ -63,25 +67,25 @@ bool GUIWindow::OnEvent(const GUIEvent & e)
 
 		switch (e.GetType())
 		{
-		case mouse_pressed:
-			_dragStart = environment->get_mouse_pos();
+		case left_mouse_pressed:
+			_dragStart = environment->GetMousePosition();
 			if (_draggable&&_dragging == false && _titlebar->GetAbsoluteRect().is_point_inside((int)_dragStart.x, (int)_dragStart.y) == true)
 				_dragging = true;
 			break;
-		case mouse_released:
+		case left_mouse_released:
 			if (_dragging) _dragging = false;
 			break;
 		case mouse_dragged:
 			if (_draggable&&_dragging)
 			{
-				_mousePos = environment->get_mouse_pos();
+				_mousePos = environment->GetMousePosition();
 				_difference.x = _mousePos.x - _dragStart.x;
 				_difference.y = _mousePos.y - _dragStart.y;
 				this->Move(glm::vec2(_difference.x, _difference.y));
 			}
 			break;
 		case mouse_moved:
-			_mousePos = environment->get_mouse_pos();
+			_mousePos = environment->GetMousePosition();
 
 			break;
 		case button_pressed:
@@ -112,5 +116,5 @@ void GUIWindow::Move(glm::vec2 delta)
 		relative_rect.clip(par);
 	}
 	UpdateAbsolutePos();
-	_dragStart = environment->get_mouse_pos();
+	_dragStart = environment->GetMousePosition();
 }

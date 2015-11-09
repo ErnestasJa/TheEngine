@@ -23,7 +23,7 @@ GUICheckbox::~GUICheckbox()
 
 void GUICheckbox::Render()
 {
-	environment->draw_gui_quad(absolute_rect, enabled ? cur_style : checked ? gui_skin_checkbox_c_disabled : gui_skin_checkbox_u_disabled);
+	environment->DrawGUIQuad(absolute_rect, enabled ? cur_style : checked ? gui_skin_checkbox_c_disabled : gui_skin_checkbox_u_disabled);
 }
 
 bool GUICheckbox::OnEvent(const GUIEvent & e)
@@ -42,11 +42,11 @@ bool GUICheckbox::OnEvent(const GUIEvent & e)
 			GUI_FIRE_EVENT(GUIEvent(element_exitted, this, this))
 				break;
 
-		case mouse_pressed:
+		case left_mouse_pressed:
 			cur_style = this->checked ? gui_skin_checkbox_c_click : gui_skin_checkbox_u_click;
 			break;
 
-		case mouse_released:
+		case left_mouse_released:
 			checked = !checked;
 			cur_style = this->checked ? gui_skin_checkbox_c_hover : gui_skin_checkbox_u_hover;
 			GUI_FIRE_EVENT(GUIEvent(checkbox_state_changed, this, this))
