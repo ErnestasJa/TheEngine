@@ -33,6 +33,8 @@ struct Font
 
 		float tx;	// x offset of glyph in Texture coordinates
 		float ty;	// y offset of glyph in Texture coordinates
+
+		uint8_t *bitmap;
 	} c[GLYPHS_PER_ATLAS];		// character information
 
 	Font(FT_Face face, int height, std::string name);
