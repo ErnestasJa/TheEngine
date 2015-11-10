@@ -290,8 +290,8 @@ Image* FontRenderer::RenderStringToImage(const std::wstring &text, float linewid
 
 	Image* img = new Image();
 
-	int imgW = (int)glm::ceil(textDimensions.x) + 8;
-	int imgH = 12;
+	int imgW = (int)glm::ceil(textDimensions.x);
+	int imgH = (int)glm::ceil(textDimensions.y);
 
 	img->Init(imgW, imgH, 4);
 
@@ -443,10 +443,6 @@ void FontRenderer::RenderString(const std::wstring &text, const glm::ivec2 &pos,
 	linesToDraw.resize(strs.size());
 
 	SubLineInfo inf;
-	inf.color = glm::vec4(1);
-	inf.shadow = false;
-	inf.bold = false;
-	inf.italic = false;
 
 	loop(i, strs.size())
 	{
@@ -545,6 +541,11 @@ glm::vec2 FontRenderer::GetTextDimensions(const std::wstring & text)
 		}
 
 		height = _currentFont->avgheight;
+
+		if (height < _currentFont->realHeight)
+		{
+			height = _currentFont->realHeight;
+		}
 
 		if (content.bold || content.italic)
 		{

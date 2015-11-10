@@ -18,6 +18,8 @@ Font::Font(FT_Face face, int height, std::string name)
 	w = 0;
 	h = 0;
 
+	realHeight = height;
+
 	memset(c, 0, sizeof c);
 	/* Find minimum size for a Texture holding all visible ASCII characters */
 	for (int i = 0; i < GLYPHS_PER_ATLAS; i++)

@@ -23,6 +23,12 @@ struct SubLineInfo
 	bool bold;
 	bool shadow;
 	bool italic;
+
+	SubLineInfo():color(1)
+	{
+		bold = shadow = italic = false;
+		text = L"";
+	}
 };
 
 struct TextLine

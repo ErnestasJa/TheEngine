@@ -19,6 +19,7 @@ struct Font
 	int w;			// width of Texture in pixels
 	int h;			// height of Texture in pixels
 	float avgheight;
+	int realHeight;
 
 	struct
 	{
