@@ -3,12 +3,15 @@
 #include "application/AppContext.h"
 #include "utility/Logger.h"
 
-RenderStateManager::RenderStateManager(MaterialPtr defaultMaterial)
-{
-	m_defaultMaterial = defaultMaterial;
 
-	if (!m_defaultMaterial)
-		GetContext().GetLogger()->log(LOG_WARN, "Default material is null.");
+RenderStateManager & GetRenderStateManager()
+{
+	return RenderStateManager::Instance();
+}
+
+RenderStateManager::RenderStateManager()
+{
+	
 }
 
 RenderStateManager::~RenderStateManager()
@@ -36,21 +39,6 @@ void RenderStateManager::Disable(vector<GLEnum> glCapabilities)
 {
 	for (GLEnum glCapability : glCapabilities)
 		glDisable(glCapability);
-}
-
-void RenderStateManager::SetMaterial(MaterialPtr material)
-{
-	m_activeMaterial = material;
-}
-
-MaterialPtr RenderStateManager::GetMaterial()
-{
-	return m_activeMaterial;
-}
-
-MaterialPtr RenderStateManager::GetDefaultMaterial()
-{
-	return m_defaultMaterial;
 }
 
 void RenderStateManager::SetCamera(CameraPtr camera)

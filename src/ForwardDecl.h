@@ -29,6 +29,8 @@ class Timer;
 class VarGroup;
 class Material;
 class Texture;
+class IRenderObject;
+class RenderStateManager;
 
 typedef std::shared_ptr<Camera> CameraPtr;
 typedef std::shared_ptr<IFile> FilePtr;
@@ -39,6 +41,7 @@ typedef std::shared_ptr<Mesh> MeshPtr;
 typedef std::shared_ptr<Texture> TexturePtr;
 typedef std::shared_ptr<Shader> ShaderPtr;
 typedef std::shared_ptr<Timer> TimerPtr;
+typedef std::shared_ptr<IRenderObject> IRenderObjectPtr;
 
 typedef uint32_t GLEnum;
 
