@@ -36,6 +36,11 @@ uint32_t Timer::get_delta_time()
 	return time - last_time;
 }
 
+float Timer::get_delta_time_ms()
+{
+	return (time - last_time)/1000.f;
+}
+
 void Timer::set_time(uint32_t time)
 {
 	this->real_time = get_system_real_time();

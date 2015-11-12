@@ -17,6 +17,7 @@ public:
 	uint32_t get_time();
 	uint32_t get_start_time();
 	uint32_t get_delta_time();
+	float get_delta_time_ms();
 	void set_time(uint32_t time);
 
 	uint32_t get_real_time();
