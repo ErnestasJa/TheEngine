@@ -42,6 +42,7 @@ typedef std::shared_ptr<Texture> TexturePtr;
 typedef std::shared_ptr<Shader> ShaderPtr;
 typedef std::shared_ptr<Timer> TimerPtr;
 typedef std::shared_ptr<IRenderObject> IRenderObjectPtr;
+typedef std::shared_ptr<VarGroup> VarGroupPtr;
 
 typedef uint32_t GLEnum;
 
