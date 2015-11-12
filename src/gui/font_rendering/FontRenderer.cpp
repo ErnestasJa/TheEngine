@@ -10,6 +10,7 @@
 #include "opengl/Texture.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem/path.hpp>
+#include "Resources/Image.h"
 
 FontRenderer::FontRenderer()
 {
@@ -280,6 +281,65 @@ void FontRenderer::_FormatTags(TextLine &tl, std::wstring in, SubLineInfo inf)
 	return;
 }
 
+Image* FontRenderer::RenderStringToImage(const std::wstring &text, float linewidth, std::string fontFamilyName)
+{
+	this->UseFontFamily(fontFamilyName);
+	Font* a = _currentFont;
+
+	glm::vec2 textDimensions = this->GetTextDimensions(text);
+
+	Image* img = new Image();
+
+	int imgW = (int)glm::ceil(textDimensions.x);
+	int imgH = (int)glm::ceil(textDimensions.y);
+
+	img->Init(imgW, imgH, 4);
+
+	glm::vec2 pos(0);
+
+	/* Loop through all characters */
+	for (int i = 0; i < text.length(); i++)
+	{
+		const uint16_t p = (const uint16_t)text.c_str()[i];
+
+		/* Calculate the vertex and Texture coordinates */
+		float x2 = pos.x;
+		float y2 = pos.y;
+		float w = a->c[p].bw;
+		float h = a->c[p].bh;
+		uint8_t* bmp = a->c[p].bitmap;
+
+		/* Advance the cursor to the start of the next character */
+		pos.x += a->c[p].ax;
+		pos.y += a->c[p].ay;
+
+		/* Skip glyphs that have no pixels */
+		if (!w || !h)
+			continue;
+
+		loop(y, h)
+		{
+			loop(x, w)
+			{
+				uint8_t data = bmp[y*(int)w + x];
+
+				int xw = x2 + x;
+				int yw = h - y2 - y;
+
+				if (x2 + x > imgW)
+					printf("out of width bounds\n");
+
+				if (pos.y + h > imgH)
+					printf("out of height bounds\n");
+
+				img->SetPixel(xw, yw, 255, 255, 255, data);
+			}
+		}
+	}
+
+	return img;
+}
+
 void FontRenderer::_RenderString(const std::wstring &text, glm::ivec2 pos, const glm::vec4 &color)
 {
 	glm::vec2 gs = _guiEnvironment->GetGUIScaling();
@@ -383,10 +443,6 @@ void FontRenderer::RenderString(const std::wstring &text, const glm::ivec2 &pos,
 	linesToDraw.resize(strs.size());
 
 	SubLineInfo inf;
-	inf.color = glm::vec4(1);
-	inf.shadow = false;
-	inf.bold = false;
-	inf.italic = false;
 
 	loop(i, strs.size())
 	{
@@ -485,6 +541,11 @@ glm::vec2 FontRenderer::GetTextDimensions(const std::wstring & text)
 		}
 
 		height = _currentFont->avgheight;
+
+		if (height < _currentFont->realHeight)
+		{
+			height = _currentFont->realHeight;
+		}
 
 		if (content.bold || content.italic)
 		{

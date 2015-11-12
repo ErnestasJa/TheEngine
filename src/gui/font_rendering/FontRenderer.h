@@ -6,6 +6,7 @@
 #include <boost/functional/hash.hpp>
 #include "Font.h"
 #include "FontFamily.h"
+#include "ForwardDecl.h"
 
 class AppContext;
 class Logger;
@@ -22,6 +23,12 @@ struct SubLineInfo
 	bool bold;
 	bool shadow;
 	bool italic;
+
+	SubLineInfo():color(1)
+	{
+		bold = shadow = italic = false;
+		text = L"";
+	}
 };
 
 struct TextLine
@@ -79,6 +86,9 @@ public:
 	void SetDefaultFontFamily(const std::string &familyName);
 
 	void RenderString(const std::wstring &text, const glm::ivec2 &pos, float linewidth = 0.f, std::string fontFamilyName = "default");
+
+	Image* RenderStringToImage(const std::wstring &text, float linewidth = 0.f, std::string fontFamilyName = "default");
+	//void RenderString3D(const std::wstring &text, const glm::ivec3 &pos, float linewidth = 0.f, std::string fontFamilyName = "default");
 
 	glm::vec2 GetTextDimensions(const std::wstring & text);
 };

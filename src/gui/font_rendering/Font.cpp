@@ -18,6 +18,8 @@ Font::Font(FT_Face face, int height, std::string name)
 	w = 0;
 	h = 0;
 
+	realHeight = height;
+
 	memset(c, 0, sizeof c);
 	/* Find minimum size for a Texture holding all visible ASCII characters */
 	for (int i = 0; i < GLYPHS_PER_ATLAS; i++)
@@ -55,6 +57,8 @@ Font::Font(FT_Face face, int height, std::string name)
 
 	rowh = 0;
 	int cnth = 0;
+
+	avgheight = 0;
 
 	for (int i = 0; i < GLYPHS_PER_ATLAS; i++)
 	{
@@ -94,6 +98,9 @@ Font::Font(FT_Face face, int height, std::string name)
 
 		c[i].tx = (float)ox / (float)w;
 		c[i].ty = (float)oy / (float)h;
+		c[i].bitmap = new uint8_t[g->bitmap.width*g->bitmap.rows];
+		//std::copy(g->bitmap.buffer, g->bitmap.buffer+ g->bitmap.width*g->bitmap.rows, c[i].bitmap);
+		memcpy(c[i].bitmap, (void*)g->bitmap.buffer, g->bitmap.width*g->bitmap.rows*sizeof(unsigned char));
 
 		rowh = glm::max(rowh, g->bitmap.rows);
 		ox += g->bitmap.width + 1;
