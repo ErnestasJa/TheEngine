@@ -281,7 +281,7 @@ void FontRenderer::_FormatTags(TextLine &tl, std::wstring in, SubLineInfo inf)
 	return;
 }
 
-Image* FontRenderer::RenderStringToImage(const std::wstring &text, float linewidth, std::string fontFamilyName)
+Image* FontRenderer::RenderStringToImage(const std::wstring &text, glm::detail::tvec3<uint8_t> color, std::string fontFamilyName)
 {
 	this->UseFontFamily(fontFamilyName);
 	Font* a = _currentFont;
@@ -332,7 +332,7 @@ Image* FontRenderer::RenderStringToImage(const std::wstring &text, float linewid
 				if (pos.y + h > imgH)
 					printf("out of height bounds\n");
 
-				img->SetPixel(xw, yw, 255, 255, 255, data);
+				img->SetPixel(xw, yw, color.r, color.g, color.b, data);
 			}
 		}
 	}

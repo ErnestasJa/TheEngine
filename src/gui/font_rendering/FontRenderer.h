@@ -24,7 +24,7 @@ struct SubLineInfo
 	bool shadow;
 	bool italic;
 
-	SubLineInfo():color(1)
+	SubLineInfo() :color(1)
 	{
 		bold = shadow = italic = false;
 		text = L"";
@@ -87,7 +87,7 @@ public:
 
 	void RenderString(const std::wstring &text, const glm::ivec2 &pos, float linewidth = 0.f, std::string fontFamilyName = "default");
 
-	Image* RenderStringToImage(const std::wstring &text, float linewidth = 0.f, std::string fontFamilyName = "default");
+	Image* RenderStringToImage(const std::wstring &text, glm::detail::tvec3<uint8_t> color = glm::detail::tvec3<uint8_t>(255), std::string fontFamilyName = "default");
 	//void RenderString3D(const std::wstring &text, const glm::ivec3 &pos, float linewidth = 0.f, std::string fontFamilyName = "default");
 
 	glm::vec2 GetTextDimensions(const std::wstring & text);

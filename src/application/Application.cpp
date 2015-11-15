@@ -188,6 +188,11 @@ bool Application::DestroyContext()
 		delete GetContext().GetResourceManager();
 	}
 
+	if (GetContext().GetInputHandler())
+	{
+		delete GetContext().GetInputHandler();
+	}
+
 	GetContext().p_timer = nullptr;
 
 	return true;
