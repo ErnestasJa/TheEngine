@@ -138,11 +138,6 @@ void Shader::Set()
 	}
 }
 
-int32_t Shader::getparam(const std::string & pname)
-{
-	return  glGetUniformLocation(program, pname.c_str());
-}
-
 bool Shader::HasBinding(const std::string & name)
 {
 	for (ShaderBinding &t : m_bindings)
