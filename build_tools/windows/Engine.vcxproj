@@ -193,7 +193,6 @@
     <ClInclude Include="..\..\src\gui\GUISkin.h" />
     <ClInclude Include="..\..\src\gui\GUISlider.h" />
     <ClInclude Include="..\..\src\gui\GUIStaticText.h" />
-    <ClInclude Include="..\..\src\gui\GUITestElement.h" />
     <ClInclude Include="..\..\src\gui\GUIWindow.h" />
     <ClInclude Include="..\..\src\opengl\AABB.h" />
     <ClInclude Include="..\..\src\opengl\BufferObject.h" />

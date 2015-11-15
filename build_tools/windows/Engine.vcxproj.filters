@@ -201,9 +201,6 @@
     <ClInclude Include="..\..\src\gui\GUIStaticText.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\gui\GUITestElement.h">
-      <Filter>Header Files\GUI</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\gui\GUIWindow.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>

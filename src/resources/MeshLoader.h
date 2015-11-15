@@ -5,7 +5,7 @@
 #include "ResourceCache.h"
 #include "ForwardDecl.h"
 
-class MeshLoader : public resource_cache<Mesh>
+class MeshLoader : public ResourceCache<Mesh>
 {
 public:
 	MeshLoader();

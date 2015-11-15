@@ -186,3 +186,8 @@ void Shader::QueryAllBindingLocations()
 		GetContext().GetLogger()->log(LOG_LOG, "Binding index=%i; Name='%s'; Type=%i;\n", location, name, type);
 	}
 }
+
+const uint32_t Shader::GetProgramId() const
+{
+	return program;
+}

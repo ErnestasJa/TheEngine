@@ -6,14 +6,14 @@
 #include "boost/filesystem/path.hpp"
 
 class AppContext;
-class ShaderLoader : public resource_cache<Shader>
+class ShaderLoader : public ResourceCache<Shader>
 {
 public:
 	ShaderLoader();
 	virtual ~ShaderLoader();
 
-	ShaderPtr Load(const Path & file);
-	ShaderPtr Load(const Path & vertex_file, const Path & fragment_file);
+	ShaderPtr Load(const Path & file, bool replaceCached = false);
+	ShaderPtr Load(const Path & vertex_file, const Path & fragment_file, bool replaceCached = false);
 	ShaderPtr GetShaderByName(const Path & name);
 
 protected:
