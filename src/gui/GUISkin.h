@@ -5,6 +5,7 @@ using namespace tinyxml2;
 enum gui_style
 {
 	gui_skin_whole_texture,
+	gui_skin_whole_texture_gl,
 
 	gui_skin_background,
 

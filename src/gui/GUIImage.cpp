@@ -4,7 +4,7 @@
 
 #include "GUI.h"
 
-GUIImage::GUIImage(GUIEnvironment* env, Rect2D<int> dimensions, std::shared_ptr<Texture> tex, bool multichannel) :GUIElement(env, dimensions)
+GUIImage::GUIImage(GUIEnvironment* env, Rect2D<int> dimensions, std::shared_ptr<Texture> tex, bool multichannel, bool glTex) :GUIElement(env, dimensions)
 {
 	this->Type = GUIET_ELEMENT;
 	environment = env;
@@ -14,6 +14,7 @@ GUIImage::GUIImage(GUIEnvironment* env, Rect2D<int> dimensions, std::shared_ptr<
 
 	m_tex = tex;
 	m_multichannel = multichannel;
+	m_gl = glTex;
 	_caption = nullptr;
 	//it's an image...
 	this->SetListening(false);
@@ -39,7 +40,7 @@ void GUIImage::SetCaption(const std::wstring& caption)
 {
 	if (!_caption)
 	{
-		_caption=environment->AddGUIStaticText(Rect2D<int>(0, 0, absolute_rect.w, 24), caption, false);
+		_caption = environment->AddGUIStaticText(Rect2D<int>(0, 0, absolute_rect.w, 24), caption, false);
 		_caption->SetParent(this);
 	}
 	else
@@ -50,7 +51,7 @@ void GUIImage::SetCaption(const std::wstring& caption)
 
 void GUIImage::Render()
 {
-	environment->DrawGUIQuad(absolute_rect, m_tex, false, m_multichannel);
+	environment->DrawGUIQuad(absolute_rect, m_tex, false, m_multichannel, m_gl);
 
 	this->RenderChildren();
 }

@@ -45,15 +45,6 @@ GUIWindow::GUIWindow(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring t
 
 GUIWindow::~GUIWindow()
 {
-	RemoveChild(_titlebar);
-	RemoveChild(_background);
-	RemoveChild(_titlebarText);
-	RemoveChild(_closeButton);
-
-	delete _titlebar;
-	delete _background;
-	delete _titlebarText;
-	delete _closeButton;
 }
 
 void GUIWindow::Render()

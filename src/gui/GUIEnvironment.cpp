@@ -70,6 +70,15 @@ GUIEnvironment::~GUIEnvironment()
 	delete sliced_quad;
 }
 
+void GUIEnvironment::DestroyChildren()
+{
+	GUIElement::DestroyChildren();
+	hover = nullptr;
+	focus = nullptr;
+	last_hover = nullptr;
+	last_focus = nullptr;
+}
+
 GUIStaticText* GUIEnvironment::AddGUIStaticText(Rect2D<int> dimensions, std::wstring text, bool drawbackground)
 {
 	auto ret = new GUIStaticText(this, dimensions, text, drawbackground);
@@ -105,9 +114,9 @@ GUISlider* GUIEnvironment::AddGUISlider(Rect2D<int> dimensions, float min, float
 	return ret;
 }
 
-GUIImage* GUIEnvironment::AddGUIImage(Rect2D<int> dimensions, TexturePtr tex, bool multichannel)
+GUIImage* GUIEnvironment::AddGUIImage(Rect2D<int> dimensions, TexturePtr tex, bool multichannel, bool glTex)
 {
-	auto ret = new GUIImage(this, dimensions, tex, multichannel);
+	auto ret = new GUIImage(this, dimensions, tex, multichannel, glTex);
 	ret->SetParent(this);
 	return ret;
 }
@@ -335,13 +344,13 @@ FontRenderer* GUIEnvironment::GetFontRenderer()
 	return m_font_renderer;
 }
 
-void GUIEnvironment::DrawGUIQuad(Rect2D<int> dims, TexturePtr tex, bool tile, bool multichannel)
+void GUIEnvironment::DrawGUIQuad(Rect2D<int> dims, TexturePtr tex, bool tile, bool multichannel, bool glTex)
 {
 	Rect2D<float> scaled_dims = ScaleGUIRect(dims.as<float>());
 
 	tex->Set(0);
 
-	gui_quad->SetUV(skin->get_uv(gui_skin_whole_texture));
+	gui_quad->SetUV(skin->get_uv(glTex?gui_skin_whole_texture_gl:gui_skin_whole_texture));
 
 	glm::mat4 M = glm::mat4(1.0f);
 

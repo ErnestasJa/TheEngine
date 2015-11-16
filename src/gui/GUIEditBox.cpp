@@ -22,6 +22,8 @@ GUIEditBox::GUIEditBox(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring
 
 	curspos = text.length();
 
+	cur_style = gui_skin_input_active;
+
 	_mx = absolute_rect.x + 5;
 	_mw = absolute_rect.w - font_size - 5;
 	_my = absolute_rect.y + (absolute_rect.h - font_size) / 2;
@@ -61,7 +63,7 @@ void GUIEditBox::Render()
 		cur_style = gui_skin_input_disabled;
 	}
 
-	environment->DrawSlicedGUIQuad(absolute_rect, gui_skin_input_disabled);
+	environment->DrawSlicedGUIQuad(absolute_rect, cur_style);
 
 	glEnable(GL_SCISSOR_TEST);
 	glScissor(absolute_rect.x, environment->GetAbsoluteRect().h - (absolute_rect.y + absolute_rect.h), absolute_rect.w, absolute_rect.h);
