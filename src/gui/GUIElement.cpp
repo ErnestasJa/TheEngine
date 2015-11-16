@@ -50,10 +50,9 @@ uint32_t GUIElement::GetId()
 
 void GUIElement::DestroyChildren()
 {
-	for (auto it = children.begin(); it != children.end();)
+	while (!children.empty())
 	{
-		delete *it;
-		it = children.erase(it);
+		delete children[0];
 	}
 
 	children.clear();
@@ -64,29 +63,27 @@ void GUIElement::Render()
 	//will be overriden by everything
 }
 
-void GUIElement::AddChild(GUIElement *e)
+void GUIElement::AddChild(GUIElement *child)
 {
-	vector<GUIElement*>::iterator i = std::find(children.begin(), children.end(), e);
+	vector<GUIElement*>::iterator i = std::find(children.begin(), children.end(), child);
 	if (i != children.end())
 		return;
 
-	e->parent = this;
-	children.push_back(e);
+	child->parent = this;
+	children.push_back(child);
 
-	e->relative_rect = e->absolute_rect;
-
+	child->relative_rect = child->absolute_rect;
 	UpdateAbsolutePos();
 }
 
-void GUIElement::RemoveChild(GUIElement *e)
+void GUIElement::RemoveChild(GUIElement *child)
 {
-	vector<GUIElement*>::iterator i = std::find(children.begin(), children.end(), e);
+	vector<GUIElement*>::iterator i = std::find(children.begin(), children.end(), child);
 	if (i != children.end())
 	{
-		i = children.erase(i);
 		(*i)->relative_rect = (*i)->absolute_rect;
 		(*i)->parent = nullptr;
-		return;
+		children.erase(i);
 	}
 }
 
@@ -258,13 +255,13 @@ void GUIElement::SetListening(bool b)
 	this->accept_events = b;
 }
 
-void GUIElement::SetParent(GUIElement *e)
+void GUIElement::SetParent(GUIElement *newparent)
 {
-	if (e)
+	if (newparent)
 	{
 		if (this->parent)
 			this->parent->RemoveChild(this);
-		e->AddChild(this);
+		newparent->AddChild(this);
 	}
 	else
 		return;
