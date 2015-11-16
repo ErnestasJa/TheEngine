@@ -101,7 +101,7 @@ ApplicationWindow::~ApplicationWindow()
 	glfwTerminate();
 }
 
-bool ApplicationWindow::Init(const std::string  &title, uint32_t width, uint32_t height, uint32_t r, uint32_t g, uint32_t b, uint32_t alpha, uint32_t depth, uint32_t stencil)
+bool ApplicationWindow::Init(const std::string  &title, uint32_t width, uint32_t height, bool fullscreen, bool windowed, uint32_t r, uint32_t g, uint32_t b, uint32_t alpha, uint32_t depth, uint32_t stencil)
 {
 	if (!glfwInit())
 	{
@@ -127,7 +127,29 @@ bool ApplicationWindow::Init(const std::string  &title, uint32_t width, uint32_t
 	glfwWindowHint(GLFW_RESIZABLE, 0);
 
 	/* Create a ApplicationWindowed mode ApplicationWindow and its OpenGL context */
-	_window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
+	GLFWmonitor* monitor = glfwGetPrimaryMonitor();;
+	const GLFWvidmode* mode = nullptr;
+
+	if (fullscreen)
+	{
+		_window = glfwCreateWindow(width, height, title.c_str(), monitor, NULL);
+	}
+
+	if (windowed)
+	{
+		_window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
+	}
+
+	if (windowed&&fullscreen)
+	{
+		mode = glfwGetVideoMode(monitor);
+		glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+		glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+		glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+		glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+
+		_window = glfwCreateWindow(width, height, title.c_str(), monitor, NULL);
+	}
 
 	if (!_window)
 	{

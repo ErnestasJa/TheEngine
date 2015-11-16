@@ -29,14 +29,14 @@ MeshPtr ResourceManager::LoadMesh(const Path & filePath)
 	return GetMeshLoader()->Load(filePath);
 }
 
-ShaderPtr ResourceManager::LoadShader(const Path & shaderPath)
+ShaderPtr ResourceManager::LoadShader(const Path & shaderPath, bool reload)
 {
-	return GetShaderLoader()->Load(shaderPath);
+	return GetShaderLoader()->Load(shaderPath, reload);
 }
 
-ShaderPtr ResourceManager::LoadShader(const Path & vertexPath, const Path & fragmentPath)
+ShaderPtr ResourceManager::LoadShader(const Path & vertexPath, const Path & fragmentPath, bool reload)
 {
-	return GetShaderLoader()->Load(vertexPath, fragmentPath);
+	return GetShaderLoader()->Load(vertexPath, fragmentPath, reload);
 }
 
 ImageLoader * ResourceManager::GetImageLoader()

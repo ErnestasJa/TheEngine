@@ -108,6 +108,15 @@ Var::Var(const char * name, int data)
 	m_flags = 0;
 }
 
+Var::Var(const char * name, bool data)
+{
+	allocAndCopyStr(m_name, name);
+	m_type = VARB;
+	m_datab = data;
+	m_count = 1;
+	m_flags = 0;
+}
+
 Var::Var(const char * name, int * data, uint8_t count)
 {
 	allocAndCopyStr(m_name, name);
@@ -183,6 +192,11 @@ int Var::ValueI() const
 	return m_datai;
 }
 
+bool Var::ValueB() const
+{
+	return m_datab;
+}
+
 float Var::ValueF() const
 {
 	return m_dataf;
@@ -250,6 +264,11 @@ void Var::Value(float value)
 void Var::Value(int value)
 {
 	m_datai = value;
+}
+
+void Var::Value(bool value)
+{
+	m_datab = value;
 }
 
 void Var::Value(const std::string & value)

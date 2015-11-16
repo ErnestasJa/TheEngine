@@ -34,6 +34,12 @@ Camera::~Camera()
 {
 }
 
+void Camera::SetFPS(bool fps)
+{
+	m_fps = fps;
+	GetContext().GetWindow()->SetCursorDisabled(fps);
+}
+
 void Camera::ResetOrientation(glm::vec3 lookDir)
 {
 	//m_rot = glm::toQuat(glm::inverse(glm::lookAt(m_pos, m_pos + lookDir * 10.f, m_up)));

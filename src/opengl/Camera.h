@@ -54,10 +54,7 @@ public:
 		return m_fps;
 	}
 
-	void SetFPS(bool b)
-	{
-		m_fps = b;
-	}
+	void SetFPS(bool fps);
 
 public:
 	void Walk(const float amount);

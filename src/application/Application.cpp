@@ -42,11 +42,11 @@ bool Application::InitSimple(const std::string  &title)
 	InitFileSystem();
 	LoadConfig();
 
-	if(!InitWindowAndOpenGL(title))
+	if (!InitWindowAndOpenGL(title))
 	{
 		GetContext().GetLogger()->log(LOG_ERROR, "Failed to initialize ApplicationWindow.");
 	}
-	
+
 	if (!GetContext().IsInitialized())
 		throw "Failed to initialize app context.";
 
@@ -62,7 +62,7 @@ bool Application::InitFileSystem()
 	///create directory for application
 	auto applicationDirectory = Path(GetApplicationId());
 
-	if(!GetContext().GetFileSystem()->CreateDirectory(applicationDirectory))
+	if (!GetContext().GetFileSystem()->CreateDirectory(applicationDirectory))
 	{
 		printf("%s\n", "Failed to create directory for current application.");
 		exit(-1);
@@ -87,14 +87,14 @@ bool Application::InitFileSystem()
 bool Application::LoadConfig()
 {
 	auto & fileSystemVars = GetContext().GetApplicationSettingsManager()->GetGroup("filesystem");
-	
+
 	Path logPath(fileSystemVars.GetVar("log_path").ValueS());
 	Path configPath(fileSystemVars.GetVar("config_path").ValueS());
 
 	///REFACTOR: Magic strings
 	Path configFilePath = configPath;
 	configFilePath.append("config.cfg");
-	if(!GetContext().GetApplicationSettingsManager()->LoadSettings(configFilePath))
+	if (!GetContext().GetApplicationSettingsManager()->LoadSettings(configFilePath))
 		GetContext().GetApplicationSettingsManager()->WriteSettings(configFilePath);
 
 	return true;
@@ -104,8 +104,10 @@ bool Application::InitWindowAndOpenGL(const std::string & title)
 {
 	int32_t width = GetContext().GetApplicationSettingsManager()->GetGroup("video").GetVar("window_width").ValueI(),
 		height = GetContext().GetApplicationSettingsManager()->GetGroup("video").GetVar("window_height").ValueI();
-	
-	if (!GetContext().GetWindow()->Init(title, width, height))
+	bool windowed = GetContext().GetApplicationSettingsManager()->GetGroup("video").GetVar("windowed").ValueB();
+	bool fullscreen = GetContext().GetApplicationSettingsManager()->GetGroup("video").GetVar("fullscreen").ValueB();
+
+	if (!GetContext().GetWindow()->Init(title, width, height, fullscreen, windowed))
 	{
 		GetContext().GetLogger()->log(LOG_LOG, "Could not initialize ApplicationWindow with dimensions %ix%i", width, height);
 		delete GetContext().p_window;
@@ -148,32 +150,32 @@ bool Application::InitWindowAndOpenGL(const std::string & title)
 
 bool Application::DestroyContext()
 {
-	if(GetContext().p_logger)
+	if (GetContext().p_logger)
 	{
 		GetContext().p_logger->log(LOG_LOG, "Exitting.");
 	}
 
-	if(GetContext().p_guiEnv)
+	if (GetContext().p_guiEnv)
 	{
 		delete GetContext().p_guiEnv;
 	}
 
-	if(GetContext().p_openGLExtensionLoader)
+	if (GetContext().p_openGLExtensionLoader)
 	{
 		delete GetContext().p_openGLExtensionLoader;
 	}
 
-	if(GetContext().p_window)
+	if (GetContext().p_window)
 	{
 		ApplicationWindow::DestroyWindow(GetContext().p_window);
 	}
 
-	if(GetContext().p_settingsManager)
+	if (GetContext().p_settingsManager)
 	{
 		delete GetContext().p_settingsManager;
 	}
 
-	if(GetContext().p_logger)
+	if (GetContext().p_logger)
 	{
 		delete GetContext().p_logger;
 	}
