@@ -15,6 +15,7 @@ FileSystem::FileSystem(const char * argv)
 	path = WorkaroundVisualStudio(path);
 
 	PHYSFS_init(path.c_str());
+	PHYSFS_permitSymbolicLinks(1);
 	m_workingDirectory = GetPhysFSWorkingDirectory();
 	PHYSFS_mount(m_workingDirectory.generic_string().c_str(), NULL, 0);
 }
