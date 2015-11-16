@@ -72,7 +72,7 @@ private:
 		int32_t * m_dataiv;
 		float     m_dataf;
 		int32_t   m_datai;
-		bool   m_datab;
+		bool	  m_datab;
 	};
 };
 

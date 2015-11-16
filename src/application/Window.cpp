@@ -134,13 +134,13 @@ bool ApplicationWindow::Init(const std::string  &title, uint32_t width, uint32_t
 	{
 		_window = glfwCreateWindow(width, height, title.c_str(), monitor, NULL);
 	}
-
+	else
 	if (windowed)
 	{
 		_window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
 	}
-
-	if (windowed&&fullscreen)
+	else
+	if (fullscreen&&windowed)
 	{
 		mode = glfwGetVideoMode(monitor);
 		glfwWindowHint(GLFW_RED_BITS, mode->redBits);

@@ -31,6 +31,10 @@ GUIElement::GUIElement(GUIEnvironment* env, Rect2D<int> dimensions)
 
 GUIElement::~GUIElement()
 {
+	if (parent)
+	{
+		parent->RemoveChild(this);
+	}
 	DestroyChildren();
 }
 
@@ -46,9 +50,10 @@ uint32_t GUIElement::GetId()
 
 void GUIElement::DestroyChildren()
 {
-	for (GUIElement* el : children)
+	for (auto it = children.begin(); it != children.end();)
 	{
-		el->SetListening(false);
+		delete *it;
+		it = children.erase(it);
 	}
 
 	children.clear();
@@ -78,9 +83,9 @@ void GUIElement::RemoveChild(GUIElement *e)
 	vector<GUIElement*>::iterator i = std::find(children.begin(), children.end(), e);
 	if (i != children.end())
 	{
-		e->parent = nullptr;
 		i = children.erase(i);
 		(*i)->relative_rect = (*i)->absolute_rect;
+		(*i)->parent = nullptr;
 		return;
 	}
 }
@@ -255,9 +260,9 @@ void GUIElement::SetListening(bool b)
 
 void GUIElement::SetParent(GUIElement *e)
 {
-	if (e != nullptr)
+	if (e)
 	{
-		if (this->parent != nullptr)
+		if (this->parent)
 			this->parent->RemoveChild(this);
 		e->AddChild(this);
 	}

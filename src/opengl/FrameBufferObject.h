@@ -32,6 +32,15 @@ struct FrameBufferObject : public GLObject
 
 	~FrameBufferObject()
 	{
+		DetachDepthTexture();
+
+		DetachDepthStencilTexture();
+
+		loopi(8)
+		{
+			DetachTexture(0);
+		}
+
 		if (Id)
 			glDeleteFramebuffers(1, &Id);
 	}

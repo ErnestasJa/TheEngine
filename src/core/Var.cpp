@@ -49,6 +49,11 @@ Var::Var(const Var & o)
 	if (m_count)
 		switch (m_type)
 		{
+		case VARB:
+		{
+			m_datab = o.ValueB();
+			break;
+		}
 		case VARI:
 		{
 			if (m_count == 1)
@@ -161,6 +166,8 @@ Var::~Var()
 			break;
 		case VARS:
 			delete[] m_datas;
+			break;
+		case VARB:
 			break;
 		default:
 			throw std::string("Bad var type");

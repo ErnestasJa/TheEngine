@@ -32,6 +32,7 @@ Camera::Camera(const glm::vec3 &pos, const glm::vec3 &target, const glm::vec3 &u
 
 Camera::~Camera()
 {
+	GetContext().GetWindow()->SetCursorDisabled(false);
 }
 
 void Camera::SetFPS(bool fps)
