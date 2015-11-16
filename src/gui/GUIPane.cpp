@@ -1,6 +1,6 @@
 #include "Precomp.h"
 
-#include "opengl/Quad.h"
+#include "opengl/geometry/Quad.h"
 #include "GUIEnvironment.h"
 #include "GUIPane.h"
 
@@ -26,7 +26,7 @@ void GUIPane::Render()
 
 	if (this->m_draw)
 	{
-		environment->draw_sliced_gui_quad(absolute_rect, gui_skin_background);
+		environment->DrawSlicedGUIQuad(absolute_rect, gui_skin_background);
 	}
 
 	this->RenderChildren();

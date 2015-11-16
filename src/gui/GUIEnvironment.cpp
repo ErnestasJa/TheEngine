@@ -1,8 +1,8 @@
 #include "Precomp.h"
 #include "GUI.h"
 #include "opengl/material/Shader.h"
-#include "opengl/GUIQuad.h"
-#include "opengl/SlicedGUIQuad.h"
+#include "opengl/geometry/Quad.h"
+#include "opengl/geometry/SlicedGUIQuad.h"
 #include "GUISkin.h"
 #include "resources/Image.h"
 #include "resources/ImageLoader.h"
@@ -17,17 +17,17 @@ GUIEnvironment::GUIEnvironment() :GUIElement(nullptr, Rect2D<int>(0, 0, GetConte
 
 	this->m_window = GetContext().GetWindow();
 
-	_sig_mouse_move = m_window->SigMouseMoved().connect(sigc::mem_fun(this, &GUIEnvironment::on_mouse_moved));
-	_sig_mouse_button = m_window->SigMouseKey().connect(sigc::mem_fun(this, &GUIEnvironment::on_mouse_button));
-	_sig_mouse_scroll = m_window->SigMouseScroll().connect(sigc::mem_fun(this, &GUIEnvironment::on_mouse_scroll));
-	_sig_key = m_window->SigKeyEvent().connect(sigc::mem_fun(this, &GUIEnvironment::on_key_event));
-	_sig_text = m_window->SigTextEvent().connect(sigc::mem_fun(this, &GUIEnvironment::on_char_typed));
+	_sig_mouse_move = m_window->SigMouseMoved().connect(sigc::mem_fun(this, &GUIEnvironment::OnMouseMove));
+	_sig_mouse_button = m_window->SigMouseKey().connect(sigc::mem_fun(this, &GUIEnvironment::OnMouseClick));
+	_sig_mouse_scroll = m_window->SigMouseScroll().connect(sigc::mem_fun(this, &GUIEnvironment::OnMouseScroll));
+	_sig_key = m_window->SigKeyEvent().connect(sigc::mem_fun(this, &GUIEnvironment::OnKeyEvent));
+	_sig_text = m_window->SigTextEvent().connect(sigc::mem_fun(this, &GUIEnvironment::OnCharacterTyped));
 
 	glm::ivec2 win_dims = m_window->GetWindowSize();
 	this->disp_w = win_dims.x;
 	this->disp_h = win_dims.y;
 
-	hover = last_hover = focus = last_focus = nullptr;
+	hover = last_hover = focus = last_focus = modal = nullptr;
 
 	m_mouse_down = m_mouse_dragged = m_mouse_moved = false;
 
@@ -39,8 +39,7 @@ GUIEnvironment::GUIEnvironment() :GUIElement(nullptr, Rect2D<int>(0, 0, GetConte
 	last_char = ' ';
 
 	gui_shader = GetContext().GetResourceManager()->LoadShader("res/engine/shaders/gui_quad");
-	gui_quad = new GUIQuad();
-	gui_quad->Init();
+	gui_quad = new Quad();
 
 	sliced_quad = new SlicedGUIQuad(glm::vec2(1), 8);
 	sliced_quad->Init();
@@ -49,7 +48,7 @@ GUIEnvironment::GUIEnvironment() :GUIElement(nullptr, Rect2D<int>(0, 0, GetConte
 
 	skin->load("res/gui/skins/skin_default.xml");
 
-	skin_atlas = new Texture();
+	skin_atlas = share(new Texture());
 	ImageLoader * imgl = new ImageLoader();
 	auto img = std::shared_ptr<Image>(imgl->Load("res/gui/skins/skin_default2.png"));
 	skin_atlas->Init(img);
@@ -68,6 +67,16 @@ GUIEnvironment::~GUIEnvironment()
 	delete m_font_renderer;
 	gui_shader = nullptr;
 	delete gui_quad;
+	delete sliced_quad;
+}
+
+void GUIEnvironment::DestroyChildren()
+{
+	GUIElement::DestroyChildren();
+	hover = nullptr;
+	focus = nullptr;
+	last_hover = nullptr;
+	last_focus = nullptr;
 }
 
 GUIStaticText* GUIEnvironment::AddGUIStaticText(Rect2D<int> dimensions, std::wstring text, bool drawbackground)
@@ -105,9 +114,9 @@ GUISlider* GUIEnvironment::AddGUISlider(Rect2D<int> dimensions, float min, float
 	return ret;
 }
 
-GUIImage* GUIEnvironment::AddGUIImage(Rect2D<int> dimensions, std::shared_ptr<Texture> tex, bool multichannel)
+GUIImage* GUIEnvironment::AddGUIImage(Rect2D<int> dimensions, TexturePtr tex, bool multichannel, bool glTex)
 {
-	auto ret = new GUIImage(this, dimensions, tex, multichannel);
+	auto ret = new GUIImage(this, dimensions, tex, multichannel, glTex);
 	ret->SetParent(this);
 	return ret;
 }
@@ -156,7 +165,7 @@ bool GUIEnvironment::OnEvent(const GUIEvent & e)
 	GUI_END_ON_EVENT(e)
 }
 
-void GUIEnvironment::on_key_event(int32_t key, int32_t scan_code, int32_t action, int32_t mod)
+void GUIEnvironment::OnKeyEvent(int32_t key, int32_t scan_code, int32_t action, int32_t mod)
 {
 	//printf("Key event: Key:%i SC:%i Action:%i Mod:%i\n",key,scan_code,action,mod);
 
@@ -203,23 +212,41 @@ void GUIEnvironment::on_key_event(int32_t key, int32_t scan_code, int32_t action
 	}
 }
 
-void GUIEnvironment::on_char_typed(int32_t scan_code)
+GUIElement* GUIEnvironment::GetFocusElement()
+{
+	return focus;
+}
+GUIElement* GUIEnvironment::GetHoverElement()
+{
+	return hover;
+}
+void GUIEnvironment::SetFocusElement(GUIElement* element)
+{
+	focus = element;
+}
+void GUIEnvironment::SetHoverElement(GUIElement* element)
+{
+	hover = element;
+}
+
+void GUIEnvironment::OnCharacterTyped(int32_t scan_code)
 {
 	this->last_char = (wchar_t)scan_code;
 	if (focus != nullptr)
 		focus->OnEvent(GUIEvent(key_typed, this, focus));
 }
 
-void GUIEnvironment::on_mouse_moved(double x, double y)
+void GUIEnvironment::OnMouseMove(double x, double y)
 {
 	mouse_pos = glm::vec2(x, y);
 
-	GUIElement *target = GetElementFromPoint(mouse_pos.x, mouse_pos.y);
+	GUIElement *target = target = GetElementFromPoint(mouse_pos.x, mouse_pos.y);
 
 	//printf("Target name: %s @ %f %f\n", target != nullptr ? target->GetName().c_str() : "das is null", mouse_pos.x, mouse_pos.y);
 
 	//only update elements which are enabled,visible and accept events
 	if (target != nullptr)
+	{
 		if (target->IsEnabled() && target->IsVisible() && target->AcceptsEvents())
 		{
 			if (target != hover)
@@ -242,70 +269,72 @@ void GUIEnvironment::on_mouse_moved(double x, double y)
 				if (m_mouse_down)
 					focus->OnEvent(GUIEvent(mouse_dragged, this, focus));
 		}
-}
-
-void GUIEnvironment::on_mouse_button(int32_t button, int32_t action, int32_t mod)
-{
-	switch (button)
-	{
-	case GLFW_MOUSE_BUTTON_LEFT:
-		switch (action)
-		{
-		case GLFW_PRESS:
-			m_mouse_down = true;
-
-			//focusing
-			if (hover != focus)
-			{
-				if (focus != nullptr)
-				{
-					last_focus = focus;
-					GUI_FIRE_ELEMENT_EVENT(last_focus, GUIEvent(gui_event_type::element_focus_lost, this, last_focus))
-						last_focus->SetFocused(false);
-				}
-				focus = hover;
-				if (hover != this)
-				{
-					GUI_FIRE_ELEMENT_EVENT(focus, GUIEvent(gui_event_type::element_focused, this, focus))
-						focus->SetFocused(true);
-					focus->GetParent()->BringToFront(focus);
-				}
-				else
-					focus = nullptr;
-			}
-
-			if (focus != nullptr&&hover == focus)
-				focus->OnEvent(GUIEvent(mouse_pressed, this, focus));
-			break;
-		case GLFW_RELEASE:
-			m_mouse_down = false;
-			if (focus != nullptr&&hover == focus)
-				focus->OnEvent(GUIEvent(mouse_released, this, focus));
-			break;
-		default:
-			break;
-		}
-		break;
-	case GLFW_MOUSE_BUTTON_RIGHT:
-		break;
-	case GLFW_MOUSE_BUTTON_MIDDLE:
-		break;
-	default:
-		break;
 	}
 }
 
-void GUIEnvironment::on_mouse_scroll(double sx, double sy)
+void GUIEnvironment::OnMouseClick(int32_t button, int32_t action, int32_t mod)
+{
+	switch (action)
+	{
+	case GLFW_PRESS:
+		if (button == GLFW_MOUSE_BUTTON_LEFT)
+		{
+			m_mouse_down = true;
+		}
+
+		//focusing
+		if (hover != focus)
+		{
+			if (focus != nullptr)
+			{
+				last_focus = focus;
+				GUI_FIRE_ELEMENT_EVENT(last_focus, GUIEvent(gui_event_type::element_focus_lost, this, last_focus))
+					last_focus->SetFocused(false);
+			}
+			focus = hover;
+			if (hover != this)
+			{
+				GUI_FIRE_ELEMENT_EVENT(focus, GUIEvent(gui_event_type::element_focused, this, focus))
+					focus->SetFocused(true);
+				focus->GetParent()->BringToFront(focus);
+			}
+			else
+				focus = nullptr;
+		}
+
+		if (focus != nullptr&&hover == focus)
+		{
+			gui_event_type eventType = button == GLFW_MOUSE_BUTTON_LEFT ? left_mouse_pressed : button == GLFW_MOUSE_BUTTON_RIGHT ? right_mouse_pressed : middle_mouse_pressed;
+			focus->OnEvent(GUIEvent(eventType, this, focus));
+		}
+		break;
+	case GLFW_RELEASE:
+		if (button == GLFW_MOUSE_BUTTON_LEFT)
+		{
+			m_mouse_down = false;
+		}
+
+		if (focus != nullptr&&hover == focus)
+		{
+			gui_event_type eventType = button == GLFW_MOUSE_BUTTON_LEFT ? left_mouse_released : button == GLFW_MOUSE_BUTTON_RIGHT ? right_mouse_released : middle_mouse_released;
+			focus->OnEvent(GUIEvent(eventType, this, focus));
+		}
+		break;
+	default:break;
+	}
+}
+
+void GUIEnvironment::OnMouseScroll(double sx, double sy)
 {
 	return;
 }
 
-glm::vec2 GUIEnvironment::get_mouse_pos()
+glm::vec2 GUIEnvironment::GetMousePosition()
 {
 	return mouse_pos;
 }
 
-glm::vec2 GUIEnvironment::get_gui_scale()
+glm::vec2 GUIEnvironment::GetGUIScaling()
 {
 	return gui_scale;
 }
@@ -315,38 +344,36 @@ FontRenderer* GUIEnvironment::GetFontRenderer()
 	return m_font_renderer;
 }
 
-void GUIEnvironment::draw_gui_quad(Rect2D<int> dims, std::shared_ptr<Texture> tex, bool tile, bool multichannel)
+void GUIEnvironment::DrawGUIQuad(Rect2D<int> dims, TexturePtr tex, bool tile, bool multichannel, bool glTex)
 {
 	Rect2D<float> scaled_dims = ScaleGUIRect(dims.as<float>());
 
-	gui_shader->Set();
 	tex->Set(0);
 
-	gui_quad->SetUV(skin->get_uv(gui_skin_whole_texture));
+	gui_quad->SetUV(skin->get_uv(glTex?gui_skin_whole_texture_gl:gui_skin_whole_texture));
 
 	glm::mat4 M = glm::mat4(1.0f);
 
 	M = glm::translate(M, glm::vec3(scaled_dims.x, scaled_dims.y, 0));
 	M = glm::scale(M, glm::vec3(scaled_dims.w, scaled_dims.h, 0));
 
-	glUniformMatrix4fv(gui_shader->getparam("M"), 1, GL_FALSE, glm::value_ptr(M));
-	glUniform1ui(gui_shader->getparam("coloured"), 0);
-	if (!multichannel)
-		glUniform1ui(gui_shader->getparam("singlechannel"), GL_TRUE);
-	else
-		glUniform1ui(gui_shader->getparam("singlechannel"), GL_FALSE);
-	glUniform1f(gui_shader->getparam("alpha"), 1.f);
+	SetBindingSafe(gui_shader, "tex", 0);
+	SetBindingSafe(gui_shader, "M", M);
+	SetBindingSafe(gui_shader, "singlechannel", !multichannel);
+	SetBindingSafe(gui_shader, "colored", GL_FALSE);
+	SetBindingSafe(gui_shader, "color", glm::vec4(0.f));
+	SetBindingSafe(gui_shader, "alpha", 1.0f);
 
+	gui_shader->Set();
 	gui_quad->Render();
 
-	glBindTexture(GL_TEXTURE_2D, 0);
+	tex->Unset(0);
 }
 
-void GUIEnvironment::draw_gui_quad(Rect2D<int> dims, uint32_t style, bool tile)
+void GUIEnvironment::DrawGUIQuad(Rect2D<int> dims, uint32_t style, bool tile)
 {
 	Rect2D<float> scaled_dims = ScaleGUIRect(dims.as<float>());
 
-	gui_shader->Set();
 	skin_atlas->Set(0);
 
 	gui_quad->SetUV(skin->get_uv(style));
@@ -356,37 +383,43 @@ void GUIEnvironment::draw_gui_quad(Rect2D<int> dims, uint32_t style, bool tile)
 	M = glm::translate(M, glm::vec3(scaled_dims.x, scaled_dims.y, 0));
 	M = glm::scale(M, glm::vec3(scaled_dims.w, scaled_dims.h, 0));
 
-	glUniformMatrix4fv(gui_shader->getparam("M"), 1, GL_FALSE, glm::value_ptr(M));
-	glUniform1ui(gui_shader->getparam("coloured"), 0);
-
-	gui_quad->Render();
-
-	glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-void GUIEnvironment::draw_gui_quad(Rect2D<int> dims, glm::vec4 col)
-{
-	Rect2D<float> scaled_dims = ScaleGUIRect(dims.as<float>());
+	SetBindingSafe(gui_shader, "tex", 0);
+	SetBindingSafe(gui_shader, "M", M);
+	SetBindingSafe(gui_shader, "singlechannel", GL_FALSE);
+	SetBindingSafe(gui_shader, "colored", GL_FALSE);
+	SetBindingSafe(gui_shader, "color", glm::vec4(0.f));
+	SetBindingSafe(gui_shader, "alpha", 1.0f);
 
 	gui_shader->Set();
+	gui_quad->Render();
+
+	skin_atlas->Unset(0);
+}
+
+void GUIEnvironment::DrawGUIQuad(Rect2D<int> dims, glm::vec4 col)
+{
+	Rect2D<float> scaled_dims = ScaleGUIRect(dims.as<float>());
 
 	glm::mat4 M = glm::mat4(1.0f);
 
 	M = glm::translate(M, glm::vec3(scaled_dims.x, scaled_dims.y, 0));
 	M = glm::scale(M, glm::vec3(scaled_dims.w, scaled_dims.h, 0));
 
-	glUniformMatrix4fv(gui_shader->getparam("M"), 1, GL_FALSE, glm::value_ptr(M));
-	glUniform1ui(gui_shader->getparam("coloured"), 1);
-	glUniform4fv(gui_shader->getparam("color"), 1, glm::value_ptr(col));
+	SetBindingSafe(gui_shader, "tex", 0);
+	SetBindingSafe(gui_shader, "M", M);
+	SetBindingSafe(gui_shader, "singlechannel", GL_FALSE);
+	SetBindingSafe(gui_shader, "colored", GL_TRUE);
+	SetBindingSafe(gui_shader, "color", col);
+	SetBindingSafe(gui_shader, "alpha", 1.0f);
 
+	gui_shader->Set();
 	gui_quad->Render();
 }
 
-void GUIEnvironment::draw_sliced_gui_quad(Rect2D<int> size, std::shared_ptr<Texture> tex, bool tile)
+void GUIEnvironment::DrawSlicedGUIQuad(Rect2D<int> size, TexturePtr tex, bool tile)
 {
 	Rect2D<float> scaled_dims = ScaleGUIRect(size.as<float>());
 
-	gui_shader->Set();
 	tex->Set(0);
 
 	glm::mat4 M = glm::mat4(1.0f);
@@ -394,19 +427,24 @@ void GUIEnvironment::draw_sliced_gui_quad(Rect2D<int> size, std::shared_ptr<Text
 	M = glm::translate(M, glm::vec3(scaled_dims.x, scaled_dims.y, 0));
 	M = glm::scale(M, glm::vec3(scaled_dims.w, scaled_dims.h, 0));
 
-	glUniformMatrix4fv(gui_shader->getparam("M"), 1, GL_FALSE, glm::value_ptr(M));
-	glUniform1ui(gui_shader->getparam("coloured"), 0);
+	SetBindingSafe(gui_shader, "tex", 0);
+	SetBindingSafe(gui_shader, "M", M);
+	SetBindingSafe(gui_shader, "singlechannel", GL_FALSE);
+	SetBindingSafe(gui_shader, "colored", GL_FALSE);
+	SetBindingSafe(gui_shader, "color", glm::vec4(0.f));
+	SetBindingSafe(gui_shader, "alpha", 1.0f);
+
 	sliced_quad->SetRatio(glm::vec2(size.w, size.h));
+	gui_shader->Set();
 	sliced_quad->Render();
 
-	glBindTexture(GL_TEXTURE_2D, 0);
+	tex->Unset(0);
 }
 
-void GUIEnvironment::draw_sliced_gui_quad(Rect2D<int> size, uint32_t style)
+void GUIEnvironment::DrawSlicedGUIQuad(Rect2D<int> size, uint32_t style)
 {
 	Rect2D<float> scaled_dims = ScaleGUIRect(size.as<float>());
 
-	gui_shader->Set();
 	skin_atlas->Set(0);
 
 	sliced_quad->SetRatio(glm::vec2(size.w, size.h), skin->get_margin(style));
@@ -417,28 +455,36 @@ void GUIEnvironment::draw_sliced_gui_quad(Rect2D<int> size, uint32_t style)
 	M = glm::translate(M, glm::vec3(scaled_dims.x, scaled_dims.y, 0));
 	M = glm::scale(M, glm::vec3(scaled_dims.w, scaled_dims.h, 0));
 
-	glUniformMatrix4fv(gui_shader->getparam("M"), 1, GL_FALSE, glm::value_ptr(M));
-	glUniform1ui(gui_shader->getparam("coloured"), 0);
-	glUniform1f(gui_shader->getparam("alpha"), 0.9f);
-	sliced_quad->Render();
-
-	glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-void GUIEnvironment::draw_sliced_gui_quad(Rect2D<int> size, glm::vec4 col)
-{
-	Rect2D<float> scaled_dims = ScaleGUIRect(size.as<float>());
+	SetBindingSafe(gui_shader, "tex", 0);
+	SetBindingSafe(gui_shader, "M", M);
+	SetBindingSafe(gui_shader, "singlechannel", GL_FALSE);
+	SetBindingSafe(gui_shader, "colored", GL_FALSE);
+	SetBindingSafe(gui_shader, "color", glm::vec4(0.f));
+	SetBindingSafe(gui_shader, "alpha", 0.9f);
 
 	gui_shader->Set();
+	sliced_quad->Render();
+
+	skin_atlas->Unset(0);
+}
+
+void GUIEnvironment::DrawSlicedGUIQuad(Rect2D<int> size, glm::vec4 col)
+{
+	Rect2D<float> scaled_dims = ScaleGUIRect(size.as<float>());
 
 	glm::mat4 M = glm::mat4(1.0f);
 
 	M = glm::translate(M, glm::vec3(scaled_dims.x, scaled_dims.y, 0));
 	M = glm::scale(M, glm::vec3(scaled_dims.w, scaled_dims.h, 0));
 
-	glUniformMatrix4fv(gui_shader->getparam("M"), 1, GL_FALSE, glm::value_ptr(M));
-	glUniform1ui(gui_shader->getparam("coloured"), 1);
-	glUniform4fv(gui_shader->getparam("color"), 1, glm::value_ptr(col));
+	SetBindingSafe(gui_shader, "tex", 0);
+	SetBindingSafe(gui_shader, "M", M);
+	SetBindingSafe(gui_shader, "singlechannel", GL_FALSE);
+	SetBindingSafe(gui_shader, "colored", GL_TRUE);
+	SetBindingSafe(gui_shader, "color", col);
+	SetBindingSafe(gui_shader, "alpha", 1.f);
+
 	sliced_quad->SetRatio(glm::vec2(size.w, size.h));
+	gui_shader->Set();
 	sliced_quad->Render();
 }

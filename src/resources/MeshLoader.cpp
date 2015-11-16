@@ -32,13 +32,13 @@ void MeshLoader::AddLoader(IMeshLoader * loader)
 MeshPtr MeshLoader::Load(const Path & fileName)
 {
 	bool found_usable_loader = false;
-	resource<Mesh> res;
-	res = this->get_resource(fileName);
+	Resource<Mesh> res;
+	res = this->GetResource(fileName);
 
-	if (res._resource)
+	if (res.resource)
 	{
 		GetContext().GetLogger()->log(LOG_LOG, "Found mesh in cache, skipping loading.");
-		return res._resource;
+		return res.resource;
 	}
 
 	std::string ext = fileName.extension().generic_string();
@@ -59,11 +59,11 @@ MeshPtr MeshLoader::Load(const Path & fileName)
 					ByteBufferPtr buffer = file->Read();
 					GetContext().GetLogger()->log(LOG_LOG, "Mesh file size: %u", buffer->size());
 
-					res._path = fileName;
-					res._resource = MeshPtr(l->Load((const char*)buffer->data(), buffer->size()));
-					this->add_resource(res);
-					res._resource->Init();
-					return res._resource;
+					res.path = fileName;
+					res.resource = MeshPtr(l->Load((const char*)buffer->data(), buffer->size()));
+					this->AddResource(res);
+					res.resource->Init();
+					return res.resource;
 				}
 				else
 				{

@@ -1,7 +1,7 @@
 #ifndef CAMERA_OBJECT_H
 #define CAMERA_OBJECT_H
 
-#include "Plane3d.h"
+#include "utility/Plane3d.h"
 
 ///REFACTOR: WTF HAPPENED IN THIS FILE... WW3??!
 
@@ -41,6 +41,7 @@ public:
 	const glm::vec3 GetPosition() const;
 	void SetPosition(glm::vec3 pos);
 	void SetRotation(const glm::quat &rotation);
+	void ResetOrientation(glm::vec3 lookDir);
 	const float GetFar() const;
 	const float GetNear() const;
 	const float GetFOV() const;
@@ -53,10 +54,7 @@ public:
 		return m_fps;
 	}
 
-	void SetFPS(bool b)
-	{
-		m_fps = b;
-	}
+	void SetFPS(bool fps);
 
 public:
 	void Walk(const float amount);

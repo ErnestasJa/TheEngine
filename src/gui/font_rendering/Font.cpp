@@ -3,29 +3,33 @@
 #include FT_FREETYPE_H
 #include "Font.h"
 #include "FontFamily.h"
+#include "opengl/Texture.h"
 
 Font::Font(FT_Face face, int height, std::string name)
 {
-	this->avgheight = height;
 	this->name = name;
+	atlas = share(new Texture());
 
 	FT_Set_Pixel_Sizes(face, 0, height);
-	FT_GlyphSlot g = face->glyph;
+	FT_GlyphSlot g;
 
 	int roww = 0;
 	int rowh = 0;
 	w = 0;
 	h = 0;
 
+	realHeight = height;
+
 	memset(c, 0, sizeof c);
 	/* Find minimum size for a Texture holding all visible ASCII characters */
-	for (int i = 0; i < 1024; i++)
+	for (int i = 0; i < GLYPHS_PER_ATLAS; i++)
 	{
 		if (FT_Load_Char(face, i, FT_LOAD_RENDER))
 		{
 			fprintf(stderr, "Loading character %c failed!\n", i);
 			continue;
 		}
+		g = face->glyph;
 		if (roww + g->bitmap.width + 1 >= MAX_FONT_ATLAS_WIDTH)
 		{
 			w = glm::max(w, roww);
@@ -40,22 +44,12 @@ Font::Font(FT_Face face, int height, std::string name)
 	w = glm::max(w, roww);
 	h += rowh;
 
-	/* Create a Texture that will be used to hold all ASCII glyphs */
-	glGenTextures(1, &tex);
-	glBindTexture(GL_TEXTURE_2D, tex);
+	w = helpers::MakePOT(w);
+	h = helpers::MakePOT(h);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_BGR, GL_UNSIGNED_BYTE, 0);
-
-	/* We require 1 byte alignment when uploading Texture data */
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-	/* Clamping to edges is important to prevent artifacts when scaling */
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-	/* Linear filtering usually looks best for text */
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	atlas->Init(nullptr, GL_TEXTURE_2D, GL_BGR, GL_RGB, w, h);
+	atlas->SetClampMode(TextureClamp::EDGE, TextureClamp::EDGE);
+	atlas->SetFilters(TextureFilterMin::NEAREST_MIPMAP, TextureFilterMag::LINEAR);
 
 	/* Paste all glyph bitmaps into the texture, remembering the offset */
 	int ox = 0;
@@ -64,13 +58,18 @@ Font::Font(FT_Face face, int height, std::string name)
 	rowh = 0;
 	int cnth = 0;
 
-	for (int i = 0; i < 1024; i++)
+	avgheight = 0;
+
+	for (int i = 0; i < GLYPHS_PER_ATLAS; i++)
 	{
 		if (FT_Load_Char(face, i, FT_LOAD_RENDER))
 		{
 			fprintf(stderr, "Loading character %c failed!\n", i);
 			continue;
 		}
+
+		g = face->glyph;
+
 		if (g->bitmap.rows > 0)
 		{
 			avgheight += g->bitmap.rows;
@@ -82,28 +81,35 @@ Font::Font(FT_Face face, int height, std::string name)
 			rowh = 0;
 			ox = 0;
 		}
-		glTexSubImage2D(GL_TEXTURE_2D, 0, ox, oy, g->bitmap.width, g->bitmap.rows, GL_RED, GL_UNSIGNED_BYTE, g->bitmap.buffer);
-		c[i].ax = g->advance.x >> 6;
-		c[i].ay = g->advance.y >> 6;
 
-		c[i].bw = g->bitmap.width;
-		c[i].bh = g->bitmap.rows;
+		if (g->bitmap.buffer != nullptr)
+		{
+			atlas->SetSubImage2D(g->bitmap.buffer, ox, oy, g->bitmap.width, g->bitmap.rows, GL_RED);
+		}
 
-		c[i].bl = g->bitmap_left;
-		c[i].bt = g->bitmap_top;
+		c[i].ax = (float)(g->advance.x >> 6);
+		c[i].ay = (float)(g->advance.y >> 6);
 
-		c[i].tx = ox / (float)w;
-		c[i].ty = oy / (float)h;
+		c[i].bw = (float)g->bitmap.width;
+		c[i].bh = (float)g->bitmap.rows;
+
+		c[i].bl = (float)g->bitmap_left;
+		c[i].bt = (float)g->bitmap_top;
+
+		c[i].tx = (float)ox / (float)w;
+		c[i].ty = (float)oy / (float)h;
+		c[i].bitmap = new uint8_t[g->bitmap.width*g->bitmap.rows];
+		//std::copy(g->bitmap.buffer, g->bitmap.buffer+ g->bitmap.width*g->bitmap.rows, c[i].bitmap);
+		memcpy(c[i].bitmap, (void*)g->bitmap.buffer, g->bitmap.width*g->bitmap.rows*sizeof(unsigned char));
 
 		rowh = glm::max(rowh, g->bitmap.rows);
 		ox += g->bitmap.width + 1;
 	}
 	avgheight = avgheight / (float)cnth;
 	fprintf(stderr, "Generated a %d x %d (%d kb) Texture atlas\n", w, h, w * h / 1024);
-	glGenerateMipmap(GL_TEXTURE_2D);
+	atlas->InitMipmap();
 }
 
 Font::~Font()
 {
-	glDeleteTextures(1, &tex);
 }

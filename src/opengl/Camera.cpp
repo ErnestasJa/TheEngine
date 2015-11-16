@@ -27,11 +27,24 @@ Camera::Camera(const glm::vec3 &pos, const glm::vec3 &target, const glm::vec3 &u
 	fh = m_far*tang;
 	fw = fh*m_aspect_ratio;
 
-	InitFrustum();
+	//InitFrustum();
 }
 
 Camera::~Camera()
 {
+	GetContext().GetWindow()->SetCursorDisabled(false);
+}
+
+void Camera::SetFPS(bool fps)
+{
+	m_fps = fps;
+	GetContext().GetWindow()->SetCursorDisabled(fps);
+}
+
+void Camera::ResetOrientation(glm::vec3 lookDir)
+{
+	//m_rot = glm::toQuat(glm::inverse(glm::lookAt(m_pos, m_pos + lookDir * 10.f, m_up)));
+	m_P = glm::perspective(m_fov, m_aspect_ratio, m_near, m_far);
 }
 
 void Camera::InitFrustum()
@@ -82,22 +95,22 @@ INTERSECT_RESULT Camera::PointInFrustum(const glm::vec3 &point)
 
 INTERSECT_RESULT Camera::BoxInFrustum(const AABB &box)
 {
-	INTERSECT_RESULT res=IR_INSIDE;
-	bool in=false,out=false;
-	loop(i,6)
+	INTERSECT_RESULT res = IR_INSIDE;
+	bool in = false, out = false;
+	loop(i, 6)
 	{
-		in=false;
-		out=false;
-		for(int j=0; j<8 && (in==false || out==false); j++)
+		in = false;
+		out = false;
+		for (int j = 0; j < 8 && (in == false || out == false); j++)
 		{
-			if(frustumPlanes[i].Distance(box.GetPoint(j))<0)
-				out=true;
+			if (frustumPlanes[i].Distance(box.GetPoint(j)) < 0)
+				out = true;
 			else
-				in=true;
+				in = true;
 		}
-		if(!in)
+		if (!in)
 			return IR_OUTSIDE;
-		else if(out)
+		else if (out)
 			res = IR_INTERSECT;
 	}
 	return res;
@@ -174,7 +187,7 @@ void Camera::Update(float dt)
 	m_up = glm::vec3(m_rot*glm::vec3(0, 1, 0));
 	m_right = glm::cross(m_look, m_up);
 
-	InitFrustum();
+	//InitFrustum();
 }
 
 void Camera::Walk(const float amount)

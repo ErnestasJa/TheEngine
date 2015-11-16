@@ -29,10 +29,10 @@ public:
 	void Set();
 	const std::string & GetName() const;
 
-	[[deprecated("For the love of god remove this from GUI")]] int32_t getparam(const std::string & pname);
 	const vector<ShaderBinding> & GetBindings() const;
 	ShaderBinding & GetBinding(const std::string & name);
 	bool HasBinding(const std::string & name);
+	const uint32_t GetProgramId() const;
 
 
 private:

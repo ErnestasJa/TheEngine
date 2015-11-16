@@ -5,6 +5,7 @@ enum VarType
 {
 	VARNULL = 0,
 	VARI = 1,
+	VARB,
 	VARF,
 	VARS
 };
@@ -32,6 +33,7 @@ public:
 	explicit Var(const char * name, float * data, uint8_t count);
 	explicit Var(const char * name, int data);
 	explicit Var(const char * name, int * data, uint8_t count);
+	explicit Var(const char * name, bool data);
 	explicit Var(const char * name, const char * data);
 	explicit Var(const char * name, const std::string & data);
 	~Var();
@@ -40,6 +42,7 @@ public:
 	uint8_t Count() const;
 	const char * Name() const;
 	int ValueI() const;
+	bool ValueB() const;
 	float ValueF() const;
 	int* ValueIV() const;
 	float* ValueFV() const;
@@ -49,6 +52,7 @@ public:
 	void SetFlags(uint8_t flags);
 	void RemoveFlags(uint8_t flags);
 	void Value(int value);
+	void Value(bool value);
 	void Value(float value);
 	void Value(int* values, uint8_t count);
 	void Value(float* values, uint8_t count);
@@ -68,6 +72,7 @@ private:
 		int32_t * m_dataiv;
 		float     m_dataf;
 		int32_t   m_datai;
+		bool	  m_datab;
 	};
 };
 

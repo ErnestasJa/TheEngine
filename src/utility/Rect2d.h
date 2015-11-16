@@ -89,7 +89,7 @@ public:
 	template <typename B>
 	Rect2D<B> as()
 	{
-		return Rect2D<B>(x, y, w, h);
+		return Rect2D<B>((B)x, (B)y, (B)w, (B)h);
 	}
 
 	void calculate_bounds()
@@ -102,5 +102,5 @@ public:
 
 protected:
 private:
-	
+
 };

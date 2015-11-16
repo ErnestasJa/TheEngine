@@ -1,6 +1,8 @@
 #ifndef FORWARD_DECL_H
 #define FORWARD_DECL_H
 
+#define DECLARE_PTR(var) class var; typedef std::shared_ptr<var> ##var##Ptr;
+
 namespace std
 {
 	template <class T>
@@ -28,6 +30,9 @@ class ShaderLoader;
 class Timer;
 class VarGroup;
 class Material;
+class Texture;
+class IRenderObject;
+class RenderStateManager;
 
 typedef std::shared_ptr<Camera> CameraPtr;
 typedef std::shared_ptr<IFile> FilePtr;
@@ -35,8 +40,11 @@ typedef std::shared_ptr<IBindingValue> IBindingValuePtr;
 typedef std::shared_ptr<Image> ImagePtr;
 typedef std::shared_ptr<Material> MaterialPtr;
 typedef std::shared_ptr<Mesh> MeshPtr;
+typedef std::shared_ptr<Texture> TexturePtr;
 typedef std::shared_ptr<Shader> ShaderPtr;
 typedef std::shared_ptr<Timer> TimerPtr;
+typedef std::shared_ptr<IRenderObject> IRenderObjectPtr;
+typedef std::shared_ptr<VarGroup> VarGroupPtr;
 
 typedef uint32_t GLEnum;
 

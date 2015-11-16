@@ -178,3 +178,8 @@ inline glm::vec3 VectorMax(const glm::vec3 &vec1, const glm::vec3 &vec2)
 {
 	return glm::vec3(glm::max(vec1.x, vec2.x), glm::max(vec1.y, vec2.y), glm::max(vec1.z, vec2.z));
 }
+
+inline float MakePOT(float v)
+{
+	return glm::pow(2.f, glm::ceil(glm::log((v)) / glm::log(2.f)));
+}

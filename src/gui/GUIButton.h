@@ -27,6 +27,7 @@ public:
 	void Render();
 
 	void SetText(const std::wstring &text);
+	const std::wstring &GetText();
 
 	void SetImage(GUIImage *image);
 	void RemoveImage();

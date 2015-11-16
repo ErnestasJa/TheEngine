@@ -1,7 +1,10 @@
 #pragma once
 
+#include "ForwardDecl.h"
+
 #define MAX_FONT_ATLAS_WIDTH 1024
 #define MAX_FONT_ATLAS_HEIGHT 1024
+#define GLYPHS_PER_ATLAS 1024
 
 struct FontFamily;
 
@@ -9,13 +12,14 @@ struct Font
 {
 	FontFamily *myFamily;
 
-	std::string name;
+	TexturePtr atlas;
 
-	GLuint tex;		// Texture object
+	std::string name;
 
 	int w;			// width of Texture in pixels
 	int h;			// height of Texture in pixels
 	float avgheight;
+	int realHeight;
 
 	struct
 	{
@@ -30,7 +34,9 @@ struct Font
 
 		float tx;	// x offset of glyph in Texture coordinates
 		float ty;	// y offset of glyph in Texture coordinates
-	} c[1024];		// character information
+
+		uint8_t *bitmap;
+	} c[GLYPHS_PER_ATLAS];		// character information
 
 	Font(FT_Face face, int height, std::string name);
 

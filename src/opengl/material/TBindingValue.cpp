@@ -27,6 +27,12 @@ void TBindingValue<glm::mat3x3>::Set(int32_t index)
 }
 
 template <>
+void TBindingValue<glm::vec2>::Set(int32_t index)
+{
+	glUniform2fv(index, 1, glm::value_ptr(m_value));
+}
+
+template <>
 void TBindingValue<glm::vec3>::Set(int32_t index) 
 {
 	glUniform3fv(index, 1, glm::value_ptr(m_value));

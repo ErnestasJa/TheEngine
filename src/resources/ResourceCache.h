@@ -4,27 +4,38 @@
 #include "boost/filesystem/path.hpp"
 
 template <class T>
-struct resource
+struct Resource
 {
-	Path _path;
-	std::shared_ptr<T> _resource;
+	Path path;
+	std::shared_ptr<T> resource;
+
+	Resource()
+	{
+
+	}
+
+	Resource(std::shared_ptr<T> resourcePtr, Path resourcePath)
+	{
+		this->path = resourcePath;
+		this->resource = resourcePtr;
+	}
 };
 
 template <class T>
-class resource_cache
+class ResourceCache
 {
 public:
 
-	void add_resource(resource<T> res)
+	void AddResource(Resource<T> res)
 	{
 		m_resources.push_back(res);
 	}
 
-	resource<T> get_resource(const Path & path)
+	Resource<T> GetResource(const Path & path)
 	{
-		auto it = std::find_if(m_resources.begin(), m_resources.end(), [&path](resource<T> res)
+		auto it = std::find_if(m_resources.begin(), m_resources.end(), [&path](Resource<T> res)
 		{
-			return res._path == path;
+			return res.path == path;
 		});
 
 		if (it != m_resources.end())
@@ -32,11 +43,33 @@ public:
 			return (*it);
 		}
 
-		return resource<T>();
+		return Resource<T>();
+	}
+
+	bool RemoveResource(const Path & path)
+	{
+		auto it = std::find_if(m_resources.begin(), m_resources.end(), [&path](Resource<T> res)
+		{
+			return res.path == path;
+		});
+
+		if (it != m_resources.end())
+		{
+			m_resources.erase(it);
+			return true;
+		}
+
+		return false;
+	}
+
+
+	void Clear()
+	{
+		m_resources.clear();
 	}
 
 protected:
-	vector< resource<T> >  m_resources;
+	vector< Resource<T> >  m_resources;
 };
 
 template <class T>

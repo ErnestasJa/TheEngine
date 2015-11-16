@@ -15,15 +15,21 @@ class GUIPane;
 class GUISlider;
 class Texture;
 
+enum CustomColorPickerEvents :uint32_t
+{
+	color_primary = 256,
+	color_secondary
+};
+
 class GUIColorPicker :public GUIElement
 {
 private:
-	glm::vec4 colRGB;
+	glm::vec4 primaryColor,secondaryColor;
 	glm::vec3 colHSV;
 	glm::vec2 cursorPos;
 	GUIImage *cursor, *picker;
 	GUIPane *bg;
-	GUIButton *btnSet;
+	GUIButton *btnSet,*btnSwitchColor;
 	GUIEditBox *ebR, *ebG, *ebB;
 	GUISlider *sat, *val;
 	ImagePtr imgBuf;
@@ -36,8 +42,16 @@ public:
 
 	void Render();
 
-	glm::vec4 GetColorRGB();
-	void SetColorRGB(uint8_t r, uint8_t g, uint8_t b);
+	glm::vec4 GetPrimaryColorRGB();
+
+	glm::vec4 GetPrimaryColorRGBGL();
+
+	glm::vec4 GetSecondaryColorRGB();
+
+	glm::vec4 GetSecondaryColorRGBGL();
+
+	void SetPrimaryColorRGB(uint8_t r, uint8_t g, uint8_t b);
+	void SetSecondaryColorRGB(uint8_t r, uint8_t g, uint8_t b);
 
 	//    glm::vec3 GetColorHSV();
 	//    void SetColorHSV(uint32_t H, float S, float V);

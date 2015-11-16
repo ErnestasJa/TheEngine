@@ -5,7 +5,7 @@
 #include "application/AppContext.h"
 
 class AppContext;
-class ImageLoader : public resource_cache<Image>
+class ImageLoader : public ResourceCache<Image>
 {
 protected:
 	vector<IImageLoader*> m_loaders;

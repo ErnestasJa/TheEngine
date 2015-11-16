@@ -34,4 +34,6 @@ private:
 	vector<VarGroup> m_groups;
 };
 
+typedef std::shared_ptr<VarGroup> VarGroupPtr;
+
 #endif

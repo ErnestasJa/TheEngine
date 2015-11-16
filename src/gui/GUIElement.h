@@ -96,6 +96,8 @@ public:
 
 	bool IsHovered();
 
+	bool IsModal();
+
 	bool AcceptsEvents();
 
 	GUIEnvironment *GetEnvironment();

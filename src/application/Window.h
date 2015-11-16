@@ -47,7 +47,7 @@ public:
 	ApplicationWindow();
 	virtual ~ApplicationWindow();
 
-	bool Init(const std::string  &title, uint32_t width, uint32_t height, uint32_t r = 8, uint32_t g = 8, uint32_t b = 8, uint32_t alpha = 8, uint32_t depth = 24, uint32_t stencil = 8);
+	bool Init(const std::string  &title, uint32_t width, uint32_t height, bool fullscreen = false, bool windowed = true, uint32_t r = 8, uint32_t g = 8, uint32_t b = 8, uint32_t alpha = 8, uint32_t depth = 24, uint32_t stencil = 8);
 	bool GetKey(uint32_t key);
 	glm::ivec2 GetMousePos();
 	glm::ivec2 GetWindowSize();

@@ -3,15 +3,12 @@
 #include <chrono>
 
 typedef std::chrono::duration<uint32_t, std::milli> milliseconds;
+typedef std::chrono::duration<uint32_t, std::micro> microseconds;
+typedef std::chrono::duration<uint32_t, std::nano> nanoseconds;
 
-Timer::Timer()
+Timer::Timer(uint32_t begin_time, TimerResolution resolution)
 {
-	update_real_time();
-	set_time(0);
-}
-
-Timer::Timer(uint32_t begin_time)
-{
+	this->resolution = resolution;
 	set_time(begin_time);
 }
 
@@ -39,24 +36,37 @@ uint32_t Timer::get_delta_time()
 	return time - last_time;
 }
 
+float Timer::get_delta_time_ms()
+{
+	return (time - last_time)/1000.f;
+}
+
 void Timer::set_time(uint32_t time)
 {
-	update_real_time();
+	this->real_time = get_system_real_time();
 	this->start_time = this->real_time + time;
 	this->time = time;
 	this->last_time = time;
 }
 
-void Timer::update_real_time()
+uint32_t Timer::get_system_real_time()
 {
 	const std::chrono::high_resolution_clock::time_point & rt = std::chrono::high_resolution_clock::now();
-	milliseconds ms = std::chrono::duration_cast<milliseconds>(rt.time_since_epoch());
-	real_time = ms.count();
+
+	switch (resolution)
+	{
+	case TimerResolution::NANOSECOND:
+		return std::chrono::duration_cast<nanoseconds>(rt.time_since_epoch()).count();
+	case TimerResolution::MICROSECOND:
+		return std::chrono::duration_cast<microseconds>(rt.time_since_epoch()).count();
+	default:
+		return std::chrono::duration_cast<milliseconds>(rt.time_since_epoch()).count();
+	}
 }
 
 void Timer::tick()
 {
-	update_real_time();
+	real_time = get_system_real_time();
 	last_time = time;
 	time = real_time - start_time;
 }

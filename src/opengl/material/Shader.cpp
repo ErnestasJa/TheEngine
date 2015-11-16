@@ -52,7 +52,7 @@ bool Shader::CompileShaderObject(GLenum Type, uint32_t &obj, const std::string &
 }
 
 Shader::Shader(const std::string & name, const std::string & vsstr, const std::string & fsstr)
-	: name(name), vsstr(vsstr), fsstr(fsstr), program(0), vsobj(0), fsobj(0)
+	: name(name), vsstr(vsstr), fsstr(fsstr), program(0), vsobj(0), fsobj(0), gsobj(0)
 {
 }
 
@@ -126,6 +126,7 @@ void Shader::Set()
 {
 	if(program!=Shader::currentProgram)
 	{
+		//GetContext().GetLogger()->log(loglevel::LOG_LOG, "stuff is set");
 		glUseProgram(program);
 		Shader::currentProgram = program;
 	}
@@ -137,9 +138,15 @@ void Shader::Set()
 	}
 }
 
-int32_t Shader::getparam(const std::string & pname)
+bool Shader::HasBinding(const std::string & name)
 {
-	return  glGetUniformLocation(program, pname.c_str());
+	for (ShaderBinding &t : m_bindings)
+	{
+		if (t.GetName() == name)
+			return true;
+	}
+
+	return false;
 }
 
 ShaderBinding & Shader::GetBinding(const std::string & pname)
@@ -178,4 +185,9 @@ void Shader::QueryAllBindingLocations()
 		m_bindings.push_back(ShaderBinding(location, name, type));
 		GetContext().GetLogger()->log(LOG_LOG, "Binding index=%i; Name='%s'; Type=%i;\n", location, name, type);
 	}
+}
+
+const uint32_t Shader::GetProgramId() const
+{
+	return program;
 }

@@ -7,8 +7,10 @@
 #include "opengl/OpenGLExtensionLoader.h"
 #include "gui/GUIEnvironment.h"
 #include "FontRenderer.h"
+#include "opengl/Texture.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem/path.hpp>
+#include "Resources/Image.h"
 
 FontRenderer::FontRenderer()
 {
@@ -36,6 +38,7 @@ FontRenderer::FontRenderer()
 	glGenVertexArrays(1, &_VAO);
 	glGenBuffers(1, &_VBO);
 	_fontShader = GetContext().GetResourceManager()->LoadShader(Path("res/engine/shaders/font"));
+	printf("Font shader id:%d\n", _fontShader->GetProgramId());
 }
 
 FontRenderer::~FontRenderer()
@@ -46,6 +49,7 @@ FontRenderer::~FontRenderer()
 	//    }
 	_fontFamilies.clear();
 	FT_Done_FreeType(_ftLib);
+	_fontShader = nullptr;
 }
 
 Font* FontRenderer::_CreateFont(const std::string &name, const std::string &filename, const int32_t &size)
@@ -235,10 +239,20 @@ void FontRenderer::_FormatTags(TextLine &tl, std::wstring in, SubLineInfo inf)
 		boost::split(tagvals, tagvalsubstr, boost::is_any_of(L", "));
 
 		float r, g, b, a;
+
 		r = 1.f / 255.f*helpers::wtoi(tagvals[0].c_str());
 		g = 1.f / 255.f*helpers::wtoi(tagvals[1].c_str());
 		b = 1.f / 255.f*helpers::wtoi(tagvals[2].c_str());
-		a = 1.f / 255.f*helpers::wtoi(tagvals[3].c_str());
+
+		if (tagvals.size() == 4)
+		{
+			a = 1.f / 255.f*helpers::wtoi(tagvals[3].c_str());
+		}
+		else
+		{
+			a = 1.f;
+		}
+
 		inf.color = glm::vec4(r, g, b, a);
 	}
 	break;
@@ -267,9 +281,68 @@ void FontRenderer::_FormatTags(TextLine &tl, std::wstring in, SubLineInfo inf)
 	return;
 }
 
+Image* FontRenderer::RenderStringToImage(const std::wstring &text, glm::detail::tvec3<uint8_t> color, std::string fontFamilyName)
+{
+	this->UseFontFamily(fontFamilyName);
+	Font* a = _currentFont;
+
+	glm::vec2 textDimensions = this->GetTextDimensions(text);
+
+	Image* img = new Image();
+
+	int imgW = (int)glm::ceil(textDimensions.x);
+	int imgH = (int)glm::ceil(textDimensions.y);
+
+	img->Init(imgW, imgH, 4);
+
+	glm::vec2 pos(0);
+
+	/* Loop through all characters */
+	for (int i = 0; i < text.length(); i++)
+	{
+		const uint16_t p = (const uint16_t)text.c_str()[i];
+
+		/* Calculate the vertex and Texture coordinates */
+		float x2 = pos.x;
+		float y2 = pos.y;
+		float w = a->c[p].bw;
+		float h = a->c[p].bh;
+		uint8_t* bmp = a->c[p].bitmap;
+
+		/* Advance the cursor to the start of the next character */
+		pos.x += a->c[p].ax;
+		pos.y += a->c[p].ay;
+
+		/* Skip glyphs that have no pixels */
+		if (!w || !h)
+			continue;
+
+		loop(y, h)
+		{
+			loop(x, w)
+			{
+				uint8_t data = bmp[y*(int)w + x];
+
+				int xw = x2 + x;
+				int yw = h - y2 - y;
+
+				if (x2 + x > imgW)
+					printf("out of width bounds\n");
+
+				if (pos.y + h > imgH)
+					printf("out of height bounds\n");
+
+				img->SetPixel(xw, yw, color.r, color.g, color.b, data);
+			}
+		}
+	}
+
+	return img;
+}
+
 void FontRenderer::_RenderString(const std::wstring &text, glm::ivec2 pos, const glm::vec4 &color)
 {
-	glm::vec2 gs = _guiEnvironment->get_gui_scale();
+	glm::vec2 gs = _guiEnvironment->GetGUIScaling();
 	float sx, sy;
 	sx = gs.x;
 	sy = gs.y;
@@ -279,11 +352,11 @@ void FontRenderer::_RenderString(const std::wstring &text, glm::ivec2 pos, const
 	_pos.x = -1 + _pos.x*sx;
 	_pos.y = 1 - _pos.y*sy - _currentFont->avgheight*sy;
 
-	_fontShader->Set();
-	_SetFontColor(color);
-
 	/* Use the Texture containing the atlas */
-	glBindTexture(GL_TEXTURE_2D, _currentFont->tex);
+	_currentFont->atlas->Set(0);
+	_SetFontColor(color);
+	SetBindingSafe(_fontShader, "tex", 0);
+	_fontShader->Set();
 
 	glBindVertexArray(_VAO);
 
@@ -370,10 +443,6 @@ void FontRenderer::RenderString(const std::wstring &text, const glm::ivec2 &pos,
 	linesToDraw.resize(strs.size());
 
 	SubLineInfo inf;
-	inf.color = glm::vec4(1);
-	inf.shadow = false;
-	inf.bold = false;
-	inf.italic = false;
 
 	loop(i, strs.size())
 	{
@@ -428,7 +497,7 @@ void FontRenderer::RenderString(const std::wstring &text, const glm::ivec2 &pos,
 
 void FontRenderer::_SetFontColor(const glm::vec4 &color)
 {
-	glUniform4fv(_fontShader->getparam("color"), 1, glm::value_ptr(color));
+	SetBindingSafe(_fontShader, "color", color);
 }
 
 glm::vec2 FontRenderer::GetTextDimensions(const std::wstring & text)
@@ -439,8 +508,8 @@ glm::vec2 FontRenderer::GetTextDimensions(const std::wstring & text)
 
 	_FormatTags(lineToDraw, text, inf);
 
-	int len = 0;
-	int height = 0;
+	float len = 0;
+	float height = 0;
 
 	FONT_FAMILY_TYPE currentStyle = _currentFamily->currentType;
 	bool canbold = _currentFamily->Has(FFT_BOLD);
@@ -472,6 +541,11 @@ glm::vec2 FontRenderer::GetTextDimensions(const std::wstring & text)
 		}
 
 		height = _currentFont->avgheight;
+
+		if (height < _currentFont->realHeight)
+		{
+			height = _currentFont->realHeight;
+		}
 
 		if (content.bold || content.italic)
 		{

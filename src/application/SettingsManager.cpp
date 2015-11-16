@@ -33,4 +33,6 @@ void ApplicationSettingsManager::InitSettings()
 	VarGroup & videoVarGroup = this->AddGroup("video");
 	videoVarGroup.AddVar(Var("window_width", 1024));
 	videoVarGroup.AddVar(Var("window_height", 768));
+	videoVarGroup.AddVar(Var("windowed", true));
+	videoVarGroup.AddVar(Var("fullscreen", false));
 }

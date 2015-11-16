@@ -29,7 +29,7 @@ void GUISkin::load(std::string filename)
 	printf("Loading a skin %s (%s) %i\n", root->Attribute("name"), root->Attribute("atlas_name"), root->IntAttribute("atlas_size"));
 
 	XMLElement* e = root->FirstChildElement();
-	uint32_t i = 1;
+	uint32_t i = 2;
 	while (e != nullptr)
 	{
 		if (e->NoChildren())
@@ -84,8 +84,13 @@ void GUISkin::generate_uv()
 	uvs[2] = glm::vec2(1, 1);
 	uvs[3] = glm::vec2(0, 1);
 
-	uint32_t j = 4;
-	for (int32_t i = 1; i < gui_skin_style_count; i++)
+	uvs[4] = glm::vec2(0, 1);
+	uvs[5] = glm::vec2(1, 1);
+	uvs[6] = glm::vec2(1, 0);
+	uvs[7] = glm::vec2(0, 0);
+
+	uint32_t j = 8;
+	for (int32_t i = 2; i < gui_skin_style_count; i++)
 	{
 		Rect2D<float> ir = rects[i].as<float>();
 

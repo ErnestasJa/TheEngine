@@ -11,10 +11,10 @@ public:
 
 	ImagePtr LoadImage(const Path & filePath);
 	MeshPtr LoadMesh(const Path & filePath);
-	ShaderPtr LoadShader(const Path & shaderPath);
-	ShaderPtr LoadShader(const Path & vertexPath, const Path & fragmentPath);
+	ShaderPtr LoadShader(const Path & shaderPath, bool reload = false);
+	ShaderPtr LoadShader(const Path & vertexPath, const Path & fragmentPath, bool reload = false);
 
-protected: 
+protected:
 	ImageLoader * GetImageLoader();
 	ShaderLoader * GetShaderLoader();
 	MeshLoader * GetMeshLoader();

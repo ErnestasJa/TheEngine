@@ -1,5 +1,6 @@
 #include "Precomp.h"
 
+#include "gui/GUIEnvironment.h"
 #include "gui/GUIElement.h"
 
 static uint32_t _elementIdCounter = 0;
@@ -30,6 +31,10 @@ GUIElement::GUIElement(GUIEnvironment* env, Rect2D<int> dimensions)
 
 GUIElement::~GUIElement()
 {
+	if (parent)
+	{
+		parent->RemoveChild(this);
+	}
 	DestroyChildren();
 }
 
@@ -45,9 +50,9 @@ uint32_t GUIElement::GetId()
 
 void GUIElement::DestroyChildren()
 {
-	for (GUIElement* el : children)
+	while (!children.empty())
 	{
-		el->SetListening(false);
+		delete children[0];
 	}
 
 	children.clear();
@@ -58,29 +63,27 @@ void GUIElement::Render()
 	//will be overriden by everything
 }
 
-void GUIElement::AddChild(GUIElement *e)
+void GUIElement::AddChild(GUIElement *child)
 {
-	vector<GUIElement*>::iterator i = std::find(children.begin(), children.end(), e);
+	vector<GUIElement*>::iterator i = std::find(children.begin(), children.end(), child);
 	if (i != children.end())
 		return;
 
-	e->parent = this;
-	children.push_back(e);
+	child->parent = this;
+	children.push_back(child);
 
-	e->relative_rect = e->absolute_rect;
-
+	child->relative_rect = child->absolute_rect;
 	UpdateAbsolutePos();
 }
 
-void GUIElement::RemoveChild(GUIElement *e)
+void GUIElement::RemoveChild(GUIElement *child)
 {
-	vector<GUIElement*>::iterator i = std::find(children.begin(), children.end(), e);
+	vector<GUIElement*>::iterator i = std::find(children.begin(), children.end(), child);
 	if (i != children.end())
 	{
-		e->parent = nullptr;
-		i = children.erase(i);
 		(*i)->relative_rect = (*i)->absolute_rect;
-		return;
+		(*i)->parent = nullptr;
+		children.erase(i);
 	}
 }
 
@@ -212,7 +215,32 @@ void GUIElement::SetFocused(bool b)
 
 void GUIElement::SetVisible(bool b)
 {
+	if (this->IsHovered())
+	{
+		this->SetHovered(false);
+		environment->SetHoverElement(nullptr);
+	}
+
+	if (this->IsFocused())
+	{
+		this->SetFocused(false);
+		environment->SetFocusElement(nullptr);
+	}
+
+	if (modal)
+	{
+		if (b)
+		{
+			environment->SetModal(this);
+		}
+		else
+		{
+			environment->RemoveModal();
+		}
+	}
+
 	this->visible = b;
+
 	for (GUIElement* e : children)
 		e->SetVisible(b);
 }
@@ -227,13 +255,13 @@ void GUIElement::SetListening(bool b)
 	this->accept_events = b;
 }
 
-void GUIElement::SetParent(GUIElement *e)
+void GUIElement::SetParent(GUIElement *newparent)
 {
-	if (e != nullptr)
+	if (newparent)
 	{
-		if (this->parent != nullptr)
+		if (this->parent)
 			this->parent->RemoveChild(this);
-		e->AddChild(this);
+		newparent->AddChild(this);
 	}
 	else
 		return;
@@ -257,6 +285,11 @@ bool GUIElement::IsVisible()
 bool GUIElement::IsHovered()
 {
 	return this->hovered;
+}
+
+bool GUIElement::IsModal()
+{
+	return this->modal;
 }
 
 bool GUIElement::AcceptsEvents()
