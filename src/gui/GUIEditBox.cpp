@@ -11,6 +11,8 @@ GUIEditBox::GUIEditBox(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring
 	this->Type = GUIET_EDITBOX;
 	environment = env;
 
+	blink = false;
+
 	blinktimer = curspos = lastkey = reptimer = sx = maxlength = 0;
 	font_size = env->GetFontRenderer()->GetCurrentFont()->avgheight;
 
