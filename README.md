@@ -11,5 +11,5 @@ Graphics rendering engine. Targeting opengl core 3.3 profile supporting hardware
 * Basic logging functionality.
 * Basic filesystem abstraction (at core of it is physfs).
 * Basic application configuration variables (using '.json' for serialization/deserialization )
-* Timer object.
+* Other utility classes.
 * ...
