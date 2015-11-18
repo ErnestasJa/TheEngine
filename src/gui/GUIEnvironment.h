@@ -28,7 +28,6 @@ public:
 	GUIEnvironment();
 	~GUIEnvironment();
 
-	void update(float delta);
 	void Render();
 
 	bool IsGUIFocused()

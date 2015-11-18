@@ -6,6 +6,9 @@
 #include "GUIEditBox.h"
 #include "font_rendering/Font.h"
 
+#include "application/AppContext.h"
+#include "utility/Timer.h"
+
 GUIEditBox::GUIEditBox(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring text, glm::vec4 text_color, bool drawbackground, bool drawshadow, bool clearonsubmit) :GUIElement(env, dimensions)
 {
 	this->Type = GUIET_EDITBOX;
@@ -37,18 +40,19 @@ GUIEditBox::~GUIEditBox()
 {
 }
 
+void GUIEditBox::Update(float dt)
+{
+	auto time = GetContext().GetTimer()->get_time();
+
+	if (time > blinktimer + 250)
+	{
+		blink = !blink;
+		blinktimer = time;
+	}
+}
+
 void GUIEditBox::Render()
 {
-	blinktimer++;
-
-	if (blinktimer >= 50 && blinktimer < 100)
-		blink = true;
-	if (blinktimer >= 100)
-	{
-		blink = false;
-		blinktimer = 0;
-	}
-
 	_mx = absolute_rect.x + 5;
 	_mw = absolute_rect.w - 5;
 	_my = absolute_rect.y + (absolute_rect.h - font_size) / 2;
