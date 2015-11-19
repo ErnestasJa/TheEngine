@@ -116,7 +116,7 @@ vector<Path> FileSystem::GetFilesInDirectory(const Path & directory)
 
 ///~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
 
-static void AppendFiles(void *data, const char *directory, const char * fileName)
+void AppendFiles(void *data, const char *directory, const char * fileName)
 {
 	Path path(directory);
 	path.append(fileName);

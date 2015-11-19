@@ -47,7 +47,7 @@ add_library(engine STATIC
 ./opengl/IBufferObject.cpp
 ./opengl/BufferObject.cpp
 ./opengl/RenderBufferObject.cpp
-./opengl/CubeMesh.cpp
+./opengl/geometry/CubeMesh.cpp
 ./opengl/Mesh.cpp
 ./opengl/AABB.cpp
 ./opengl/Texture.cpp
