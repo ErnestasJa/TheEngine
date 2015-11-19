@@ -7,7 +7,8 @@ class Rect2D;
 class GUIEditBox :public GUIElement
 {
 private:
-	uint32_t blinktimer, curspos, reptimer, font_size, maxlength;
+	uint32_t curspos, reptimer, font_size, maxlength;
+	float blinktimer;
 	int32_t sx;
 	float _mx, _mw, _my, _mh; //margins for drawing
 	wchar_t lastkey;
@@ -24,6 +25,7 @@ public:
 	virtual ~GUIEditBox();
 
 	void Render();
+	virtual void Update(float dt);
 
 	void SetText(const std::wstring &text);
 

@@ -58,6 +58,11 @@ void GUIElement::DestroyChildren()
 	children.clear();
 }
 
+void GUIElement::Update(float dt)
+{
+	//will be overriden by everything
+}
+
 void GUIElement::Render()
 {
 	//will be overriden by everything
@@ -95,6 +100,17 @@ void GUIElement::BringToFront(GUIElement *e)
 		i = children.erase(i);
 		children.push_back(e);
 		return;
+	}
+}
+
+void GUIElement::UpdateChildren(float dt)
+{
+	Update(dt);
+
+	for (GUIElement* i : children)
+	{
+		if (i->IsVisible())
+			i->UpdateChildren(dt);
 	}
 }
 
@@ -241,8 +257,8 @@ void GUIElement::SetVisible(bool b)
 
 	this->visible = b;
 
-	for (GUIElement* e : children)
-		e->SetVisible(b);
+	/*for (GUIElement* e : children)
+		e->SetVisible(b);*/
 }
 
 void GUIElement::SetHovered(bool b)

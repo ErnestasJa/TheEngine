@@ -135,10 +135,6 @@ GUIPane* GUIEnvironment::AddGUIPane(Rect2D<int> dimensions, bool draw)
 	return ret;
 }
 
-void GUIEnvironment::update(float delta)
-{
-}
-
 void GUIEnvironment::Render()
 {
 	glDisable(GL_DEPTH_TEST);

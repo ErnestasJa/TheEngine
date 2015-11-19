@@ -55,7 +55,11 @@ public:
 	//each element handles it's own rendering
 	virtual void Render();
 
+	virtual void Update(float dt);
+
 	void RenderChildren();
+
+	void UpdateChildren(float dt);
 
 	void AddChild(GUIElement *e);
 
