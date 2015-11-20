@@ -1,7 +1,7 @@
 #ifndef AABB_H
 #define AABB_H
 
-#include "utility/Vector.h"
+#include "core/Vector.h"
 
 class AABB
 {

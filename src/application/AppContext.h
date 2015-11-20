@@ -12,6 +12,7 @@ class AppContext: private boost::noncopyable
 protected:
 	AppContext();
 	virtual ~AppContext();
+
 public:
 	friend class Application;
 	static AppContext & Instance();

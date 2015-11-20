@@ -1,5 +1,5 @@
 #include "Precomp.h"
-#include "utility/Vector.h"
+#include "core/Vector.h"
 #include "utility/Rect2d.h"
 #include "GUISkin.h"
 

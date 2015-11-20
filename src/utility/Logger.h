@@ -25,13 +25,13 @@ public:
 	~Logger();
 
 	void log(loglevel lev, const char* st, ...);
-	void SetLogFile(FilePtr file);
+	void SetLogFile(IFilePtr file);
 	void SetTimestampedLogFile();
 	Path GenerateLogFileName();
 
 private:
 	int m_verbosity;
-	FilePtr m_logfile;
+	IFilePtr m_logfile;
 	//vector< std::pair<debuglevel,std::string> > outputs; //wrapped outputs for easy output
 
 	std::string GenerateTimestamp(); //timestamp generation

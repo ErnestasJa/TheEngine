@@ -10,7 +10,7 @@
  * sh->set();
  **/
 
-#include "utility/Vector.h"
+#include "core/Vector.h"
 #include "ForwardDecl.h"
 #include "ShaderBinding.h"
 

@@ -1,7 +1,7 @@
 #ifndef RENDER_STATEMANAGER_H
 #define RENDER_STATEMANAGER_H
 
-#include "utility/Vector.h"
+#include "core/Vector.h"
 #include "ForwardDecl.h"
 
 class RenderStateManager

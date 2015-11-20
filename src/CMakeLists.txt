@@ -67,6 +67,7 @@ add_library(engine STATIC
 ./core/VarJsonReader.cpp
 ./core/FileSystem.cpp
 ./core/File.cpp
+./core/EngineProvider.cpp
 ./gui/font_rendering/FontFamily.cpp
 ./gui/font_rendering/Font.cpp
 ./gui/font_rendering/FontRenderer.cpp

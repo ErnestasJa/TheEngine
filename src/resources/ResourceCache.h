@@ -1,5 +1,5 @@
 #pragma once
-#include "utility/Vector.h"
+#include "core/Vector.h"
 #include "ForwardDecl.h"
 #include "boost/filesystem/path.hpp"
 

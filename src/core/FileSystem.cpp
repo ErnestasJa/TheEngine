@@ -102,6 +102,7 @@ bool FileSystem::CreateDirectory(const Path & path)
 		GetContext().GetLogger()->log(LOG_LOG, "Failed to create directory, error: %s", PHYSFS_getLastError());
 		//printf("Failed to create directory, error: %s\n", PHYSFS_getLastError());
 	}
+	
 
 	return returnCode != 0;
 }

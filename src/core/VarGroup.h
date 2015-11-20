@@ -1,7 +1,7 @@
 #ifndef VARGROUP_H
 #define VARGROUP_H
 
-#include "utility/Vector.h"
+#include "core/Vector.h"
 #include <boost/core/noncopyable.hpp>
 
 class Var;

@@ -1,7 +1,7 @@
 #ifndef RENDERABLE_OBJECT_MANAGER_H
 #define RENDERABLE_OBJECT_MANAGER_H
 
-#include "utility/Vector.h"
+#include "core/Vector.h"
 #include "ForwardDecl.h"
 
 /*

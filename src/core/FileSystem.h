@@ -1,7 +1,7 @@
 #ifndef FILESYSTEM
 #define FILESYSTEM
 
-#include "utility/Vector.h"
+#include "core/Vector.h"
 #include "boost/filesystem/path.hpp"
 #include "IFile.h"
 

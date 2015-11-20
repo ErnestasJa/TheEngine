@@ -2,7 +2,7 @@
 #define BUFFER_OBJECT_H
 
 #include "IBufferObject.h"
-#include "utility/Vector.h"
+#include "core/Vector.h"
 
 template <class T>
 struct BufferObject : public IBufferObject

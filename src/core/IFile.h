@@ -2,7 +2,7 @@
 #define IFILE_H
 
 #include "EFileMode.h"
-#include "utility/Vector.h"
+#include "core/Vector.h"
 typedef vector<uint8_t> ByteBuffer;
 typedef std::shared_ptr<ByteBuffer> ByteBufferPtr;
 

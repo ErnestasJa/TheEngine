@@ -1,50 +1,44 @@
 #ifndef FORWARD_DECL_H
 #define FORWARD_DECL_H
 
-#define DECLARE_PTR(var) class var; typedef std::shared_ptr<var> ##var##Ptr;
-
 namespace std
 {
-	template <class T>
-	class shared_ptr;
+	template <class T>	class shared_ptr;
+	template <class T>	class weak_ptr;
 }
 
-class AppContext;
-class ApplicationSettingsManager;
-class ApplicationWindow;
-class Camera;
-class FileSystem;
-class GUIEnvironment;
-class IBindingValue;
-class IFile;
-class Image;
-class ImageLoader;
-class InputHandler;
-class Logger;
-class Mesh;
-class MeshLoader;
-class OpenGLExtensionLoader;
-class ResourceManager;
-class Shader;
-class ShaderLoader;
-class Timer;
-class VarGroup;
-class Material;
-class Texture;
-class IRenderObject;
-class RenderStateManager;
 
-typedef std::shared_ptr<Camera> CameraPtr;
-typedef std::shared_ptr<IFile> FilePtr;
-typedef std::shared_ptr<IBindingValue> IBindingValuePtr;
-typedef std::shared_ptr<Image> ImagePtr;
-typedef std::shared_ptr<Material> MaterialPtr;
-typedef std::shared_ptr<Mesh> MeshPtr;
-typedef std::shared_ptr<Texture> TexturePtr;
-typedef std::shared_ptr<Shader> ShaderPtr;
-typedef std::shared_ptr<Timer> TimerPtr;
-typedef std::shared_ptr<IRenderObject> IRenderObjectPtr;
-typedef std::shared_ptr<VarGroup> VarGroupPtr;
+#define DECLARE_PTR(var)\
+	class var;\
+	typedef std::shared_ptr<var> var##Ptr;\
+	typedef std::weak_ptr<var> var##WeakPtr
+
+DECLARE_PTR(AppContext);
+DECLARE_PTR(ApplicationSettingsManager);
+DECLARE_PTR(ApplicationWindow);
+DECLARE_PTR(Camera);
+DECLARE_PTR(FileSystem);
+DECLARE_PTR(GUIEnvironment);
+DECLARE_PTR(IBindingValue);
+DECLARE_PTR(IFile);
+DECLARE_PTR(Image);
+DECLARE_PTR(ImageLoader);
+DECLARE_PTR(InputHandler);
+DECLARE_PTR(Logger);
+DECLARE_PTR(Mesh);
+DECLARE_PTR(MeshLoader);
+DECLARE_PTR(OpenGLExtensionLoader);
+DECLARE_PTR(ResourceManager);
+DECLARE_PTR(Shader);
+DECLARE_PTR(ShaderLoader);
+DECLARE_PTR(Timer);
+DECLARE_PTR(VarGroup);
+DECLARE_PTR(Material);
+DECLARE_PTR(Texture);
+DECLARE_PTR(IRenderObject);
+DECLARE_PTR(RenderStateManager);
+DECLARE_PTR(EngineProvider);
+DECLARE_PTR(IEngineModule);
 
 typedef uint32_t GLEnum;
 
