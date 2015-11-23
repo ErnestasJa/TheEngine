@@ -13,3 +13,5 @@ Graphics rendering engine. Targeting opengl core 3.3 profile supporting hardware
 * Basic application configuration variables (using '.json' for serialization/deserialization )
 * Other utility classes.
 * ...
+
+[![Stories in Ready](https://badge.waffle.io/serengeor/TheEngine.png?label=ready&title=Ready)](http://waffle.io/serengeor/TheEngine)
