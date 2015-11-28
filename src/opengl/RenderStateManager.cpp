@@ -1,7 +1,7 @@
 #include "Precomp.h"
 #include "RenderStateManager.h"
 #include "application/AppContext.h"
-#include "utility/Logger.h"
+#include "modules/logging/Logger.h"
 
 
 RenderStateManager & GetRenderStateManager()

@@ -4,7 +4,7 @@
 #include "stb_image.h"
 
 #include "application/AppContext.h"
-#include "utility/Logger.h"
+#include "modules/logging/Logger.h"
 
 png_loader::png_loader()
 {

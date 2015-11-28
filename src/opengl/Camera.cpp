@@ -1,5 +1,5 @@
 #include "Precomp.h"
-#include "utility/Logger.h"
+#include "modules/logging/Logger.h"
 #include "Camera.h"
 #include "application/AppContext.h"
 #include "opengl/AABB.h"

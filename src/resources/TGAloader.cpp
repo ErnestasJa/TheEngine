@@ -4,7 +4,7 @@
 #include "glm.hpp"
 
 #include "application/AppContext.h"
-#include "utility/Logger.h"
+#include "modules/logging/Logger.h"
 
 tgaloader::tgaloader()
 {

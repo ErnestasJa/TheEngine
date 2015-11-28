@@ -1,7 +1,7 @@
 #include "Precomp.h"
 #include "utility/Helpers.h"
 #include "application/AppContext.h"
-#include "utility/Logger.h"
+#include "modules/logging/Logger.h"
 #include "opengl/material/Shader.h"
 #include "resources/ResourceManager.h"
 #include "opengl/OpenGLExtensionLoader.h"

@@ -1,9 +1,9 @@
 #include "Precomp.h"
 #include "ShaderLoader.h"
 #include "opengl/material/Shader.h"
-#include "utility/Logger.h"
+#include "modules/logging/Logger.h"
 #include "application/AppContext.h"
-#include "core/FileSystem.h"
+#include "modules/filesystem/FileSystem.h"
 
 ShaderLoader::ShaderLoader()
 {

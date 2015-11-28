@@ -5,8 +5,8 @@
 #include "TGAloader.h"
 #include "opengl/Texture.h"
 
-#include "utility/Logger.h"
-#include "core/FileSystem.h"
+#include "modules/logging/Logger.h"
+#include "modules/filesystem/FileSystem.h"
 
 ImageLoader::ImageLoader()
 {

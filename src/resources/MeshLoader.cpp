@@ -3,8 +3,8 @@
 #include "MeshLoader.h"
 #include "IQMLoader.h"
 #include "opengl/Mesh.h"
-#include "utility/Logger.h"
-#include "core/FileSystem.h"
+#include "modules/logging/Logger.h"
+#include "modules/filesystem/FileSystem.h"
 #include "boost/filesystem/path.hpp"
 
 MeshLoader::MeshLoader()

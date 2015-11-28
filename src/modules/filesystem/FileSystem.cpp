@@ -1,7 +1,7 @@
 #include "Precomp.h"
 
 #include "application/AppContext.h"
-#include "utility/Logger.h"
+#include "modules/logging/Logger.h"
 #include "FileSystem.h"
 #include "File.h"
 #include "PathTools.h"
@@ -14,7 +14,7 @@ FileSystem::FileSystem(const char * argv)
 
 	path = WorkaroundVisualStudio(path);
 
-	PHYSFS_init(path.c_str());
+	bool successInit = PHYSFS_init(path.c_str()) == 0;
 	PHYSFS_permitSymbolicLinks(1);
 	m_workingDirectory = GetPhysFSWorkingDirectory();
 	auto test = m_workingDirectory.generic_string();
@@ -26,6 +26,31 @@ FileSystem::~FileSystem()
 {
 	if (!PHYSFS_deinit())
 		std::cout << "PHYSFS_deinit() failed!\n reason: " << PHYSFS_getLastError() << "." << std::endl;
+}
+
+bool FileSystem::Initialize(EngineModuleProviderWeakPtr ptr)
+{
+	return true;
+}
+
+bool FileSystem::IsInitialized() const
+{
+	return true;
+}
+
+const std::string & FileSystem::GetName() const
+{
+	return "File system";
+}
+
+const ModuleType FileSystem::GetType() const
+{
+	return ModuleType::FileSystem;
+}
+
+uint32_t FileSystem::GetExtendedType() const
+{
+	return 0;
 }
 
 bool FileSystem::SetWriteDirectory(const Path & path)

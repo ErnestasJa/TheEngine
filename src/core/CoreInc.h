@@ -1,9 +1,9 @@
 #ifndef CORE_INC_H
 #define CORE_INC_H
 
-#include "EFileMode.h"
-#include "IFile.h"
-#include "FileSystem.h"
+#include "modules/filesystem/EFileMode.h"
+#include "modules/filesystem/IFile.h"
+#include "modules/filesystem/FileSystem.h"
 #include "Var.h"
 #include "VarGroup.h"
 #include "VarJsonReader.h"

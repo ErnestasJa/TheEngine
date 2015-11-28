@@ -2,6 +2,7 @@
 #define LOGGER_H
 
 #include "ForwardDecl.h"
+#include "modules/IEngineModule.h"
 
 //logger levels
 ///REFACTOR: bitwise levels, verbosity from config, separate verbosity for file, console.
@@ -15,7 +16,7 @@ enum loglevel
 };
 
 class AppContext;
-class Logger
+class Logger: public IEngineModule
 {
 public:
 	Logger(int verbosity); //to be decided
@@ -24,9 +25,16 @@ public:
 	//verbosity 2: only errors
 	~Logger();
 
+	virtual bool Initialize(EngineModuleProviderWeakPtr ptr);
+	virtual bool IsInitialized() const;
+	virtual const std::string & GetName() const;
+	virtual const ModuleType GetType() const;
+	virtual uint32_t GetExtendedType() const;
+
 	void log(loglevel lev, const char* st, ...);
 	void SetLogFile(IFilePtr file);
-	void SetTimestampedLogFile();
+
+private:
 	Path GenerateLogFileName();
 
 private:

@@ -5,26 +5,27 @@
 
 enum class ModuleType:uint32_t
 {
-	UNDEFINED = 0,
-	FILESYSTEM = 1,
-	LOGGING = 2,
-	WINDOW = 3,
+	Undefined = 0,
+	FileSystem = 1,
+	Logging = 2,
+	Window = 3,
 
 	COUNT,
 	// For modules registered outside the engine scope.
 	// Make sure to provide unique ids
-	EXTERNAL = 128 
+	EXTENDED = 128 
 };
 
+// Module is a part of application that has only one instance per application lifetime.
 class IEngineModule
 {
 public:
 	virtual ~IEngineModule(){}
-	virtual bool ResolveDependantModules(std::weak_ptr<EngineProvider> ptr);
+	virtual bool Initialize(EngineModuleProviderWeakPtr ptr) = 0;
 	virtual bool IsInitialized() const = 0;
 	virtual const std::string & GetName() const = 0;
-	virtual ModuleType GetType() const = 0;
-	virtual uint32_t GetExternalType() const = 0;
+	virtual const ModuleType GetType() const = 0;
+	virtual uint32_t GetExtendedType() const = 0;
 };
 
 typedef std::function<IEngineModulePtr(void)> EngineModuleCreateFunc;

@@ -4,9 +4,9 @@
 #include "json/reader.h"
 #include "core/Var.h"
 #include "core/VarGroup.h"
-#include "utility/Logger.h"
+#include "modules/logging/Logger.h"
 #include "application/AppContext.h"
-#include "core/FileSystem.h"
+#include "modules/filesystem/FileSystem.h"
 
 
 VarJsonReader::VarJsonReader()

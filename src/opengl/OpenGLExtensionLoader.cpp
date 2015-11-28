@@ -1,7 +1,7 @@
 #include "Precomp.h"
 #include "OpenGLExtensionLoader.h"
 #include "application/AppContext.h"
-#include "utility/Logger.h"
+#include "modules/logging/Logger.h"
 
 #if defined(__MINGW32__) || defined(_WIN32)
 #include <GLXW/glxw_wgl.h>

@@ -4,7 +4,7 @@
 #include "opengl/Mesh.h"
 #include "opengl/BufferObject.h"
 #include "utility/Util.h"
-#include "utility/Logger.h"
+#include "modules/logging/Logger.h"
 
 IQMLoader::IQMLoader()
 {

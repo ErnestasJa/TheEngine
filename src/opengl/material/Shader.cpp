@@ -1,7 +1,7 @@
 #include "Precomp.h"
 #include "Shader.h"
 #include "application/AppContext.h"
-#include "utility/Logger.h"
+#include "modules/logging/Logger.h"
 
 
 uint32_t Shader::currentProgram = -1;

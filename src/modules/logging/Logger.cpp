@@ -1,10 +1,11 @@
 #include "Precomp.h"
 
-#include "utility/Logger.h"
+#include "modules/logging/Logger.h"
 #include "application/AppContext.h"
 #include "application/SettingsManager.h"
 #include "utility/Timer.h"
-#include "core/FileSystem.h"
+#include "modules/filesystem/FileSystem.h"
+#include "modules/EngineModuleProvider.h"
 
 
 Logger::Logger(int verbosity)
@@ -17,6 +18,42 @@ Logger::~Logger()
 {
 	log(LOG_DEBUG, "Logger is terminating...");
 }
+
+bool Logger::Initialize(EngineModuleProviderWeakPtr ptr)
+{
+	if (auto provider = ptr.lock())
+	{
+		auto modulew = provider->GetModuleWithType<FileSystem>(ModuleType::FileSystem);
+
+		if(auto module = modulew.lock())
+		{
+			m_logfile = module->OpenWrite(GenerateLogFileName());
+		}
+	}
+
+	return false;
+}
+
+bool Logger::IsInitialized() const
+{
+	return true;
+}
+
+const std::string & Logger::GetName() const
+{
+	return "Logging";
+}
+
+const ModuleType Logger::GetType() const
+{
+	return ModuleType::Logging;
+}
+
+uint32_t Logger::GetExtendedType() const
+{
+	return 0;
+}
+
 
 void Logger::log(loglevel lev, const char* formatString, ...)
 {
@@ -34,11 +71,6 @@ void Logger::log(loglevel lev, const char* formatString, ...)
 void Logger::SetLogFile(FilePtr file)
 {
 	m_logfile = file;
-}
-
-void Logger::SetTimestampedLogFile()
-{
-	m_logfile = GetContext().GetFileSystem()->OpenWrite(GenerateLogFileName());
 }
 
 std::string Logger::FormatMessage(loglevel lev, const char* formatString, va_list & variableArgumentList)

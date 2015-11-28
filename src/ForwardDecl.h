@@ -37,7 +37,7 @@ DECLARE_PTR(Material);
 DECLARE_PTR(Texture);
 DECLARE_PTR(IRenderObject);
 DECLARE_PTR(RenderStateManager);
-DECLARE_PTR(EngineProvider);
+DECLARE_PTR(EngineModuleProvider);
 DECLARE_PTR(IEngineModule);
 
 typedef uint32_t GLEnum;

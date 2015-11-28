@@ -2,11 +2,11 @@
 
 #include "Window.h"
 #include "utility/Timer.h"
-#include "utility/Logger.h"
+#include "modules/logging/Logger.h"
 #include "utility/StringUtil.h"
 #include "boost/filesystem/path.hpp"
 #include "boost/filesystem/operations.hpp"
-#include "core/FileSystem.h"
+#include "modules/filesystem/FileSystem.h"
 #include "Application.h"
 #include "SettingsManager.h"
 #include "resources/ResourceManager.h"

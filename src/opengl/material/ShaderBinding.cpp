@@ -4,7 +4,7 @@
 #include "ShaderBinding.h"
 
 #include "application/AppContext.h"
-#include "utility/Logger.h"
+#include "modules/logging/Logger.h"
 #include <utility>
 
 

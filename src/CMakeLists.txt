@@ -61,13 +61,13 @@ add_library(engine STATIC
 ./utility/Util.cpp
 ./utility/Helpers.cpp
 ./utility/Timer.cpp
-./utility/Logger.cpp
 ./core/VarGroup.cpp
 ./core/Var.cpp
 ./core/VarJsonReader.cpp
-./core/FileSystem.cpp
-./core/File.cpp
-./core/EngineProvider.cpp
+./modules/EngineModuleProvider.cpp
+./modules/filesystem/FileSystem.cpp
+./modules/filesystem/File.cpp
+./modules/logging/Logger.cpp
 ./gui/font_rendering/FontFamily.cpp
 ./gui/font_rendering/Font.cpp
 ./gui/font_rendering/FontRenderer.cpp

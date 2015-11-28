@@ -4,15 +4,22 @@
 #include "core/Vector.h"
 #include "boost/filesystem/path.hpp"
 #include "IFile.h"
+#include "modules/IEngineModule.h"
 
 using Path = boost::filesystem::path;
 class AppContext;
 
-class FileSystem
+class FileSystem: public IEngineModule
 {
 public:
 	FileSystem(const char * argv);
 	virtual ~FileSystem();
+
+	virtual bool Initialize(EngineModuleProviderWeakPtr ptr);
+	virtual bool IsInitialized() const;
+	virtual const std::string & GetName() const;
+	virtual const ModuleType GetType() const;
+	virtual uint32_t GetExtendedType() const;
 
 	bool SetWriteDirectory(const Path & path);
 	Path GetWriteDirectory();
@@ -29,7 +36,7 @@ public:
 
 	static Path MakePosix(const Path& path);
 
-private:	
+private:
 	Path m_writeDirectory, m_workingDirectory;
 	vector<Path> m_searchDirectories;
 };
