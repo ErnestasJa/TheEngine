@@ -27,7 +27,7 @@ bool VarJsonReader::Read(void * buffer, uint32_t size, VarGroup & group)
 
 	Json::Value root;
 
-	if(!reader.parse(doc, doc + size, root) && m_logger)
+	if (!reader.parse(doc, doc + size, root) && m_logger)
 		m_logger->log(LOG_WARN, "%s\n", "Failed to parse json buffer.");
 
 	LoadGroup(group, root, m_logger);
@@ -37,8 +37,8 @@ bool VarJsonReader::Read(void * buffer, uint32_t size, VarGroup & group)
 bool VarJsonReader::Read(const Path & fileName, VarGroup & group)
 {
 	FilePtr file = m_fileSystem->OpenRead(fileName);
-	
-	if(file && file->IsOpen())
+
+	if (file && file->IsOpen())
 	{
 		ByteBufferPtr buffer = file->Read();
 		return Read(buffer->data(), buffer->size(), group);
@@ -55,7 +55,7 @@ bool VarJsonReader::Write(const Path & fileName, VarGroup & group)
 	Json::StyledWriter writer;
 
 	Json::Value root = Json::Value(Json::objectValue);
-	
+
 	BuildGroup(group, root);
 
 	std::string buf = writer.write(root);
@@ -68,8 +68,8 @@ bool VarJsonReader::Write(const Path & fileName, VarGroup & group)
 void WriteFile(const Path & fileName, const std::string & jsonString)
 {
 	FilePtr file = GetContext().GetFileSystem()->OpenWrite(fileName);
-	
-	if(file && file->IsOpen())
+
+	if (file && file->IsOpen())
 	{
 		file->Write((void*)&jsonString[0], jsonString.size());
 	}
@@ -83,7 +83,7 @@ void BuildGroup(VarGroup & group, Json::Value & parentValue)
 
 	BuildVars(group, newGroup);
 
-	for(auto & varGroup : group.Groups())
+	for (auto & varGroup : group.Groups())
 	{
 		BuildGroup(varGroup, newGroup);
 	}
@@ -92,22 +92,26 @@ void BuildGroup(VarGroup & group, Json::Value & parentValue)
 
 void BuildVars(VarGroup & group, Json::Value & groupValue)
 {
-	for(auto & var : group.Vars())
+	for (auto & var : group.Vars())
 	{
-		switch(var.Type()){
-			case VARI:
-				groupValue[var.Name()] = Json::Value(var.ValueI());
+		switch (var.Type()) {
+		case VARB:
+			groupValue[var.Name()] = Json::Value(var.ValueB());
 			break;
 
-			case VARF:
-				groupValue[var.Name()] = Json::Value(var.ValueF());
+		case VARI:
+			groupValue[var.Name()] = Json::Value(var.ValueI());
 			break;
 
-			case VARS:
-				groupValue[var.Name()] = Json::Value(var.ValueS());
+		case VARF:
+			groupValue[var.Name()] = Json::Value(var.ValueF());
 			break;
 
-			default:
+		case VARS:
+			groupValue[var.Name()] = Json::Value(var.ValueS());
+			break;
+
+		default:
 			break;
 		}
 	}
@@ -131,6 +135,9 @@ void LoadGroup(VarGroup & g, Json::Value & jg, Logger * logger)
 		if (!jvar.isNull())
 			switch (var.Type())
 			{
+			case VARB:
+				var.Value(jvar.asBool());
+				break;
 			case VARI:
 				var.Value(jvar.asInt());
 				break;
