@@ -32,6 +32,11 @@ AppContext & AppContext::Instance()
     return instance;
 }
 
+bool AppContext::IsInitializedNoGL()
+{
+	return p_timer && p_logger && p_settingsManager && p_fileSystem && p_resourceManager;
+}
+
 bool AppContext::IsInitialized()
 {
 	return p_window && p_timer && p_logger && p_settingsManager && p_fileSystem && p_openGLExtensionLoader && p_resourceManager;

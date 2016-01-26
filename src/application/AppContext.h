@@ -16,6 +16,7 @@ public:
 	friend class Application;
 	static AppContext & Instance();
 	bool IsInitialized();
+	bool IsInitializedNoGL();
 
 	ApplicationSettingsManager * GetApplicationSettingsManager();
 	ApplicationWindow * GetWindow();

@@ -53,6 +53,18 @@ bool Application::InitSimple(const std::string  &title)
 	return true;
 }
 
+bool Application::InitConsoleOnly()
+{
+	InitContextBasics();
+	InitFileSystem();
+	LoadConfig();
+
+	if (!GetContext().IsInitializedNoGL())
+		throw "Failed to initialize app context.";
+
+	return true;
+}
+
 bool Application::InitFileSystem()
 {
 	///set working directory to where the binary is.

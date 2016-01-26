@@ -27,6 +27,7 @@ public:
 	
 	///Call this one func..
 	bool InitSimple(const std::string & title);
+	bool InitConsoleOnly();
 	///.. Or call these manually
 	bool InitContextBasics();
 	bool InitFileSystem();
