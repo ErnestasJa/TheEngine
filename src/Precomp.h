@@ -20,8 +20,8 @@
 #include <stdarg.h>
 
 // OPENGL RELATED LIBS
-#include <GLXW/glxw.h>
-#include <GLFW/glfw3.h>
+#include "GLXW/glxw.h"
+#include "GLFW/glfw3.h"
 
 #include "glm.hpp"
 #include "gtx/norm.hpp"

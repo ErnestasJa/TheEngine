@@ -1,6 +1,6 @@
 #include "Precomp.h"
 
-#include "GUI/GUIButton.h"
+#include "gui/GUIButton.h"
 
 #include "ToggleGroup.h"
 

@@ -1,7 +1,7 @@
 #ifndef FORWARD_DECL_H
 #define FORWARD_DECL_H
 
-#define DECLARE_PTR(var) class var; typedef std::shared_ptr<var> ##var##Ptr;
+#define DECLARE_PTR(var) class var; typedef std::shared_ptr< var > var##Ptr;
 
 namespace std
 {

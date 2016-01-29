@@ -100,16 +100,16 @@ class Helper:
             
 
         #Write lib names to file for easy config
-        fname = os.path.join(self.get_build_path_for('libraries'), "liblist.txt")
-        file = open(fname, "w")
+        # fname = os.path.join(self.get_build_path_for('libraries'), "liblist.txt")
+        # file = open(fname, "w")
 
-        print("Libs found: " + str(len(matches)))
+        # print("Libs found: " + str(len(matches)))
 
-        for f in matches:
-            name = f[0]
-            file.write(name[3:len(name)-2]+"\n")
+        # for f in matches:
+        #     name = f[0]
+        #     file.write(name[3:len(name)-2]+"\n")
 
-        file.close()
+        # file.close()
 
         os.chdir(self.get_path_for('engine'))
 
@@ -140,7 +140,9 @@ class Helper:
         os.chdir('build')
 
         if(self.platform == "linux"):
-            subprocess.call('cmake ../ -DCMAKE_BUILD_TYPE=RelWithDebInfo -G "Unix Makefiles" -DPROJECT_PATH:STRING="/home/serengeor/Coding/Project/TheEngine"', shell=True)
+            projectPath = os.path.normpath(os.getcwd() + os.sep + os.pardir + os.sep + os.pardir)
+            print("projectPath=" + projectPath)
+            subprocess.call('cmake ../ -DCMAKE_BUILD_TYPE=RelWithDebInfo -G "Unix Makefiles" -DPROJECT_PATH:STRING="'+projectPath+'"', shell=True)
             subprocess.call('make ' + self.buildcores, shell=True)
        
         os.chdir(self.get_path_for('engine'))

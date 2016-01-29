@@ -1,6 +1,6 @@
 #include "Precomp.h"
 
-#include "../OpenglInc.h"
+#include "opengl/OpenGLInc.h"
 #include "Quad.h"
 
 Quad::Quad(float size)

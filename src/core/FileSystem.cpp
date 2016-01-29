@@ -19,6 +19,7 @@ FileSystem::FileSystem(const char * argv)
 	auto test = m_workingDirectory.generic_string();
 	auto cstr = test.c_str();
 	PHYSFS_mount(cstr, NULL, 0);
+	PHYSFS_permitSymbolicLinks(1);
 }
 
 FileSystem::~FileSystem()
@@ -114,8 +115,7 @@ vector<Path> FileSystem::GetFilesInDirectory(const Path & directory)
 }
 
 ///~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
-
-static void AppendFiles(void *data, const char *directory, const char * fileName)
+void AppendFiles(void *data, const char *directory, const char * fileName)
 {
 	Path path(directory);
 	path.append(fileName);
