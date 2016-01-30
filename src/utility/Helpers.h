@@ -4,7 +4,7 @@
 #include <sstream>
 
 #define loop(var,count) for(uint32_t (var) = 0; (var) < (count); (var)++)
-#define loopi(count) for(int32_t i = 0; i < (count); i++)
+#define loopi(count) for(uint32_t i = 0; i < (count); i++)
 #define loopr(var,start,count) for(uint32_t (var) = (start); (var) < (count); (var)++)
 #define loopxyz(cx,cy,cz) loop(z,(cz)) loop(y,(cy)) loop(x,(cx))
 #define loopxyzr(cx,sx,ex,cy,sy,ey,cz,sz,ez) loopr((cz),sz,ez) loopr((cy),sy,ey) loopr((cx),sx,ex)
