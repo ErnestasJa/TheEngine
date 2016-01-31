@@ -91,17 +91,18 @@ Font::Font(FT_Face face, int height, std::string name)
         c[i].tx = (float)ox / (float)w;
         c[i].ty = (float)oy / (float)h;
         c[i].bitmap = new uint8_t[g->bitmap.width * g->bitmap.rows];
-        // std::copy(g->bitmap.buffer, g->bitmap.buffer+ g->bitmap.width*g->bitmap.rows, c[i].bitmap);
-        memcpy(c[i].bitmap, (void*)g->bitmap.buffer, g->bitmap.width * g->bitmap.rows * sizeof(unsigned char));
+        std::copy(g->bitmap.buffer, g->bitmap.buffer + g->bitmap.width * g->bitmap.rows, c[i].bitmap);
+        // memcpy(c[i].bitmap, (void*)g->bitmap.buffer, g->bitmap.width * g->bitmap.rows * sizeof(unsigned char));
 
         rowh = glm::max(rowh, g->bitmap.rows);
         ox += g->bitmap.width + 1;
     }
     avgheight = avgheight / (float)cnth;
-    fprintf(stderr, "Generated a %d x %d (%d kb) Texture atlas\n", w, h, w * h / 1024);
+    // fprintf(stderr, "Generated a %d x %d (%d kb) Texture atlas\n", w, h, w * h / 1024);
     atlas->InitMipmap();
 }
 
 Font::~Font()
 {
+    atlas = nullptr;
 }

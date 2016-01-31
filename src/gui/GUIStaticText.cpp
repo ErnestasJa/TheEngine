@@ -4,18 +4,18 @@
 #include "GUIEnvironment.h"
 #include "GUIStaticText.h"
 
-GUIStaticText::GUIStaticText(GUIEnvironment* env, Rect2D<int> dimensions, std::wstring text, bool drawbackground) :GUIElement(env, dimensions)
+GUIStaticText::GUIStaticText(GUIEnvironment *env, Rect2D<int> dimensions, std::wstring text, bool drawbackground) : GUIElement(env, dimensions)
 {
-	this->Type = GUIET_STATIC_TEXT;
-	environment = env;
+    this->Type = GUIET_STATIC_TEXT;
+    environment = env;
 
-	m_draw_background = drawbackground;
+    m_draw_background = drawbackground;
 
-	absolute_rect = dimensions;
-	relative_rect = absolute_rect;
+    absolute_rect = dimensions;
+    relative_rect = absolute_rect;
 
-	m_text = text;
-	_font = "default";
+    m_text = text;
+    _font = "default";
 }
 
 GUIStaticText::~GUIStaticText()
@@ -24,22 +24,21 @@ GUIStaticText::~GUIStaticText()
 
 void GUIStaticText::Render()
 {
-	if (this->m_draw_background)
-	{
-		environment->DrawSlicedGUIQuad(absolute_rect, gui_skin_background);
-	}
+    if (this->m_draw_background) {
+        environment->DrawSlicedGUIQuad(absolute_rect, gui_skin_background);
+    }
 
-	environment->GetFontRenderer()->RenderString(this->m_text, glm::ivec2(this->absolute_rect.x, this->absolute_rect.y), 0, _font);
+    environment->GetFontRenderer()->RenderString(this->m_text, glm::ivec2(this->absolute_rect.x, this->absolute_rect.y), _font);
 
-	this->RenderChildren();
+    this->RenderChildren();
 }
 
 void GUIStaticText::SetText(const std::wstring &text)
 {
-	this->m_text = text;
+    this->m_text = text;
 }
 
 void GUIStaticText::SetFont(const std::string &font)
 {
-	_font = font;
+    _font = font;
 }

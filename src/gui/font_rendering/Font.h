@@ -8,37 +8,40 @@
 
 struct FontFamily;
 
-struct Font
-{
-	FontFamily *myFamily;
+struct Font {
+    FontFamily *myFamily;
 
-	TexturePtr atlas;
+    TexturePtr atlas;
 
-	std::string name;
+    std::string name;
 
-	int w;			// width of Texture in pixels
-	int h;			// height of Texture in pixels
-	float avgheight;
-	int realHeight;
+    int w;  // width of Texture in pixels
+    int h;  // height of Texture in pixels
+    float avgheight;
+    int realHeight;
 
-	struct
-	{
-		float ax;	// advance.x
-		float ay;	// advance.y
+    struct SGlyphInfo {
+        ~SGlyphInfo()
+        {
+            delete bitmap;
+        }
 
-		float bw;	// bitmap.width;
-		float bh;	// bitmap.height;
+        float ax;  // advance.x
+        float ay;  // advance.y
 
-		float bl;	// bitmap_left;
-		float bt;	// bitmap_top;
+        float bw;  // bitmap.width;
+        float bh;  // bitmap.height;
 
-		float tx;	// x offset of glyph in Texture coordinates
-		float ty;	// y offset of glyph in Texture coordinates
+        float bl;  // bitmap_left;
+        float bt;  // bitmap_top;
 
-		uint8_t *bitmap;
-	} c[GLYPHS_PER_ATLAS];		// character information
+        float tx;  // x offset of glyph in Texture coordinates
+        float ty;  // y offset of glyph in Texture coordinates
 
-	Font(FT_Face face, int height, std::string name);
+        uint8_t *bitmap;
+    } c[GLYPHS_PER_ATLAS];  // character information
 
-	~Font();
+    Font(FT_Face face, int height, std::string name);
+
+    ~Font();
 };

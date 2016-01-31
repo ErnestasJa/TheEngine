@@ -1,12 +1,14 @@
 #ifndef FORWARD_DECL_H
 #define FORWARD_DECL_H
 
-#define DECLARE_PTR(var) class var; typedef std::shared_ptr< var > var##Ptr;
+#define DECLARE_PTR(var) \
+    class var;           \
+    typedef std::shared_ptr<var> var##Ptr;
 
 namespace std
 {
-	template <class T>
-	class shared_ptr;
+template <class T>
+class shared_ptr;
 }
 
 class AppContext;
@@ -50,10 +52,10 @@ typedef uint32_t GLEnum;
 
 namespace boost
 {
-	namespace filesystem
-	{
-		class path;
-	}
+namespace filesystem
+{
+    class path;
+}
 }
 
 using Path = boost::filesystem::path;
