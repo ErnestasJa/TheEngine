@@ -25,6 +25,7 @@ struct IBufferObject
 
 	virtual void Init() = 0;
 	virtual void Upload() = 0;
+	virtual void Clear() = 0;
 
 	virtual IBufferObject::IBO_TYPE GetType() = 0;
 	virtual uint32_t GetDataType() = 0;

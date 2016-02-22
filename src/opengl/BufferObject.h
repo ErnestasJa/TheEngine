@@ -19,6 +19,10 @@ struct BufferObject : public IBufferObject
 	virtual void Init();
 	virtual void Upload();
 	virtual void UploadSubData(vector<T> subdata, uint32_t offset);
+	virtual void Clear()
+	{
+		data.clear();
+	}
 
 	virtual IBufferObject::IBO_TYPE GetType()
 	{
@@ -46,6 +50,10 @@ struct IndexBufferObject : public IBufferObject
 	//void Init_buffers();
 	virtual void Init();
 	virtual void Upload();
+	virtual void Clear()
+	{
+		data.clear();
+	}
 
 	virtual IBufferObject::IBO_TYPE GetType()
 	{
