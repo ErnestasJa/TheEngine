@@ -226,8 +226,8 @@ void GUIElement::SetVisible(bool b)
 
     this->visible = b;
 
-    /*for (GUIElement* e : children)
-        e->SetVisible(b);*/
+    for (GUIElement* e : children)
+        e->SetVisible(b);
 }
 
 void GUIElement::SetHovered(bool b)
