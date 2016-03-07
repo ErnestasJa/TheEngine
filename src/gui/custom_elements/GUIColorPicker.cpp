@@ -47,14 +47,20 @@ GUIColorPicker::GUIColorPicker(GUIEnvironment* env, Rect2D<int> dimensions, bool
 	ebR = new GUIEditBox(env, Rect2D<int>(picker->GetRelativeRect().w + 16, picker->GetRelativeRect().y + 32, 32, 16), L"255", glm::vec4(1, 0, 0, 1));
 	ebR->SetParent(picker);
 	ebR->SetMaxLength(3);
+
 	ebG = new GUIEditBox(env, Rect2D<int>(picker->GetRelativeRect().w + 16, picker->GetRelativeRect().y + 56, 32, 16), L"255", glm::vec4(0, 1, 0, 1));
 	ebG->SetParent(picker);
 	ebG->SetMaxLength(3);
+
 	ebB = new GUIEditBox(env, Rect2D<int>(picker->GetRelativeRect().w + 16, picker->GetRelativeRect().y + 80, 32, 16), L"255", glm::vec4(0, 0, 1, 1));
 	ebB->SetParent(picker);
 	ebB->SetMaxLength(3);
 
-	btnSet = new GUIButton(env, Rect2D<int>(picker->GetRelativeRect().w + 16, picker->GetRelativeRect().y + 104, 32, 16), L"['s]Set[s']");
+	ebA = new GUIEditBox(env, Rect2D<int>(picker->GetRelativeRect().w + 16, picker->GetRelativeRect().y + 104, 32, 16), L"255", glm::vec4(1, 1, 1, 1));
+	ebA->SetParent(picker);
+	ebA->SetMaxLength(3);
+
+	btnSet = new GUIButton(env, Rect2D<int>(picker->GetRelativeRect().w + 16, picker->GetRelativeRect().y + 128, 32, 16), L"['s]Set[s']");
 	btnSet->SetParent(picker);
 
 	btnSwitchColor = new GUIButton(env, Rect2D<int>(picker->GetRelativeRect().w + 16, picker->GetRelativeRect().y + 16, 32, 12), L"<->");
@@ -119,7 +125,8 @@ bool GUIColorPicker::OnEvent(const GUIEvent &e)
 			uint32_t r = helpers::wtoi(ebR->get_text().c_str());
 			uint32_t g = helpers::wtoi(ebG->get_text().c_str());
 			uint32_t b = helpers::wtoi(ebB->get_text().c_str());
-			primaryColor = glm::vec4(r, g, b, 255);
+			uint32_t a = helpers::wtoi(ebA->get_text().c_str());
+			primaryColor = glm::vec4(r, g, b, a);
 		}
 
 		if (e.get_element() == btnSwitchColor)
@@ -145,27 +152,28 @@ void GUIColorPicker::UpdateValues()
 {
 	primaryColor = imgBuf->GetPixel(cursorPos.x + 4, imgBuf->height - 1 - cursorPos.y - 4);
 
-	ebR->SetText(helpers::to_wstr(primaryColor.x));
-	ebG->SetText(helpers::to_wstr(primaryColor.y));
-	ebB->SetText(helpers::to_wstr(primaryColor.z));
+	ebR->SetText(helpers::to_wstr(primaryColor.r));
+	ebG->SetText(helpers::to_wstr(primaryColor.g));
+	ebB->SetText(helpers::to_wstr(primaryColor.b));
+	ebA->SetText(helpers::to_wstr(primaryColor.a));
 }
 
-glm::vec4 GUIColorPicker::GetPrimaryColorRGB()
+glm::vec4 GUIColorPicker::GetPrimaryColor()
 {
 	return primaryColor;
 }
 
-glm::vec4 GUIColorPicker::GetPrimaryColorRGBGL()
+glm::vec4 GUIColorPicker::GetPrimaryColorGL()
 {
 	return 1.f / 255.f*primaryColor;
 }
 
-glm::vec4 GUIColorPicker::GetSecondaryColorRGB()
+glm::vec4 GUIColorPicker::GetSecondaryColor()
 {
 	return secondaryColor;
 }
 
-glm::vec4 GUIColorPicker::GetSecondaryColorRGBGL()
+glm::vec4 GUIColorPicker::GetSecondaryColorGL()
 {
 	return 1.f / 255.f*secondaryColor;
 }
@@ -175,9 +183,19 @@ void GUIColorPicker::SetPrimaryColorRGB(uint8_t r, uint8_t g, uint8_t b)
 	primaryColor = glm::vec4(r, g, b, 255);
 }
 
+void GUIColorPicker::SetPrimaryColorRGBA(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
+{
+	primaryColor = glm::vec4(r, g, b, a);
+}
+
 void GUIColorPicker::SetSecondaryColorRGB(uint8_t r, uint8_t g, uint8_t b)
 {
 	secondaryColor = glm::vec4(r, g, b, 255);
+}
+
+void GUIColorPicker::SetSecondaryColorRGBA(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
+{
+	secondaryColor = glm::vec4(r, g, b, a);
 }
 
 void GUIColorPicker::Render()

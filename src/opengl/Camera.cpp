@@ -168,6 +168,11 @@ void Camera::SetRotation(const glm::quat &rotation)
 	m_rot = rotation;
 }
 
+void Camera::SetProjection(const glm::mat4 &projection)
+{
+	m_P = projection;
+}
+
 void Camera::Update(float dt)
 {
 	m_pos += m_translation;

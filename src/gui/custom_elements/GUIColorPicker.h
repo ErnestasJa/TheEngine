@@ -30,7 +30,7 @@ private:
 	GUIImage *cursor, *picker;
 	GUIPane *bg;
 	GUIButton *btnSet,*btnSwitchColor;
-	GUIEditBox *ebR, *ebG, *ebB;
+	GUIEditBox *ebR, *ebG, *ebB, *ebA;
 	GUISlider *sat, *val;
 	ImagePtr imgBuf;
 	std::shared_ptr<Texture> texBuf;
@@ -42,15 +42,15 @@ public:
 
 	void Render();
 
-	glm::vec4 GetPrimaryColorRGB();
+	glm::vec4 GetPrimaryColor();
+	glm::vec4 GetPrimaryColorGL();
 
-	glm::vec4 GetPrimaryColorRGBGL();
+	glm::vec4 GetSecondaryColor();
+	glm::vec4 GetSecondaryColorGL();
 
-	glm::vec4 GetSecondaryColorRGB();
-
-	glm::vec4 GetSecondaryColorRGBGL();
-
+	void SetPrimaryColorRGBA(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 	void SetPrimaryColorRGB(uint8_t r, uint8_t g, uint8_t b);
+	void SetSecondaryColorRGBA(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 	void SetSecondaryColorRGB(uint8_t r, uint8_t g, uint8_t b);
 
 	//    glm::vec3 GetColorHSV();

@@ -41,6 +41,7 @@ public:
 	const glm::vec3 GetPosition() const;
 	void SetPosition(glm::vec3 pos);
 	void SetRotation(const glm::quat &rotation);
+	void SetProjection(const glm::mat4 &projection);
 	void ResetOrientation(glm::vec3 lookDir);
 	const float GetFar() const;
 	const float GetNear() const;
