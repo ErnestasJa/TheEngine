@@ -130,16 +130,6 @@ bool ApplicationWindow::Init(const std::string  &title, uint32_t width, uint32_t
 	GLFWmonitor* monitor = glfwGetPrimaryMonitor();;
 	const GLFWvidmode* mode = nullptr;
 
-	if (fullscreen)
-	{
-		_window = glfwCreateWindow(width, height, title.c_str(), monitor, NULL);
-	}
-	else
-	if (windowed)
-	{
-		_window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
-	}
-	else
 	if (fullscreen&&windowed)
 	{
 		mode = glfwGetVideoMode(monitor);
@@ -148,7 +138,17 @@ bool ApplicationWindow::Init(const std::string  &title, uint32_t width, uint32_t
 		glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
 		glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
 
+		_window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
+	}
+	else
+	if (fullscreen)
+	{
 		_window = glfwCreateWindow(width, height, title.c_str(), monitor, NULL);
+	}
+	else
+	if (windowed)
+	{
+		_window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
 	}
 
 	if (!_window)
