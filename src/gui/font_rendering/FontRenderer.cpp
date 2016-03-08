@@ -254,7 +254,7 @@ void FontRenderer::_FormatTags(TextLine& tl, std::wstring in, SubLineInfo inf)
     return;
 }
 
-Image* FontRenderer::RenderStringToImage(const std::wstring& text, glm::detail::tvec3<uint8_t> color, std::string fontFamilyName)
+Image* FontRenderer::RenderStringToImage(const std::wstring& text, glm::tvec3<uint8_t> color, std::string fontFamilyName)
 {
     this->UseFontFamily(fontFamilyName);
     Font* a = _currentFont;

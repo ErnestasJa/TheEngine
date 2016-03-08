@@ -11,21 +11,21 @@ private:
 	float m_size;
 public:
 	BufferObject<glm::vec3> * pos;
-	BufferObject<glm::detail::tvec4<uint8_t>> * col;
+	BufferObject<glm::tvec4<uint8_t>> * col;
 	BufferObject<glm::vec2> * tex_coords;
 	IndexBufferObject<uint32_t> * indices;
-	glm::detail::tvec4<uint8_t> m_color;
+	glm::tvec4<uint8_t> m_color;
 
 	std::shared_ptr<Mesh> glmesh;
 
-	CubeMesh(float size = 1.0f, glm::detail::tvec4<uint8_t> color = glm::detail::tvec4<uint8_t>(1))
+	CubeMesh(float size = 1.0f, glm::tvec4<uint8_t> color = glm::tvec4<uint8_t>(1))
 	{
 		this->m_size = size;
 		this->m_color = color;
 		Init();
 	}
 
-	CubeMesh(const AABB & aabb, glm::detail::tvec4<uint8_t> color = glm::detail::tvec4<uint8_t>(1))
+	CubeMesh(const AABB & aabb, glm::tvec4<uint8_t> color = glm::tvec4<uint8_t>(1))
 	{
 		this->m_size = 1;
 		this->m_color = color;
@@ -68,7 +68,7 @@ public:
 		pos->data[6] = p7;
 		pos->data[7] = p8;
 
-		col = new BufferObject<glm::detail::tvec4<uint8_t>>();
+		col = new BufferObject<glm::tvec4<uint8_t>>();
 
 		col->data.resize(8);
 		col->data[0] = m_color;
@@ -169,7 +169,7 @@ public:
 		pos->data[6] = p7;
 		pos->data[7] = p8;
 
-		col = new BufferObject<glm::detail::tvec4<uint8_t>>();
+		col = new BufferObject<glm::tvec4<uint8_t>>();
 
 		col->data.resize(8);
 		col->data[0] = m_color;

@@ -84,7 +84,7 @@ public:
 
     void RenderString(const std::wstring &text, const glm::ivec2 &pos, std::string fontFamilyName = "default");
 
-    Image *RenderStringToImage(const std::wstring &text, glm::detail::tvec3<uint8_t> color = glm::detail::tvec3<uint8_t>(255), std::string fontFamilyName = "default");
+    Image *RenderStringToImage(const std::wstring &text, glm::tvec3<uint8_t> color = glm::tvec3<uint8_t>(255), std::string fontFamilyName = "default");
     // void RenderString3D(const std::wstring &text, const glm::ivec3 &pos, float linewidth = 0.f, std::string fontFamilyName = "default");
 
     glm::vec2 GetTextDimensions(const std::wstring &text);
