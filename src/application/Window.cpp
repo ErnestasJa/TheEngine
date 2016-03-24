@@ -127,7 +127,7 @@ bool ApplicationWindow::Init(const std::string  &title, uint32_t width, uint32_t
 	glfwWindowHint(GLFW_RESIZABLE, 0);
 
 	/* Create a ApplicationWindowed mode ApplicationWindow and its OpenGL context */
-	GLFWmonitor* monitor = glfwGetPrimaryMonitor();;
+	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
 	const GLFWvidmode* mode = nullptr;
 
 	if (fullscreen&&windowed)
