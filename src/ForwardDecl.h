@@ -5,6 +5,10 @@
     class var;           \
     typedef std::shared_ptr<var> var##Ptr;
 
+#define DECLARE_UNIQUE(var) \
+    class var;           \
+    typedef std::unique_ptr<var> var##Ptr;
+
 namespace std
 {
 template <class T>
