@@ -4,15 +4,11 @@
 AABB::AABB() : m_halfSize(0.5)
 {
 	//ctor
-	points.resize(8);
-	CalculatePoints();
 }
 
 AABB::AABB(const glm::vec3 & center, const glm::vec3 & halfSize) :m_center(center), m_halfSize(halfSize)
 {
 	//ctor
-	points.resize(8);
-	CalculatePoints();
 }
 
 AABB::~AABB()
@@ -201,16 +197,6 @@ bool AABB::CollidesWithRay(const glm::vec3 & rayStart, const glm::vec3 & rayDire
 	return tmax >= tmin;
 }
 
-glm::vec3 AABB::GetPoint(uint32_t i) const
-{
-	return points[i];
-}
-
-vector<glm::vec3> AABB::GetPoints() const
-{
-	return points;
-}
-
 glm::vec3 AABB::GetHalfSize() const
 {
 	return m_halfSize;
@@ -236,17 +222,19 @@ void AABB::SetCenter(const glm::vec3 &point)
 	m_center = point;
 }
 
-void AABB::CalculatePoints()
+std::vector<glm::vec3> AABB::CalculatePoints() const
 {
-	float w = m_halfSize.x*2.0f, h = m_halfSize.y*2.0f, l = m_halfSize.z*2.0f;
+	std::vector<glm::vec3> points;
+	points.resize(8);
 
 	points[0] = m_center - m_halfSize;
-	points[1] = m_center - glm::vec3(m_halfSize.x, 0, 0);
-	points[2] = m_center - glm::vec3(0, m_halfSize.y, 0);
-	points[3] = m_center - glm::vec3(0, 0, m_halfSize.z);
-
-	points[4] = m_center + glm::vec3(0, 0, m_halfSize.z);
-	points[5] = m_center + glm::vec3(0, m_halfSize.y, 0);
-	points[6] = m_center + glm::vec3(m_halfSize.x, 0, 0);
+	points[1] = m_center + glm::vec3(m_halfSize.x, -m_halfSize.y, -m_halfSize.z);
+	points[2] = m_center + glm::vec3(-m_halfSize.x, -m_halfSize.y, m_halfSize.z);
+	points[3] = m_center + glm::vec3(m_halfSize.x, -m_halfSize.y, m_halfSize.z);				 
+	points[4] = m_center + glm::vec3(-m_halfSize.x, m_halfSize.y, -m_halfSize.z);
+	points[5] = m_center + glm::vec3(m_halfSize.x, m_halfSize.y, -m_halfSize.z);
+	points[6] = m_center + glm::vec3(-m_halfSize.x, m_halfSize.y, m_halfSize.z);
 	points[7] = m_center + m_halfSize;
+
+	return points;
 }

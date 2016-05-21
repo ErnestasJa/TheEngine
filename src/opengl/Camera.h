@@ -11,8 +11,8 @@ enum FRUSTUM_PLANES
 	FP_BOTTOM,
 	FP_LEFT,
 	FP_RIGHT,
-	FP_NEAR,
 	FP_FAR,
+	FP_NEAR,
 
 	FP_COUNT
 };
@@ -65,12 +65,11 @@ public:
 	virtual glm::mat4x4 GetViewProjMat();
 	void Orbit(glm::vec3 point, float distance, float verticalAngle, float horizontalAngle);
 
-	void DrawFrustum()
-	{
-	}
-
 	INTERSECT_RESULT PointInFrustum(const glm::vec3 &point);
+	INTERSECT_RESULT SphereInFrustum(const glm::vec3 &center, float radius);
 	INTERSECT_RESULT BoxInFrustum(const AABB &box);
+	void InitFrustum();
+	Plane3d * GetFrustumPlanes();
 
 	//	INTERSECT_RESULT SphereInFrustum(const glm::vec3 &point,float radius)
 	//	{
@@ -82,15 +81,14 @@ public:
 	//
 	//	}
 private:
-	void InitFrustum();
 	void HandleMouse();
 protected:
 	float m_fov, m_aspect_ratio, m_far, m_near;
 	static glm::vec3 UP;
 	//frustrum
 	Plane3d frustumPlanes[FP_COUNT];
-	glm::vec3 ntl, ntr, nbl, nbr, ftl, ftr, fbl, fbr;
-	float nw, nh, fw, fh;
+	glm::vec3 nearTopLeft, nearTopRight, nearBottomLeft, nearBottomRight, farTopLeft, farTopRight, farBottomLeft, farBottomRight;
+	float nearWidth, nearHeight, farWidth, farHeight;
 	//frustrum
 	glm::vec3 m_pos;
 	glm::vec3 m_look;

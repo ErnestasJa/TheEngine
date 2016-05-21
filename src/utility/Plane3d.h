@@ -4,51 +4,57 @@
 class Plane3d
 {
 public:
-	///  pB--------pD
+	///  Points are going to be passed in counter-clockwise
+	///  pC--------pD
 	///  |       /  |
 	///  |     /    |
 	///  |   /      |
 	///  | /        |
-	///  pA--------pC
+	///  pB--------pA
 
 	Plane3d()
 	{
 		n = glm::normalize(glm::vec3(1));
-		D = 0.f;
+		d = 0.f;
 	}
 
 	~Plane3d()
 	{
 	}
 
-	void SetPoints(const glm::vec3 &pA, const glm::vec3 &pB, const glm::vec3 &pC)
+	void SetNormalsAndD(float x, float y, float z, float d)
 	{
-		glm::vec3 v1 = pB - pA;
-		glm::vec3 v2 = pC - pA;
-		glm::vec3 n = glm::cross(v1, v2);
-		n = glm::normalize(n);
+		this->n.x = x;
+		this->n.y = y;
+		this->n.z = z;
+		this->d = d;
 
-		D = glm::dot(-n, pA);
-
-		points[0] = pA;
-		points[1] = pB;
-		points[2] = pC;
-		points[3] = glm::cross(pB, pC);
+		Normalize();
 	}
 
-	const glm::vec3 *GetPoints()
+	void Normalize()
+	{
+		float scale = 1.f / glm::length(n);
+		n.x *= scale;
+		n.y *= scale;
+		n.z *= scale;
+		d *= scale;
+	}
+
+	const glm::vec3* GetPoints() const
 	{
 		return points;
 	}
 
-	float Distance(const glm::vec3 &p)
+	float Distance(const glm::vec3 &p, float radius = 0.f)
 	{
-		return glm::dot(n, p) + D;
+		auto distance = d + radius + glm::dot(n, p);
+		return distance;
 	}
 private:
 	glm::vec3 points[4];
 	glm::vec3 n;
-	float D;
+	float d;
 protected:
 };
 

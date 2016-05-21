@@ -203,7 +203,6 @@
     <ClInclude Include="..\..\src\opengl\FrameBufferObject.h" />
     <ClInclude Include="..\..\src\opengl\geometry\CubeMesh.h" />
     <ClInclude Include="..\..\src\opengl\geometry\GridMesh.h" />
-    <ClInclude Include="..\..\src\opengl\geometry\Plane3d.h" />
     <ClInclude Include="..\..\src\opengl\geometry\Quad.h" />
     <ClInclude Include="..\..\src\opengl\geometry\SlicedGUIQuad.h" />
     <ClInclude Include="..\..\src\opengl\GLObject.h" />
@@ -244,6 +243,7 @@
     <ClInclude Include="..\..\src\utility\Box3d.h" />
     <ClInclude Include="..\..\src\utility\Helpers.h" />
     <ClInclude Include="..\..\src\utility\Logger.h" />
+    <ClInclude Include="..\..\src\utility\Plane3d.h" />
     <ClInclude Include="..\..\src\utility\Rect2d.h" />
     <ClInclude Include="..\..\src\utility\SimplexNoise.h" />
     <ClInclude Include="..\..\src\utility\StringUtil.h" />

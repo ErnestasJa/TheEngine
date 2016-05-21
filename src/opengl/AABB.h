@@ -12,7 +12,7 @@ public:
 
 	void Reset(const glm::vec3 &point);
 	void AddPoint(const glm::vec3 &point);
-	void CalculatePoints();
+	std::vector<glm::vec3> CalculatePoints() const;
 	bool ContainsPoint(const glm::vec3 &point) const;
 	bool IntersectsWith(const AABB &other) const;
 	float SweepCollidesWith(const AABB & other, const glm::vec3 & vel, glm::vec3 & normal) const;
@@ -21,8 +21,6 @@ public:
 	void Translate(const glm::vec3 &point);
 	void SetCenter(const glm::vec3 &point);
 
-	glm::vec3 GetPoint(uint32_t i) const;
-	vector<glm::vec3> GetPoints() const;
 	glm::vec3 GetHalfSize() const;
 	glm::vec3 GetCenter() const;
 	glm::vec3 GetMin() const;
@@ -30,7 +28,6 @@ public:
 
 protected:
 	glm::vec3 m_center, m_halfSize;
-	vector<glm::vec3> points;
 };
 
 #endif // SG_AABB_H
