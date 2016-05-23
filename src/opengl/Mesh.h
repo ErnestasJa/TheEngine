@@ -94,7 +94,7 @@ public:
 	void Render();
 	void Render(uint32_t sub_mesh_index);
 
-	void render_lines();
+	void render_lines(uint32_t lineWidth = 1);
 	void render_triangle_strip();
 	void UploadBuffers();
 

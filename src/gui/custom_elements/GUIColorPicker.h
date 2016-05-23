@@ -36,6 +36,7 @@ private:
 	std::shared_ptr<Texture> texBuf;
 
 	void UpdateValues();
+	void UpdateColorTextValues();
 public:
 	GUIColorPicker(GUIEnvironment* env, Rect2D<int> dimensions, bool drawbackground = true);
 	virtual ~GUIColorPicker();

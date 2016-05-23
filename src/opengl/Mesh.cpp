@@ -112,8 +112,13 @@ void Mesh::Render()
 	glBindVertexArray(0);
 }
 
-void Mesh::render_lines()
+void Mesh::render_lines(uint32_t lineWidth)
 {
+	if (lineWidth != 1)
+	{
+		glLineWidth(lineWidth);
+	}
+
 	glBindVertexArray(vao);
 
 	uint32_t size = buffers[POSITION]->GetSize();
@@ -122,6 +127,11 @@ void Mesh::render_lines()
 		glDrawArrays(GL_LINES, 0, size);
 
 	glBindVertexArray(0);
+
+	if (lineWidth != 1)
+	{
+		glLineWidth(1);
+	}
 }
 
 void Mesh::render_triangle_strip()

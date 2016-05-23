@@ -151,7 +151,11 @@ bool GUIColorPicker::OnEvent(const GUIEvent &e)
 void GUIColorPicker::UpdateValues()
 {
 	primaryColor = imgBuf->GetPixel(cursorPos.x + 4, imgBuf->height - 1 - cursorPos.y - 4);
+	UpdateColorTextValues();
+}
 
+void GUIColorPicker::UpdateColorTextValues()
+{
 	ebR->SetText(helpers::to_wstr(primaryColor.r));
 	ebG->SetText(helpers::to_wstr(primaryColor.g));
 	ebB->SetText(helpers::to_wstr(primaryColor.b));
@@ -181,11 +185,13 @@ glm::vec4 GUIColorPicker::GetSecondaryColorGL()
 void GUIColorPicker::SetPrimaryColorRGB(uint8_t r, uint8_t g, uint8_t b)
 {
 	primaryColor = glm::vec4(r, g, b, 255);
+	UpdateColorTextValues();
 }
 
 void GUIColorPicker::SetPrimaryColorRGBA(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 {
 	primaryColor = glm::vec4(r, g, b, a);
+	UpdateColorTextValues();
 }
 
 void GUIColorPicker::SetSecondaryColorRGB(uint8_t r, uint8_t g, uint8_t b)

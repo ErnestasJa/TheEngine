@@ -15,6 +15,7 @@
 #include <atomic>
 #include <condition_variable>
 #include <mutex>
+#include <random>
 
 #include <string.h>
 #include <string>
