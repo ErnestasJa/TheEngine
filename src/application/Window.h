@@ -51,6 +51,7 @@ public:
 	bool GetKey(uint32_t key);
 	glm::ivec2 GetMousePos();
 	glm::ivec2 GetWindowSize();
+	void SetWindowPosition(const glm::ivec2 &pos);
 	void SetMousePos(const glm::ivec2 & pos);
 	void SetCursorDisabled(bool disabled);
 	GLFWwindow * GetWindow();

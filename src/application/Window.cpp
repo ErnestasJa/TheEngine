@@ -189,6 +189,11 @@ glm::ivec2 ApplicationWindow::GetMousePos()
 	return glm::ivec2(x, y);
 }
 
+void ApplicationWindow::SetWindowPosition(const glm::ivec2 &pos)
+{
+	glfwSetWindowPos(_window, pos.x, pos.y);
+}
+
 glm::ivec2 ApplicationWindow::GetWindowSize()
 {
 	int32_t x, y;
