@@ -9,7 +9,7 @@
 #define loopxyz(cx,cy,cz) loop(z,(cz)) loop(y,(cy)) loop(x,(cx))
 #define loopxyzr(cx,sx,ex,cy,sy,ey,cz,sz,ez) loopr((cz),sz,ez) loopr((cy),sy,ey) loopr((cx),sx,ex)
 #define loopxyzrv(cx,cy,cz,sv,ev) loopr((cz),sv.z,ev.z) loopr((cy),sv.y,ev.y) loopr((cx),sv.x,ev.x)
-#define comp(vec) (vec).x, (vec).y, (vec).z
+#define components(vec) (vec).x, (vec).y, (vec).z
 #define SetBindingSafe(shader,binding,value) if(shader->HasBinding((binding))) { shader->GetBinding((binding)).Set((value)); }
 #define ROUNDING_ERROR 0.00001f
 
@@ -40,6 +40,12 @@ namespace helpers
 	inline int wtoi(const wchar_t *str)
 	{
 		return (int)wcstol(str, 0, 10);
+	}
+
+	inline bool IsNan(const glm::vec3 &vec)
+	{
+		auto &nanCheck = glm::isnan(vec);
+		return nanCheck.x || nanCheck.y || nanCheck.z;
 	}
 
 	inline float MakePOT(float v);
