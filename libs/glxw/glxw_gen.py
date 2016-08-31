@@ -2,6 +2,7 @@
 
 import argparse
 import os
+import platform
 import re
 import sys
 if sys.version_info < (3, 0):
@@ -12,16 +13,20 @@ else:
 
 def download(output_dir, include_dir, source_url, filename):
     full_filename = os.path.join(output_dir, filename)
-    full_filename = full_filename.replace("\\","/") # making paths consistent on windows
+    if platform.system() == "Windows":
+        full_filename = full_filename.replace("\\","/") # making paths consistent on windows
     if os.path.exists(full_filename):
         return
 
     include_file = os.path.join(include_dir, filename) if include_dir is not None else None
-    include_file = include_file.replace("\\","/") # making paths consistent on windows
-    
+    if platform.system() == "Windows":
+        include_file = include_file.replace("\\","/") # making paths consistent on windows
     if include_dir is not None and os.path.exists(include_file):
         print('Copying %s to %s' % (include_file, full_filename))
-        source = 'file:///' + os.path.abspath(include_file) # file:// is required for python 3, file:/// seems to fix windows issues
+        if platform.system() == "Windows":
+            source = 'file:///' + os.path.abspath(include_file) # file:/// is required for python 3 on windows
+        else:
+            source = 'file://' + os.path.abspath(include_file) # file:// is required for python 3
     else:
         print('Downloading %s from %s to %s' % (filename, source_url, full_filename))
         source = source_url
@@ -29,8 +34,9 @@ def download(output_dir, include_dir, source_url, filename):
     dirname = os.path.dirname(full_filename)
     if not os.path.exists(dirname):
         os.makedirs(dirname)
-    
-    source=source.replace("\\","/") # making paths consistent on windows
+        
+    if platform.system() == "Windows":
+        source=source.replace("\\","/") # making paths consistent on windows
     urlretrieve(source, full_filename)
 
 def parse_funcs(filename, regex_string, blacklist):
@@ -285,34 +291,34 @@ official sources and generates an extension loading library.
     apis = [
         ('opengl', 'gl', '', 'GL', r'GLAPI.*APIENTRY\s+(gl\w+)',
             [],
-            [(True, 'glcorearb.h', 'http://www.opengl.org/registry/api/GL/glcorearb.h')]),
+            [(True, 'glcorearb.h', 'https://www.opengl.org/registry/api/GL/glcorearb.h')]),
         ('wgl', 'wgl', '_wgl', 'GL', r'.*WINAPI\s+(wgl\w+)',
             [],
-            [(True, 'wglext.h', 'http://www.opengl.org/registry/api/GL/wglext.h')]),
+            [(True, 'wglext.h', 'https://www.opengl.org/registry/api/GL/wglext.h')]),
         ('glx', 'glX', '_glx', 'GL', r'.*(glX\w+)\s*\(',
             ['GLX_SGIX_video_source',
                 'GLX_SGIX_fbconfig',
                 'GLX_SGIX_dmbuffer',
                 'GLX_VERSION_1_4',
                 'GLX_ARB_get_proc_address'],
-            [(True, 'glxext.h', 'http://www.opengl.org/registry/api/GL/glxext.h')]),
+            [(True, 'glxext.h', 'https://www.opengl.org/registry/api/GL/glxext.h')]),
         ('gles2', 'gl', '_es2', 'GLES2', r'GL_APICALL.*GL_APIENTRY\s+(\w+)',
             [],
-            [(False, 'gl2.h', 'http://www.khronos.org/registry/gles/api/GLES2/gl2.h'),
-            (False, 'gl2platform.h', 'http://www.khronos.org/registry/gles/api/GLES2/gl2platform.h'),
-            (True, 'gl2ext.h', 'http://www.khronos.org/registry/gles/api/GLES2/gl2ext.h')]),
+            [(False, 'gl2.h', 'https://www.khronos.org/registry/gles/api/GLES2/gl2.h'),
+            (False, 'gl2platform.h', 'https://www.khronos.org/registry/gles/api/GLES2/gl2platform.h'),
+            (True, 'gl2ext.h', 'https://www.khronos.org/registry/gles/api/GLES2/gl2ext.h')]),
         ('gles3', 'gl', '_es3', 'GLES3',  r'GL_APICALL.*GL_APIENTRY\s+(\w+)',
             [],
-            [(False, 'gl3.h', 'http://www.khronos.org/registry/gles/api/GLES3/gl3.h'),
-            (False, 'gl3platform.h', 'http://www.khronos.org/registry/gles/api/GLES3/gl3platform.h')]),
+            [(False, 'gl3.h', 'https://www.khronos.org/registry/gles/api/GLES3/gl3.h'),
+            (False, 'gl3platform.h', 'https://www.khronos.org/registry/gles/api/GLES3/gl3platform.h')]),
         ('egl', 'egl', '_egl', 'EGL', r'EGLAPI.*EGLAPIENTRY\s+(\w+)',
             [],
-            [(False, 'egl.h', 'http://www.khronos.org/registry/egl/api/EGL/egl.h'),
-            (True, 'eglext.h', 'http://www.khronos.org/registry/egl/api/EGL/eglext.h'),
-            (False, 'eglplatform.h', 'http://www.khronos.org/registry/egl/api/EGL/eglplatform.h')]),
+            [(False, 'egl.h', 'https://www.khronos.org/registry/egl/api/EGL/egl.h'),
+            (True, 'eglext.h', 'https://www.khronos.org/registry/egl/api/EGL/eglext.h'),
+            (False, 'eglplatform.h', 'https://www.khronos.org/registry/egl/api/EGL/eglplatform.h')]),
         ('khr', None, '_khr', 'KHR', None,
             [],
-            [(False, 'khrplatform.h', 'http://www.khronos.org/registry/egl/api/KHR/khrplatform.h')])
+            [(False, 'khrplatform.h', 'https://www.khronos.org/registry/egl/api/KHR/khrplatform.h')])
 
         ]
 
