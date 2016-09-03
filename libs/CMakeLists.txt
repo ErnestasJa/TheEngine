@@ -6,6 +6,7 @@ project (BUILD_LIBRARIES)
 #Causes build failure for googletest cause of strict ansi settings c++11 flag adds
 #set(CMAKE_CXX_FLAGS "-fPIC -std=c++11 ${CMAKE_CXX_FLAGS}")
 
+OPTION(PHYSFS_BUILD_SHARED "" OFF)
 #libs that we want to build
 add_subdirectory("${BUILD_LIBRARIES_SOURCE_DIR}/stb_image/")
 add_subdirectory("${BUILD_LIBRARIES_SOURCE_DIR}/tinyxml2/src/")
