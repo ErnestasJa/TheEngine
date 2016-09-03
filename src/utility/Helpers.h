@@ -6,9 +6,10 @@
 #define loop(var,count) for(uint32_t (var) = 0; (var) < (count); (var)++)
 #define loopi(count) for(uint32_t i = 0; i < (count); i++)
 #define loopr(var,start,count) for(uint32_t (var) = (start); (var) < (count); (var)++)
+#define loopri(var,start,count) for(int32_t (var) = (start); (var) < (count); (var)++)
 #define loopxyz(cx,cy,cz) loop(z,(cz)) loop(y,(cy)) loop(x,(cx))
 #define loopxyzr(cx,sx,ex,cy,sy,ey,cz,sz,ez) loopr((cz),sz,ez) loopr((cy),sy,ey) loopr((cx),sx,ex)
-#define loopxyzrv(cx,cy,cz,sv,ev) loopr((cz),sv.z,ev.z) loopr((cy),sv.y,ev.y) loopr((cx),sv.x,ev.x)
+#define loopxyzrv(cx,cy,cz,sv,ev) loopri((cz),sv.z,ev.z) loopri((cy),sv.y,ev.y) loopri((cx),sv.x,ev.x)
 #define components(vec) (vec).x, (vec).y, (vec).z
 #define SetBindingSafe(shader,binding,value) if(shader->HasBinding((binding))) { shader->GetBinding((binding)).Set((value)); }
 #define ROUNDING_ERROR 0.00001f
