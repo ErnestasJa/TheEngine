@@ -40,6 +40,7 @@ public:
 	const glm::vec3 GetRight() const;
 	const glm::vec3 GetPosition() const;
 	void SetPosition(glm::vec3 pos);
+	void SetTarget(glm::vec3 target);
 	void SetRotation(const glm::quat &rotation);
 	void SetProjection(const glm::mat4 &projection);
 	void ResetOrientation(glm::vec3 lookDir);
@@ -53,6 +54,11 @@ public:
 	bool IsFPS()
 	{
 		return m_fps;
+	}
+
+	bool HasFrustum()
+	{
+		return m_hasFrustum;
 	}
 
 	void SetFPS(bool fps);
@@ -93,6 +99,7 @@ protected:
 	glm::vec3 m_pos;
 	glm::vec3 m_look;
 	glm::vec3 m_up;
+	glm::vec3 m_target;
 	glm::vec3 m_right;
 	glm::mat4 m_P; //projection matrix
 	glm::quat m_rot;
@@ -101,6 +108,7 @@ protected:
 	glm::vec3 m_translation;
 
 	bool m_fps;
+	bool m_hasFrustum;
 };
 
 typedef std::shared_ptr<Camera> CameraPtr;

@@ -8,7 +8,9 @@
 Camera::Camera(const glm::vec3 &pos, const glm::vec3 &target, const glm::vec3 &up, float aspect_ratio, float field_of_view, float near_z, float far_z)
 {
 	m_fps = true;
+	m_hasFrustum = false;
 	m_pos = pos;
+	m_target = target;
 	m_rot = glm::toQuat(glm::inverse(glm::lookAt(pos, target, up)));
 
 	this->m_look = pos - target;
@@ -48,6 +50,8 @@ void Camera::ResetOrientation(glm::vec3 lookDir)
 
 void Camera::InitFrustum()
 {
+	m_hasFrustum = true;
+
 	auto proj = GetViewProjMat();
 	frustumPlanes[FP_RIGHT].SetNormalsAndD(
 		proj[0][3] - proj[0][0],
@@ -233,6 +237,11 @@ void Camera::SetPosition(glm::vec3 pos)
 	m_pos = pos;
 }
 
+void Camera::SetTarget(glm::vec3 target)
+{
+	m_target = target;
+}
+
 void Camera::SetRotation(const glm::quat &rotation)
 {
 	m_rot = rotation;
@@ -257,10 +266,14 @@ void Camera::Update(float dt)
 		m_last_mouse_pos = window->GetMousePos();
 		HandleMouse();
 	}
+	else
+	{
+		//m_rot = glm::toQuat(glm::inverse(glm::lookAt(m_pos, m_target, m_up)));
+		m_look = glm::vec3(m_rot*glm::vec3(0, 0, -1));
+		m_up = glm::vec3(m_rot*glm::vec3(0, 1, 0));
 
-	m_look = glm::vec3(m_rot*glm::vec3(0, 0, -1));
-	m_up = glm::vec3(m_rot*glm::vec3(0, 1, 0));
-	m_right = glm::cross(m_look, m_up);
+		m_right = glm::cross(m_look, m_up);
+	}
 
 	InitFrustum();
 }

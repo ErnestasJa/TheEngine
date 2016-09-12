@@ -92,21 +92,30 @@ void Texture::Init(const uint8_t * data, uint32_t target, uint32_t image_format,
 
 	case GL_RG:
 		glPixelStorei(GL_UNPACK_ALIGNMENT, (uint32_t)TextureUnpackAlignment::EVEN_BYTE);
-		break;							   
-										   
-	case GL_DEPTH_COMPONENT:			   
+		break;
+
+	case GL_DEPTH_COMPONENT:
 		glPixelStorei(GL_UNPACK_ALIGNMENT, (uint32_t)TextureUnpackAlignment::BYTE);
-		break;							   
-										   
-	default:							   
+		break;
+
+	default:
 		glPixelStorei(GL_UNPACK_ALIGNMENT, (uint32_t)TextureUnpackAlignment::WORD);
 		break;
 	}
 
-	dataType = GL_UNSIGNED_BYTE;
-
-	if (internal_format == GL_RGBA32F || internal_format == GL_DEPTH_COMPONENT)
+	switch (internalFormat)
+	{
+	case GL_RGBA32F:
+	case GL_DEPTH_COMPONENT:
+	case GL_DEPTH_COMPONENT16:
+	case GL_DEPTH_COMPONENT24:
+	case GL_DEPTH_COMPONENT32:
+	case GL_DEPTH_COMPONENT32F:
 		dataType = GL_FLOAT;
+		break;
+	default:
+		dataType = GL_UNSIGNED_BYTE;
+	}
 
 	glTexImage2D(Type, 0, internalFormat, w, h, 0, imageFormat, dataType, data);
 
