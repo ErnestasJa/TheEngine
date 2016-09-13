@@ -40,6 +40,7 @@ public:
 	const glm::vec3 GetRight() const;
 	const glm::vec3 GetPosition() const;
 	void SetPosition(glm::vec3 pos);
+	const glm::vec3 &GetTarget() const;
 	void SetTarget(glm::vec3 target);
 	void SetRotation(const glm::quat &rotation);
 	void SetProjection(const glm::mat4 &projection);

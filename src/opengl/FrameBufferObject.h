@@ -131,7 +131,7 @@ struct FrameBufferObject : public GLObject
 		if (obj->GetType() == GLO_TEXTURE)
 		{
 			TexturePtr tex = std::static_pointer_cast<Texture>(obj);
-			glFramebufferTexture(target, GL_DEPTH_ATTACHMENT, tex->Id, level);
+			glFramebufferTexture2D(target, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, tex->Id, level);
 		}
 		else if (obj->GetType() == GLO_RENDERBUFFER)
 		{
