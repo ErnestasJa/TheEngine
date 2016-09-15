@@ -294,6 +294,9 @@
     <ClInclude Include="..\..\src\utility\Plane3d.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\gui\custom_elements\GUIColorSwatches.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\application\Application.cpp">
@@ -484,6 +487,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\opengl\material\IRenderObject.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\gui\custom_elements\GUIColorSwatches.cpp">
+      <Filter>Source Files\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

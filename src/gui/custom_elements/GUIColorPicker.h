@@ -15,12 +15,6 @@ class GUIPane;
 class GUISlider;
 class Texture;
 
-enum CustomColorPickerEvents :uint32_t
-{
-	color_primary = 256,
-	color_secondary
-};
-
 class GUIColorPicker :public GUIElement
 {
 private:
