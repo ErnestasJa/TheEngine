@@ -107,9 +107,9 @@ GUIEditBox* GUIEnvironment::AddGUIEditBox(Rect2D<int> dimensions, std::wstring t
     return ret;
 }
 
-GUISlider* GUIEnvironment::AddGUISlider(Rect2D<int> dimensions, float min, float max, float pos, bool vertical)
+GUISlider* GUIEnvironment::AddGUISlider(Rect2D<int> dimensions, float min, float max, float pos, bool drawValue, bool snap, bool wide, bool vertical, bool dark)
 {
-    auto ret = new GUISlider(this, dimensions, min, max, pos, vertical);
+    auto ret = new GUISlider(this, dimensions, min, max, pos, drawValue, snap, wide, vertical, dark);
     ret->SetParent(this);
     return ret;
 }

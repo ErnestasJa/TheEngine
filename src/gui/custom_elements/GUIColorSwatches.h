@@ -4,11 +4,13 @@
 #include "gui/GUIElement.h"
 
 class GUIImage;
+class GUIColorPicker;
 
 class GUIColorSwatches :public GUIElement
 {
 private:
 	GUIImage* swatchImage;
+	GUIColorPicker* picker;
 	ImagePtr imgBuf;
 	TexturePtr texBuf;
 
@@ -19,7 +21,7 @@ private:
 	vector<glm::vec4> swatches;
 	glm::ivec2 swatchSize;
 public:
-	GUIColorSwatches(GUIEnvironment* env, Rect2D<int> dimensions, const glm::ivec2 &swatchSize);
+	GUIColorSwatches(GUIEnvironment* env, Rect2D<int> dimensions, const glm::ivec2 &swatchSize, GUIColorPicker* picker=nullptr);
 	virtual ~GUIColorSwatches();
 
 	void AddSwatchColor(const glm::vec4 &color);

@@ -186,6 +186,7 @@
     <ClInclude Include="..\..\src\gui\GUI.h" />
     <ClInclude Include="..\..\src\gui\GUIButton.h" />
     <ClInclude Include="..\..\src\gui\GUICheckbox.h" />
+    <ClInclude Include="..\..\src\gui\GUIContainer.h" />
     <ClInclude Include="..\..\src\gui\GUIEditBox.h" />
     <ClInclude Include="..\..\src\gui\GUIElement.h" />
     <ClInclude Include="..\..\src\gui\GUIEnvironment.h" />
@@ -272,6 +273,7 @@
     <ClCompile Include="..\..\src\gui\font_rendering\FontRenderer.cpp" />
     <ClCompile Include="..\..\src\gui\GUIButton.cpp" />
     <ClCompile Include="..\..\src\gui\GUICheckbox.cpp" />
+    <ClCompile Include="..\..\src\gui\GUIContainer.cpp" />
     <ClCompile Include="..\..\src\gui\GUIEditBox.cpp" />
     <ClCompile Include="..\..\src\gui\GUIElement.cpp" />
     <ClCompile Include="..\..\src\gui\GUIEnvironment.cpp" />

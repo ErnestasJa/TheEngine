@@ -305,7 +305,9 @@ glm::mat4x4 Camera::GetViewMat()
 
 	m_right = glm::cross(m_look, m_up);
 
-	return glm::lookAt(m_pos, m_pos + m_look, m_up);
+	m_target = m_pos + m_look;
+
+	return glm::lookAt(m_pos, m_target, m_up);
 }
 
 glm::mat4x4 Camera::GetViewProjMat()
@@ -321,13 +323,15 @@ void Camera::Orbit(glm::vec3 point, float distance, float verticalAngle, float h
 
 	m_pos = point + glm::vec3(camX, camY, camZ);
 	m_rot = glm::toQuat(glm::inverse(glm::lookAt(m_pos, point, glm::vec3(0, 1, 0))));
+	m_target = point;
+	m_look = m_target - m_pos;
 }
 
 void Camera::HandleMouse()
 {
 	glm::ivec2 delta_pos = m_current_mouse_pos - m_last_mouse_pos;
 
-	if (glm::abs(delta_pos.x) > 100 || glm::abs(delta_pos.y) > 100) ///probably some random shit happened, discard
+	if (glm::abs(delta_pos.x) > 64 || glm::abs(delta_pos.y) > 64) ///probably some random shit happened, discard
 		return;
 
 	glm::quat r = m_rot;

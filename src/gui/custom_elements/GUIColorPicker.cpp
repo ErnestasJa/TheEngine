@@ -60,6 +60,10 @@ GUIColorPicker::GUIColorPicker(GUIEnvironment* env, Rect2D<int> dimensions, bool
 	ebA->SetParent(picker);
 	ebA->SetMaxLength(3);
 
+	ebHTML = new GUIEditBox(env, Rect2D<int>(16, dimensions.h + 32, 128, 16), L"", glm::vec4(1, 1, 1, 1));
+	ebHTML->SetParent(this);
+	ebHTML->SetMaxLength(8);
+
 	btnSet = new GUIButton(env, Rect2D<int>(picker->GetRelativeRect().w + 16, picker->GetRelativeRect().y + 128, 32, 16), L"['s]Set[s']");
 	btnSet->SetParent(picker);
 
@@ -95,55 +99,82 @@ bool GUIColorPicker::OnEvent(const GUIEvent &e)
 {
 	GUI_BEGIN_ON_EVENT(e)
 
-	switch (e.GetType())
-	{
-	case left_mouse_pressed:
-	case mouse_dragged:
-		if (e.get_element() == picker)
+		switch (e.GetType())
 		{
-			float mx = environment->GetMousePosition().x;
-			float my = environment->GetMousePosition().y;
-			if (picker->GetAbsoluteRect().is_point_inside(mx, my))
+		case left_mouse_pressed:
+		case mouse_dragged:
+			if (e.get_element() == picker)
 			{
-				float x = mx - absolute_rect.x - picker->GetRelativeRect().x - 4;
-				float y = my - absolute_rect.y - picker->GetRelativeRect().y - 4;
-				cursorPos = glm::vec2(x, y);
-				cursor->Move(cursorPos);
-				//                cursor->GetRelativeRect().clip(picker->GetAbsoluteRect());
-				//                cursor->UpdateAbsolutePos();
+				float mx = environment->GetMousePosition().x;
+				float my = environment->GetMousePosition().y;
+				if (picker->GetAbsoluteRect().is_point_inside(mx, my))
+				{
+					float x = mx - absolute_rect.x - picker->GetRelativeRect().x - 4;
+					float y = my - absolute_rect.y - picker->GetRelativeRect().y - 4;
+					cursorPos = glm::vec2(x, y);
+					cursor->Move(cursorPos);
+					//                cursor->GetRelativeRect().clip(picker->GetAbsoluteRect());
+					//                cursor->UpdateAbsolutePos();
 
-				BringToFront(cursor);
+					BringToFront(cursor);
 
-				UpdateValues();
+					UpdateValues();
+				}
+			}
+			break;
+		case key_typed:
+		{
+			if (e.get_element() == ebHTML)
+			{
+				auto text = ebHTML->get_text();
+				if (text.length() >= 6)
+				{
+					uint32_t r = 0;
+					uint32_t g = 0;
+					uint32_t b = 0;
+					uint32_t a = 255;
+
+					if (text.length() == 8)
+					{
+						std::wistringstream(text.substr(6, 2)) >> std::hex >> a;
+					}
+
+					std::wistringstream(text.substr(0, 2)) >> std::hex >> r;
+					std::wistringstream(text.substr(2, 2)) >> std::hex >> g;
+					std::wistringstream(text.substr(4, 2)) >> std::hex >> b;
+
+					primaryColor = glm::vec4(r, g, b, a);
+				}
+			}
+			break;
+		}
+		case button_released:
+		{
+			if (e.get_element() == btnSet)
+			{
+				uint32_t r = helpers::wtoi(ebR->get_text().c_str());
+				uint32_t g = helpers::wtoi(ebG->get_text().c_str());
+				uint32_t b = helpers::wtoi(ebB->get_text().c_str());
+				uint32_t a = helpers::wtoi(ebA->get_text().c_str());
+
+				primaryColor = glm::vec4(r, g, b, a);
+			}
+
+			if (e.get_element() == btnSwitchColor)
+			{
+				glm::vec4 col = primaryColor;
+				primaryColor = secondaryColor;
+				secondaryColor = col;
 			}
 		}
 		break;
-	case button_released:
-	{
-		if (e.get_element() == btnSet)
-		{
-			uint32_t r = helpers::wtoi(ebR->get_text().c_str());
-			uint32_t g = helpers::wtoi(ebG->get_text().c_str());
-			uint32_t b = helpers::wtoi(ebB->get_text().c_str());
-			uint32_t a = helpers::wtoi(ebA->get_text().c_str());
-			primaryColor = glm::vec4(r, g, b, a);
+		case scrollbar_changed:
+			GenerateHSVMap(sat->get_value());
+			UpdateValues();
+			break;
+		default:
+			break;
 		}
-
-		if (e.get_element() == btnSwitchColor)
-		{
-			glm::vec4 col = primaryColor;
-			primaryColor = secondaryColor;
-			secondaryColor = col;
-		}
-	}
-	break;
-	case scrollbar_changed:
-		GenerateHSVMap(sat->get_value());
-		UpdateValues();
-		break;
-	default:
-		break;
-	}
 
 	GUI_END_ON_EVENT(e)
 }

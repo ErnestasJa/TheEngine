@@ -110,7 +110,7 @@ public:
 	GUIButton*  AddGUIButton(Rect2D<int> dimensions, std::wstring text = L"text", bool colored = false, bool toggling = false, bool toggleStatus = false);
 	GUICheckbox* AddGUICheckbox(Rect2D<int> dimensions, bool checked);
 	GUIEditBox* AddGUIEditBox(Rect2D<int> dimensions, std::wstring text = L"text", glm::vec4 text_color = glm::vec4(1, 1, 1, 1), bool drawbackground = false, bool drawshadow = false, bool clearonsubmit = false);
-	GUISlider* AddGUISlider(Rect2D<int> dimensions, float min, float max, float pos, bool vertical = false);
+	GUISlider* AddGUISlider(Rect2D<int> dimensions, float min, float max, float pos, bool drawValue = false, bool snap = false, bool wide = false, bool vertical = false, bool dark = false);
 	GUIImage* AddGUIImage(Rect2D<int> dimensions, TexturePtr tex, bool multichannel = true, bool glTex = false);
 	GUIWindow* AddGUIWindow(Rect2D<int> dimensions, std::wstring titlebar_text = L"Window", bool clip = true, bool showclose = true, bool modal = false, bool movable = true);
 	GUIPane* AddGUIPane(Rect2D<int> dimensions, bool draw = true);

@@ -24,7 +24,7 @@ private:
 	GUIImage *cursor, *picker;
 	GUIPane *bg;
 	GUIButton *btnSet,*btnSwitchColor;
-	GUIEditBox *ebR, *ebG, *ebB, *ebA;
+	GUIEditBox *ebR, *ebG, *ebB, *ebA, *ebHTML;
 	GUISlider *sat, *val;
 	ImagePtr imgBuf;
 	std::shared_ptr<Texture> texBuf;
