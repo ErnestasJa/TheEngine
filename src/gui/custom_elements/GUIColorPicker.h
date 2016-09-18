@@ -23,7 +23,8 @@ private:
 	glm::vec2 cursorPos;
 	GUIImage *cursor, *picker;
 	GUIPane *bg;
-	GUIButton *btnSet,*btnSwitchColor;
+	GUIButton *btnSwitchColor;
+	GUIStaticText *stR, *stG, *stB, *stA, *stHTML;
 	GUIEditBox *ebR, *ebG, *ebB, *ebA, *ebHTML;
 	GUISlider *sat, *val;
 	ImagePtr imgBuf;
@@ -31,6 +32,7 @@ private:
 
 	void UpdateValues();
 	void UpdateColorTextValues();
+	void UpdateHTMLColorTextValues();
 public:
 	GUIColorPicker(GUIEnvironment* env, Rect2D<int> dimensions, bool drawbackground = true);
 	virtual ~GUIColorPicker();

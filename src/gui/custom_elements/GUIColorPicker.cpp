@@ -20,7 +20,7 @@ GUIColorPicker::GUIColorPicker(GUIEnvironment* env, Rect2D<int> dimensions, bool
 
 	if (drawbackground)
 	{
-		bg = new GUIPane(env, Rect2D<int>(0, 0, dimensions.w + 64 + 16, dimensions.h + 32));
+		bg = new GUIPane(env, Rect2D<int>(0, 0, dimensions.w + 64 + 16, dimensions.h + 32 + 20));
 		bg->SetParent(this);
 		bg->SetListening(false);
 	}
@@ -44,6 +44,18 @@ GUIColorPicker::GUIColorPicker(GUIEnvironment* env, Rect2D<int> dimensions, bool
 	sat = new GUISlider(env, Rect2D<int>(16, dimensions.h + 16 + 4, dimensions.w, 8), 0, 1, 1, false);
 	sat->SetParent(this);
 
+	stR = new GUIStaticText(env, Rect2D<int>(picker->GetRelativeRect().w + 4, picker->GetRelativeRect().y + 36, 16, 16), L"['s]R:[s']");
+	stR->SetParent(picker);
+
+	stG = new GUIStaticText(env, Rect2D<int>(picker->GetRelativeRect().w + 4, picker->GetRelativeRect().y + 60, 16, 16), L"['s]G:[s']");
+	stG->SetParent(picker);
+
+	stB = new GUIStaticText(env, Rect2D<int>(picker->GetRelativeRect().w + 4, picker->GetRelativeRect().y + 84, 16, 16), L"['s]B:[s']");
+	stB->SetParent(picker);
+
+	stA = new GUIStaticText(env, Rect2D<int>(picker->GetRelativeRect().w + 4, picker->GetRelativeRect().y + 108, 16, 16), L"['s]A:[s']");
+	stA->SetParent(picker);
+
 	ebR = new GUIEditBox(env, Rect2D<int>(picker->GetRelativeRect().w + 16, picker->GetRelativeRect().y + 32, 32, 16), L"255", glm::vec4(1, 0, 0, 1));
 	ebR->SetParent(picker);
 	ebR->SetMaxLength(3);
@@ -60,14 +72,14 @@ GUIColorPicker::GUIColorPicker(GUIEnvironment* env, Rect2D<int> dimensions, bool
 	ebA->SetParent(picker);
 	ebA->SetMaxLength(3);
 
-	ebHTML = new GUIEditBox(env, Rect2D<int>(16, dimensions.h + 32, 128, 16), L"", glm::vec4(1, 1, 1, 1));
+	stHTML = new GUIStaticText(env, Rect2D<int>(4, dimensions.h + 36, 64, 16), L"['s]HTML Hex:[s']");
+	stHTML->SetParent(this);
+
+	ebHTML = new GUIEditBox(env, Rect2D<int>(64, dimensions.h + 32, 128, 16), L"", glm::vec4(1, 1, 1, 1));
 	ebHTML->SetParent(this);
 	ebHTML->SetMaxLength(8);
 
-	btnSet = new GUIButton(env, Rect2D<int>(picker->GetRelativeRect().w + 16, picker->GetRelativeRect().y + 128, 32, 16), L"['s]Set[s']");
-	btnSet->SetParent(picker);
-
-	btnSwitchColor = new GUIButton(env, Rect2D<int>(picker->GetRelativeRect().w + 16, picker->GetRelativeRect().y + 16, 32, 12), L"<->");
+	btnSwitchColor = new GUIButton(env, Rect2D<int>(picker->GetRelativeRect().w + 16, picker->GetRelativeRect().y + 16, 32, 12), L"['s]<->[s']");
 	btnSwitchColor->SetParent(picker);
 
 	GenerateHSVMap(sat->get_value());
@@ -124,6 +136,35 @@ bool GUIColorPicker::OnEvent(const GUIEvent &e)
 			break;
 		case key_typed:
 		{
+			if (e.get_element() == ebR || e.get_element() == ebG || e.get_element() == ebB || e.get_element() == ebA)
+			{
+				auto primary = primaryColor;
+
+				uint32_t r = primaryColor.r;
+				uint32_t g = primaryColor.g;
+				uint32_t b = primaryColor.b;
+				uint32_t a = primaryColor.a;
+
+				if (ebR->get_text().length() > 0)
+				{
+					r = helpers::wtoi(ebR->get_text().c_str());
+				}
+				if (ebG->get_text().length() > 0)
+				{
+					g = helpers::wtoi(ebG->get_text().c_str());
+				}
+				if (ebB->get_text().length() > 0)
+				{
+					b = helpers::wtoi(ebB->get_text().c_str());
+				}
+				if (ebA->get_text().length() > 0)
+				{
+					a = helpers::wtoi(ebA->get_text().c_str());
+				}
+
+				primaryColor = glm::vec4(r, g, b, a);
+				UpdateHTMLColorTextValues();
+			}
 			if (e.get_element() == ebHTML)
 			{
 				auto text = ebHTML->get_text();
@@ -144,22 +185,13 @@ bool GUIColorPicker::OnEvent(const GUIEvent &e)
 					std::wistringstream(text.substr(4, 2)) >> std::hex >> b;
 
 					primaryColor = glm::vec4(r, g, b, a);
+					UpdateColorTextValues();
 				}
 			}
 			break;
 		}
 		case button_released:
 		{
-			if (e.get_element() == btnSet)
-			{
-				uint32_t r = helpers::wtoi(ebR->get_text().c_str());
-				uint32_t g = helpers::wtoi(ebG->get_text().c_str());
-				uint32_t b = helpers::wtoi(ebB->get_text().c_str());
-				uint32_t a = helpers::wtoi(ebA->get_text().c_str());
-
-				primaryColor = glm::vec4(r, g, b, a);
-			}
-
 			if (e.get_element() == btnSwitchColor)
 			{
 				glm::vec4 col = primaryColor;
@@ -183,6 +215,7 @@ void GUIColorPicker::UpdateValues()
 {
 	primaryColor = imgBuf->GetPixel(cursorPos.x + 4, imgBuf->height - 1 - cursorPos.y - 4);
 	UpdateColorTextValues();
+	UpdateHTMLColorTextValues();
 }
 
 void GUIColorPicker::UpdateColorTextValues()
@@ -191,6 +224,56 @@ void GUIColorPicker::UpdateColorTextValues()
 	ebG->SetText(helpers::to_wstr(primaryColor.g));
 	ebB->SetText(helpers::to_wstr(primaryColor.b));
 	ebA->SetText(helpers::to_wstr(primaryColor.a));
+}
+
+unsigned char hexval(unsigned char c)
+{
+	if ('0' <= c && c <= '9')
+		return c - '0';
+	else if ('a' <= c && c <= 'f')
+		return c - 'a' + 10;
+	else if ('A' <= c && c <= 'F')
+		return c - 'A' + 10;
+	else abort();
+}
+
+void hex2ascii(const std::wstring& in, std::wstring& out)
+{
+	out.clear();
+	out.reserve(in.length() / 2);
+	for (std::wstring::const_iterator p = in.begin(); p != in.end(); p++)
+	{
+		unsigned char c = hexval(*p);
+		p++;
+		if (p == in.end()) break; // incomplete last digit - should report error
+		c = (c << 4) + hexval(*p); // + takes precedence over <<
+		out.push_back(c);
+	}
+}
+
+std::wstring toHex(uint8_t value)
+{
+	auto n = glm::max<int>(0, glm::min<int>(value, 255));
+
+	std::wstring hexstring = L"0123456789ABCDEF";
+	auto char1 = hexstring.at((n - n % 16) / 16);
+	auto char2 = hexstring.at(n % 16);
+
+	std::wstring resultString = L"";
+	resultString += char1;
+	resultString += char2;
+
+	return resultString;
+}
+
+void GUIColorPicker::UpdateHTMLColorTextValues()
+{
+	std::wstring val = L"";
+	val += toHex(primaryColor.r);
+	val += toHex(primaryColor.g);
+	val += toHex(primaryColor.b);
+	val += toHex(primaryColor.a);
+	ebHTML->SetText(val);
 }
 
 glm::vec4 GUIColorPicker::GetPrimaryColor()
@@ -217,12 +300,14 @@ void GUIColorPicker::SetPrimaryColorRGB(uint8_t r, uint8_t g, uint8_t b)
 {
 	primaryColor = glm::vec4(r, g, b, 255);
 	UpdateColorTextValues();
+	UpdateHTMLColorTextValues();
 }
 
 void GUIColorPicker::SetPrimaryColorRGBA(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 {
 	primaryColor = glm::vec4(r, g, b, a);
 	UpdateColorTextValues();
+	UpdateHTMLColorTextValues();
 }
 
 void GUIColorPicker::SetSecondaryColorRGB(uint8_t r, uint8_t g, uint8_t b)
