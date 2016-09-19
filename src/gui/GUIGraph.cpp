@@ -50,7 +50,7 @@ void GUIGraph::AddValue(const std::string &valueName, float value, int spacing, 
 
 	auto &properties = valueProperties[valueName];
 
-	while (realValues.size() * properties.spacing >= relative_rect.w)
+	while (realValues.size() * properties.spacing > relative_rect.w)
 	{
 		realValues.erase(realValues.begin());
 	}
