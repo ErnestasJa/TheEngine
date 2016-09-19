@@ -12,6 +12,36 @@ template <typename T> inline std::wstring to_wstr(const T& t)
 	return os.str();
 }
 
+inline std::string toHex(uint8_t value)
+{
+	auto n = glm::max<int>(0, glm::min<int>(value, 255));
+
+	std::string hexstring = "0123456789ABCDEF";
+	auto char1 = hexstring.at((n - n % 16) / 16);
+	auto char2 = hexstring.at(n % 16);
+
+	std::string resultString = "";
+	resultString += char1;
+	resultString += char2;
+
+	return resultString;
+}
+
+inline std::wstring toHex_w(uint8_t value)
+{
+	auto n = glm::max<int>(0, glm::min<int>(value, 255));
+
+	std::wstring hexstring = L"0123456789ABCDEF";
+	auto char1 = hexstring.at((n - n % 16) / 16);
+	auto char2 = hexstring.at(n % 16);
+
+	std::wstring resultString = L"";
+	resultString += char1;
+	resultString += char2;
+
+	return resultString;
+}
+
 template <typename T>
 inline T limit(T val, T min, T max)
 {

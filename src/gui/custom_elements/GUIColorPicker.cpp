@@ -226,53 +226,13 @@ void GUIColorPicker::UpdateColorTextValues()
 	ebA->SetText(helpers::to_wstr(primaryColor.a));
 }
 
-unsigned char hexval(unsigned char c)
-{
-	if ('0' <= c && c <= '9')
-		return c - '0';
-	else if ('a' <= c && c <= 'f')
-		return c - 'a' + 10;
-	else if ('A' <= c && c <= 'F')
-		return c - 'A' + 10;
-	else abort();
-}
-
-void hex2ascii(const std::wstring& in, std::wstring& out)
-{
-	out.clear();
-	out.reserve(in.length() / 2);
-	for (std::wstring::const_iterator p = in.begin(); p != in.end(); p++)
-	{
-		unsigned char c = hexval(*p);
-		p++;
-		if (p == in.end()) break; // incomplete last digit - should report error
-		c = (c << 4) + hexval(*p); // + takes precedence over <<
-		out.push_back(c);
-	}
-}
-
-std::wstring toHex(uint8_t value)
-{
-	auto n = glm::max<int>(0, glm::min<int>(value, 255));
-
-	std::wstring hexstring = L"0123456789ABCDEF";
-	auto char1 = hexstring.at((n - n % 16) / 16);
-	auto char2 = hexstring.at(n % 16);
-
-	std::wstring resultString = L"";
-	resultString += char1;
-	resultString += char2;
-
-	return resultString;
-}
-
 void GUIColorPicker::UpdateHTMLColorTextValues()
 {
 	std::wstring val = L"";
-	val += toHex(primaryColor.r);
-	val += toHex(primaryColor.g);
-	val += toHex(primaryColor.b);
-	val += toHex(primaryColor.a);
+	val += helpers::toHex_w(primaryColor.r);
+	val += helpers::toHex_w(primaryColor.g);
+	val += helpers::toHex_w(primaryColor.b);
+	val += helpers::toHex_w(primaryColor.a);
 	ebHTML->SetText(val);
 }
 

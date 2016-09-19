@@ -192,6 +192,7 @@
     <ClInclude Include="..\..\src\gui\GUIEnvironment.h" />
     <ClInclude Include="..\..\src\gui\GUIEvent.h" />
     <ClInclude Include="..\..\src\gui\GUIEventListener.h" />
+    <ClInclude Include="..\..\src\gui\GUIGraph.h" />
     <ClInclude Include="..\..\src\gui\GUIImage.h" />
     <ClInclude Include="..\..\src\gui\GUIPane.h" />
     <ClInclude Include="..\..\src\gui\GUISkin.h" />
@@ -277,6 +278,7 @@
     <ClCompile Include="..\..\src\gui\GUIEditBox.cpp" />
     <ClCompile Include="..\..\src\gui\GUIElement.cpp" />
     <ClCompile Include="..\..\src\gui\GUIEnvironment.cpp" />
+    <ClCompile Include="..\..\src\gui\GUIGraph.cpp" />
     <ClCompile Include="..\..\src\gui\GUIImage.cpp" />
     <ClCompile Include="..\..\src\gui\GUIPane.cpp" />
     <ClCompile Include="..\..\src\gui\GUISkin.cpp" />
