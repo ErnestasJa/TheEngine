@@ -136,9 +136,9 @@ bool GUIColorSwatches::OnEvent(const GUIEvent &e)
 	{
 		auto mousePos = environment->GetMousePosition();
 		auto modx = (int)glm::floor((mousePos.x - absolute_rect.x) / swatchSize.x);
-		auto mody = (int)glm::floor((absolute_rect.h - (mousePos.y - absolute_rect.y)) / swatchSize.y);
-		auto pixelCoord = glm::vec2(modx*swatchSize.x + swatchSize.x / 2, mody*swatchSize.y + swatchSize.y / 2);
-		color = imgBuf->GetPixel(pixelCoord.x, pixelCoord.y);
+		auto mody = (int)glm::floor((mousePos.y - absolute_rect.y) / swatchSize.y);
+
+		color = swatches[mody*xSize+modx];
 
 		if (picker)
 		{
