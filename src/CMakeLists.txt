@@ -21,7 +21,7 @@ include_directories(
 	"${LIB_PATH}/freetype/include"
 	"${LIB_PATH}/glfw/include"
 	"${LIB_PATH}/glm"
-	"${LIB_PATH}/glxw/include"
+	"${LIB_PATH}/glad/include"
 	"${LIB_PATH}/physfs"
 	"${LIB_PATH}/tinyxml2/src"
 	"${LIB_PATH}/freetype2/include"
