@@ -22,7 +22,7 @@
 #include <stdarg.h>
 
 // OPENGL RELATED LIBS
-#include "GLXW/glxw.h"
+#include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
 #include "glm.hpp"

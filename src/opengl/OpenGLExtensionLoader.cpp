@@ -3,13 +3,8 @@
 #include "application/AppContext.h"
 #include "utility/Logger.h"
 
-#if defined(__MINGW32__) || defined(_WIN32)
-#include <GLXW/glxw_wgl.h>
-#include <GL/wglext.h>
-#else
-#include <GLXW/glxw_glx.h>
-#include "GL/glxext.h"
-#endif
+
+#include <glad\glad.h>
 
 OpenGLExtensionLoader::OpenGLExtensionLoader()
 {
@@ -22,10 +17,7 @@ OpenGLExtensionLoader::~OpenGLExtensionLoader()
 
 bool OpenGLExtensionLoader::load_extensions()
 {
-	if (glxwInit() != 0)
-		return false;
-
-	return true;
+	return gladLoadGL();
 }
 
 // TODO (serengeor#1#): log this

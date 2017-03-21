@@ -10,7 +10,7 @@ OPTION(PHYSFS_BUILD_SHARED "" OFF)
 #libs that we want to build
 add_subdirectory("${BUILD_LIBRARIES_SOURCE_DIR}/stb_image/")
 add_subdirectory("${BUILD_LIBRARIES_SOURCE_DIR}/tinyxml2/src/")
-add_subdirectory("${BUILD_LIBRARIES_SOURCE_DIR}/glxw/")
+add_subdirectory("${BUILD_LIBRARIES_SOURCE_DIR}/glad/")
 add_subdirectory("${BUILD_LIBRARIES_SOURCE_DIR}/glfw/")
 add_subdirectory("${BUILD_LIBRARIES_SOURCE_DIR}/freetype2/")
 add_subdirectory("${BUILD_LIBRARIES_SOURCE_DIR}/jsoncpp/")

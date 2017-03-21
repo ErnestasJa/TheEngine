@@ -19,3 +19,5 @@ __pycache__/
 tests/bin/
 *#
 /.project
+build_tools/windows/Engine.VC.db
+build_tools/windows/Engine.VC.VC.opendb

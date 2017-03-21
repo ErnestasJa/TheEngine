@@ -107,7 +107,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\src;..\..\libs\boost;..\..\libs\freetype2\include;..\..\libs\glfw\include;..\..\libs\glm;..\..\libs\glxw\include;..\..\libs\jsoncpp\include;..\..\libs\libsigc++;..\..\libs\physfs;..\..\libs\stb_image;..\..\libs\tinyxml2\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\src;..\..\libs\boost;..\..\libs\freetype2\include;..\..\libs\glfw\include;..\..\libs\glm;..\..\libs\glad\include;..\..\libs\jsoncpp\include;..\..\libs\libsigc++;..\..\libs\physfs;..\..\libs\stb_image;..\..\libs\tinyxml2\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeaderFile>Precomp.h</PrecompiledHeaderFile>
       <MinimalRebuild>false</MinimalRebuild>
@@ -147,7 +147,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\src;..\..\libs\boost;..\..\libs\freetype2\include;..\..\libs\glfw\include;..\..\libs\glm;..\..\libs\glxw\include;..\..\libs\jsoncpp\include;..\..\libs\libsigc++;..\..\libs\physfs;..\..\libs\stb_image;..\..\libs\tinyxml2\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\src;..\..\libs\boost;..\..\libs\freetype2\include;..\..\libs\glfw\include;..\..\libs\glm;..\..\libs\glad\include;..\..\libs\jsoncpp\include;..\..\libs\libsigc++;..\..\libs\physfs;..\..\libs\stb_image;..\..\libs\tinyxml2\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeaderFile>Precomp.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>4002</DisableSpecificWarnings>
