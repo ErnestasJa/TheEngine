@@ -5,7 +5,7 @@ rmdir /s /q "libs/win64release"
 mkdir "build"
 mkdir "libs/win64release"
 cd "build"
-call ../build_tools/windows/vcvars64.bat
+call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
 cmake ../libs/ -DCMAKE_BUILD_TYPE=RELEASE -G "NMake Makefiles"
 nmake
 cd "../libs/boost/"
