@@ -56,6 +56,7 @@ public:
 	void SetUnpackAlignment(TextureUnpackAlignment alignment);
 	void InitMipmap(uint32_t base, uint32_t max);
 	void InitMipmap();
+	void SetMaxAniso();
 	void UpdateMipmaps();
 	void Set(uint8_t slot);
 	void Unset(uint8_t slot);

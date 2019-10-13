@@ -235,6 +235,14 @@ void Texture::Unset(uint8_t slot)
 	current = Id;
 }
 
+void Texture::SetMaxAniso()
+{
+	float aniso = 0.0f;
+	glBindTexture(Type, Id);
+	glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &aniso);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, aniso);
+}
+
 void Texture::Free()
 {
 }
