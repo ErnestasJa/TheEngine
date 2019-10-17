@@ -64,7 +64,7 @@ void Texture::Init(ImagePtr img)
  * @param filter
  * bit0 = linear, bit1 = mipmap
  */
-void Texture::Init(const uint8_t * data, uint32_t target, uint32_t image_format, uint32_t internal_format, int32_t w, int32_t h)
+void Texture::Init(const uint8_t* data, uint32_t target, uint32_t image_format, uint32_t internal_format, int32_t w, int32_t h, int32_t d)
 {
 	Type = target;
 
@@ -76,10 +76,12 @@ void Texture::Init(const uint8_t * data, uint32_t target, uint32_t image_format,
 
 	glTexParameteri(Type, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(Type, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	if(Type==GL_TEXTURE_3D)
+		glTexParameteri(Type, GL_TEXTURE_WRAP_R, GL_REPEAT);
 	glTexParameteri(Type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(Type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE);
+	glTexParameteri(Type, GL_TEXTURE_COMPARE_MODE, GL_NONE);
 
 	/// either use Texture with or without alpha channel
 	switch (image_format)
@@ -87,6 +89,9 @@ void Texture::Init(const uint8_t * data, uint32_t target, uint32_t image_format,
 	case GL_RED:
 	case GL_RGB:
 	case GL_BGR:
+	case GL_COMPRESSED_RED:
+	case GL_COMPRESSED_RGB:
+	case GL_COMPRESSED_RGBA:
 		glPixelStorei(GL_UNPACK_ALIGNMENT, (uint32_t)TextureUnpackAlignment::BYTE);
 		break;
 
@@ -117,8 +122,15 @@ void Texture::Init(const uint8_t * data, uint32_t target, uint32_t image_format,
 		dataType = GL_UNSIGNED_BYTE;
 	}
 
-	glTexImage2D(Type, 0, internalFormat, w, h, 0, imageFormat, dataType, data);
-
+	switch (Type)
+	{
+	case GL_TEXTURE_2D:
+		glTexImage2D(Type, 0, internalFormat, w, h, 0, imageFormat, dataType, data);
+		break;
+	case GL_TEXTURE_3D:
+		glTexImage3D(Type, 0, internalFormat, w, h, d, 0, imageFormat, dataType, data);
+		break;
+	}
 	//glinitMipmap(Type);
 
 	glBindTexture(Type, current);
@@ -136,19 +148,23 @@ void Texture::SetFilters(TextureFilterMin fmin, TextureFilterMag fmag)
 		glBindTexture(Type, current);
 }
 
-void Texture::SetClampMode(TextureClamp x, TextureClamp y)
+void Texture::SetClampMode(TextureClamp x, TextureClamp y, TextureClamp z)
 {
 	if (current != Id)
 		glBindTexture(Type, Id);
 
 	glTexParameteri(Type, GL_TEXTURE_WRAP_S, x == TextureClamp::EDGE ? GL_CLAMP_TO_EDGE : (x == TextureClamp::BORDER ? GL_CLAMP_TO_BORDER : GL_REPEAT));
 	glTexParameteri(Type, GL_TEXTURE_WRAP_T, y == TextureClamp::EDGE ? GL_CLAMP_TO_EDGE : (y == TextureClamp::BORDER ? GL_CLAMP_TO_BORDER : GL_REPEAT));
+	if (Type == GL_TEXTURE_3D)
+	{
+		glTexParameteri(Type, GL_TEXTURE_WRAP_R, y == TextureClamp::EDGE ? GL_CLAMP_TO_EDGE : (y == TextureClamp::BORDER ? GL_CLAMP_TO_BORDER : GL_REPEAT));
+	}
 
 	if (current != Id)
 		glBindTexture(Type, current);
 }
 
-void Texture::SetBorderColor(const glm::vec4 & color)
+void Texture::SetBorderColor(const glm::vec4& color)
 {
 	if (current != Id)
 		glBindTexture(Type, Id);
@@ -214,13 +230,25 @@ void Texture::Set(uint8_t slot)
 	current = Id;
 }
 
-void Texture::SetSubImage2D(const uint8_t * data, uint32_t xoffset, uint32_t yoffset, uint32_t width, uint32_t height, uint32_t overrideFormat)
+void Texture::SetSubImage2D(const uint8_t* data, uint32_t xoffset, uint32_t yoffset, uint32_t width, uint32_t height, uint32_t overrideFormat)
 {
 	glActiveTexture(GL_TEXTURE0 + active_slot);
 	if (current != Id)
 		glBindTexture(Type, Id);
 
 	glTexSubImage2D(Type, 0, xoffset, yoffset, width, height, overrideFormat == 0 ? imageFormat : overrideFormat, dataType, data);
+
+	if (current != Id)
+		glBindTexture(Type, current);
+}
+
+void Texture::SetSubImage3D(const uint8_t* data, uint32_t xoffset, uint32_t yoffset, uint32_t zoffset, uint32_t width, uint32_t height, uint32_t depth, uint32_t overrideFormat)
+{
+	glActiveTexture(GL_TEXTURE0 + active_slot);
+	if (current != Id)
+		glBindTexture(Type, Id);
+
+	glTexSubImage3D(Type, 0, xoffset, yoffset, zoffset, width, height, depth, overrideFormat == 0 ? imageFormat : overrideFormat, dataType, data);
 
 	if (current != Id)
 		glBindTexture(Type, current);

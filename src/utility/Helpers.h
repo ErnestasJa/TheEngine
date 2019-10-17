@@ -45,7 +45,7 @@ namespace helpers
 
 	inline bool IsNan(const glm::vec3 &vec)
 	{
-		auto &nanCheck = glm::isnan(vec);
+		auto nanCheck = glm::isnan(vec);
 		return nanCheck.x || nanCheck.y || nanCheck.z;
 	}
 

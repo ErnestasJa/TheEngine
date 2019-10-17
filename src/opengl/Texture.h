@@ -47,12 +47,13 @@ public:
 	~Texture();
 
 	void Init(ImagePtr img);
-	void Init(const uint8_t * data, uint32_t target, uint32_t image_format, uint32_t internal_format, int32_t w, int32_t h);
+	void Init(const uint8_t* data, uint32_t target, uint32_t image_format, uint32_t internal_format, int32_t w, int32_t h, int32_t d = 0);
 
 	void SetFilters(TextureFilterMin fmin, TextureFilterMag fmag);
-	void SetClampMode(TextureClamp x, TextureClamp y);
-	void SetSubImage2D(const uint8_t * data, uint32_t xoffset, uint32_t yoffset, uint32_t width, uint32_t height, uint32_t overrideFormat = 0);
-	void SetBorderColor(const glm::vec4 & color);
+	void SetClampMode(TextureClamp x, TextureClamp y, TextureClamp z = TextureClamp::REPEAT);
+	void SetSubImage2D(const uint8_t* data, uint32_t xoffset, uint32_t yoffset, uint32_t width, uint32_t height, uint32_t overrideFormat = 0);
+	void SetSubImage3D(const uint8_t* data, uint32_t xoffset, uint32_t yoffset, uint32_t zoffset, uint32_t width, uint32_t height, uint32_t depth, uint32_t overrideFormat = 0);
+	void SetBorderColor(const glm::vec4& color);
 	void SetUnpackAlignment(TextureUnpackAlignment alignment);
 	void InitMipmap(uint32_t base, uint32_t max);
 	void InitMipmap();
