@@ -24,7 +24,7 @@ template <>
 void IndexBufferObject<uint8_t>::Upload()
 {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->Id);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, GetSize() * sizeof(uint32_t), data.size() > 0 ? &data[0] : 0, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, GetSize() * sizeof(uint32_t), data.size() > 0 ? &data[0] : 0, this->UsageHint);
     // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
@@ -50,7 +50,7 @@ template <>
 void IndexBufferObject<uint32_t>::Upload()
 {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->Id);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, GetSize() * sizeof(uint32_t), data.size() > 0 ? &data[0] : 0, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, GetSize() * sizeof(uint32_t), data.size() > 0 ? &data[0] : 0, this->UsageHint);
     // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
@@ -85,7 +85,7 @@ template <>
 void BufferObject<uint8_t>::Upload()
 {
     glBindBuffer(GL_ARRAY_BUFFER, this->Id);
-    glBufferData(GL_ARRAY_BUFFER, GetSize() * sizeof(uint8_t), data.size() > 0 ? &data[0] : 0, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, GetSize() * sizeof(uint8_t), data.size() > 0 ? &data[0] : 0, this->UsageHint);
     // glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -111,7 +111,7 @@ template <>
 void BufferObject<helpers::u8vec4>::Upload()
 {
     glBindBuffer(GL_ARRAY_BUFFER, this->Id);
-    glBufferData(GL_ARRAY_BUFFER, GetSize() * sizeof(helpers::u8vec4), data.size() > 0 ? &data[0] : 0, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, GetSize() * sizeof(helpers::u8vec4), data.size() > 0 ? &data[0] : 0, this->UsageHint);
     // glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -147,7 +147,7 @@ template <>
 void BufferObject<uint32_t>::Upload()
 {
     glBindBuffer(GL_ARRAY_BUFFER, this->Id);
-    glBufferData(GL_ARRAY_BUFFER, GetSize() * sizeof(uint32_t), data.size() > 0 ? &data[0] : 0, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, GetSize() * sizeof(uint32_t), data.size() > 0 ? &data[0] : 0, this->UsageHint);
     // glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -173,7 +173,7 @@ template <>
 void BufferObject<float>::Upload()
 {
     glBindBuffer(GL_ARRAY_BUFFER, this->Id);
-    glBufferData(GL_ARRAY_BUFFER, GetSize() * sizeof(float), data.size() > 0 ? &data[0] : 0, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, GetSize() * sizeof(float), data.size() > 0 ? &data[0] : 0, this->UsageHint);
     // glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -207,7 +207,7 @@ template <>
 void BufferObject<glm::vec4>::Upload()
 {
     glBindBuffer(GL_ARRAY_BUFFER, this->Id);
-    glBufferData(GL_ARRAY_BUFFER, GetSize() * sizeof(glm::vec4), data.size() > 0 ? &data[0] : 0, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, GetSize() * sizeof(glm::vec4), data.size() > 0 ? &data[0] : 0, this->UsageHint);
     // glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -241,7 +241,7 @@ template <>
 void BufferObject<glm::tvec4<uint8_t>>::Upload()
 {
     glBindBuffer(GL_ARRAY_BUFFER, this->Id);
-    glBufferData(GL_ARRAY_BUFFER, GetSize() * sizeof(glm::tvec4<uint8_t>), data.size() > 0 ? &data[0] : 0, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, GetSize() * sizeof(glm::tvec4<uint8_t>), data.size() > 0 ? &data[0] : 0, this->UsageHint);
     // glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -275,7 +275,7 @@ template <>
 void BufferObject<glm::vec3>::Upload()
 {
     glBindBuffer(GL_ARRAY_BUFFER, this->Id);
-    glBufferData(GL_ARRAY_BUFFER, GetSize() * sizeof(glm::vec3), data.size() > 0 ? &data[0] : 0, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, GetSize() * sizeof(glm::vec3), data.size() > 0 ? &data[0] : 0, this->UsageHint);
     // glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -309,7 +309,7 @@ template <>
 void BufferObject<glm::vec2>::Upload()
 {
     glBindBuffer(GL_ARRAY_BUFFER, this->Id);
-    glBufferData(GL_ARRAY_BUFFER, GetSize() * sizeof(glm::vec2), data.size() > 0 ? &data[0] : 0, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, GetSize() * sizeof(glm::vec2), data.size() > 0 ? &data[0] : 0, this->UsageHint);
     // glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 

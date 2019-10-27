@@ -1,7 +1,7 @@
 #include "Precomp.h"
 #include "IBufferObject.h"
 
-IBufferObject::IBufferObject() : Id(0), UsageHint(STATIC)
+IBufferObject::IBufferObject(USAGE_HINT hint) : Id(0), UsageHint(hint)
 {
 }
 

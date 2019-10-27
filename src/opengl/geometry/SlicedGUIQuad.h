@@ -83,9 +83,9 @@ public:
 
 		this->m_margin = margin;
 
-		pos = new BufferObject<glm::vec3>();
-		tex_coords = new BufferObject<glm::vec2>();
-		indices = new IndexBufferObject<uint32_t>();
+		pos = new BufferObject<glm::vec3>(IBufferObject::USAGE_HINT::STATIC);
+		tex_coords = new BufferObject<glm::vec2>(IBufferObject::USAGE_HINT::STATIC);
+		indices = new IndexBufferObject<uint32_t>(IBufferObject::USAGE_HINT::STATIC);
 	}
 
 	void CreateTCoords(vector<glm::vec2> uvs)

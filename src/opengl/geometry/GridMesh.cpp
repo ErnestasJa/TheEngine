@@ -4,8 +4,8 @@
 
 GridMesh::GridMesh(float density, uint32_t size, uint32_t gridlines, bool positiveOnly)
 {
-	BufferObject<glm::vec3> *pos = new BufferObject<glm::vec3>();
-	BufferObject<glm::vec4> *col = new BufferObject<glm::vec4>();
+	BufferObject<glm::vec3> *pos = new BufferObject<glm::vec3>(IBufferObject::USAGE_HINT::STATIC);
+	BufferObject<glm::vec4> *col = new BufferObject<glm::vec4>(IBufferObject::USAGE_HINT::STATIC);
 
 	int32_t halfsize = size / 2;
 

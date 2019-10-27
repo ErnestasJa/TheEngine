@@ -11,16 +11,16 @@ struct IBufferObject
 
 	enum USAGE_HINT
 	{
-		STATIC = 0,
-		DYNAMIC,
-		STREAM
+		STATIC = GL_STATIC_DRAW,
+		DYNAMIC = GL_DYNAMIC_DRAW,
+		STREAM = GL_STREAM_DRAW
 	};
 
 	uint32_t Id;
 	uint32_t UsageHint;
 	//bool enabled;
 
-	IBufferObject();
+	IBufferObject(USAGE_HINT hint);
 	virtual ~IBufferObject();
 
 	virtual void Init() = 0;

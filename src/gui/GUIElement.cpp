@@ -97,6 +97,16 @@ void GUIElement::BringToFront(GUIElement *e)
     }
 }
 
+void GUIElement::SendToBack(GUIElement* e)
+{
+	vector<GUIElement*>::iterator i = std::find(children.begin(), children.end(), e);
+	if (i != children.end()) {
+		i = children.erase(i);
+		children.insert(children.begin(),e);
+		return;
+	}
+}
+
 void GUIElement::UpdateChildren(float dt)
 {
     Update(dt);

@@ -39,7 +39,7 @@ public:
 	{
 		glmesh = share(new Mesh());
 
-		pos = new BufferObject<glm::vec3>();
+		pos = new BufferObject<glm::vec3>(IBufferObject::USAGE_HINT::STATIC);
 
 		pos->data = {
 			{ m_size / 2.f, -m_size / 2.f, -m_size / 2.f },
@@ -80,12 +80,12 @@ public:
 			{ -m_size / 2.f, m_size / 2.f, m_size / 2.f }
 		};
 
-		col = new BufferObject<glm::tvec4<uint8_t>>();
+		col = new BufferObject<glm::tvec4<uint8_t>>(IBufferObject::USAGE_HINT::STATIC);
 
 
 		col->data.resize(36, m_color);
 
-		normals = new BufferObject<glm::vec3>();
+		normals = new BufferObject<glm::vec3>(IBufferObject::USAGE_HINT::STATIC);
 
 		normals->data = {
 			{ -0.000000, -0.000000, -1.000000 },
@@ -126,7 +126,7 @@ public:
 			{ -0.000000, 1.000000, 0.000000 }
 		};
 
-		indices = new IndexBufferObject<uint32_t>();
+		indices = new IndexBufferObject<uint32_t>(IBufferObject::USAGE_HINT::STATIC);
 
 		indices->data = {
 			0,  1,  2,
@@ -156,7 +156,7 @@ public:
 	{
 		glmesh = share(new Mesh());
 
-		pos = new BufferObject<glm::vec3>();
+		pos = new BufferObject<glm::vec3>(IBufferObject::USAGE_HINT::STATIC);
 
 		const glm::vec3 bmin = aabb.GetMin(), bmax = aabb.GetMax();
 		/// - - +
@@ -187,7 +187,7 @@ public:
 		pos->data[6] = p7;
 		pos->data[7] = p8;
 
-		col = new BufferObject<glm::tvec4<uint8_t>>();
+		col = new BufferObject<glm::tvec4<uint8_t>>(IBufferObject::USAGE_HINT::STATIC);
 
 		col->data.resize(8);
 		col->data[0] = m_color;
@@ -199,7 +199,7 @@ public:
 		col->data[6] = m_color;
 		col->data[7] = m_color;
 
-		indices = new IndexBufferObject<uint32_t>();
+		indices = new IndexBufferObject<uint32_t>(IBufferObject::USAGE_HINT::STATIC);
 
 		indices->data.resize(36);
 		// Front
@@ -257,7 +257,7 @@ public:
 	{
 		glmesh = share(new Mesh());
 
-		pos = new BufferObject<glm::vec3>();
+		pos = new BufferObject<glm::vec3>(IBufferObject::USAGE_HINT::STATIC);
 
 		/// - - +
 		glm::vec3 p1(left, bottom, zfar);
@@ -287,7 +287,7 @@ public:
 		pos->data[6] = p7;
 		pos->data[7] = p8;
 
-		col = new BufferObject<glm::tvec4<uint8_t>>();
+		col = new BufferObject<glm::tvec4<uint8_t>>(IBufferObject::USAGE_HINT::STATIC);
 
 		col->data.resize(8);
 		col->data[0] = m_color;
@@ -299,7 +299,7 @@ public:
 		col->data[6] = m_color;
 		col->data[7] = m_color;
 
-		indices = new IndexBufferObject<uint32_t>();
+		indices = new IndexBufferObject<uint32_t>(IBufferObject::USAGE_HINT::STATIC);
 
 		indices->data.resize(36);
 		// Front

@@ -10,6 +10,11 @@ struct BufferObject : public IBufferObject
 	uint32_t preallocatedSize;
 	vector<T> data;
 
+	BufferObject(IBufferObject::USAGE_HINT hint, uint32_t prealloc=0) : IBufferObject(hint), preallocatedSize(prealloc)
+	{
+
+	}
+
 	virtual ~BufferObject()
 	{
 		data.clear();
@@ -41,6 +46,10 @@ struct IndexBufferObject : public IBufferObject
 {
 	uint32_t preallocatedSize;
 	vector<T> data;
+
+	IndexBufferObject(IBufferObject::USAGE_HINT hint, uint32_t prealloc = 0) : IBufferObject(hint), preallocatedSize(prealloc)
+	{
+	}
 
 	virtual ~IndexBufferObject()
 	{

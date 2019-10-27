@@ -65,7 +65,9 @@ public:
 
 	void RemoveChild(GUIElement *e);
 
-	void BringToFront(GUIElement *e);
+	void BringToFront(GUIElement* e);
+
+	void SendToBack(GUIElement* e);
 
 	void UpdateAbsolutePos();
 

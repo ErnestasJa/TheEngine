@@ -43,14 +43,14 @@ MeshPtr IQMLoader::Load(const char* data, const uint32_t size)
 
 	glmesh = MeshPtr(new Mesh());
 
-	auto positions = new BufferObject<glm::vec3>();
-	auto texcoords = new BufferObject<glm::vec2>();
-	auto normals = new BufferObject<glm::vec3>();
-	auto tangents = new BufferObject<glm::vec4>();
-	auto bindexes = new BufferObject<helpers::u8vec4>();
-	auto bweights = new BufferObject<helpers::u8vec4>();
-	auto colors = new BufferObject<glm::vec3>();
-	auto indices = new IndexBufferObject<uint32_t>();
+	auto positions = new BufferObject<glm::vec3>(IBufferObject::USAGE_HINT::STATIC);
+	auto texcoords = new BufferObject<glm::vec2>(IBufferObject::USAGE_HINT::STATIC);
+	auto normals = new BufferObject<glm::vec3>(IBufferObject::USAGE_HINT::STATIC);
+	auto tangents = new BufferObject<glm::vec4>(IBufferObject::USAGE_HINT::STATIC);
+	auto bindexes = new BufferObject<helpers::u8vec4>(IBufferObject::USAGE_HINT::STATIC);
+	auto bweights = new BufferObject<helpers::u8vec4>(IBufferObject::USAGE_HINT::STATIC);
+	auto colors = new BufferObject<glm::vec3>(IBufferObject::USAGE_HINT::STATIC);
+	auto indices = new IndexBufferObject<uint32_t>(IBufferObject::USAGE_HINT::STATIC);
 
 	iqmmesh         * submeshes;
 	iqmvertexarray  * vertexarrays; //IQM vertex array info

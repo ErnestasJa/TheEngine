@@ -8,21 +8,21 @@ Quad::Quad(float size)
 {
 	this->m_size = size;
 
-	auto posBuffer = new BufferObject<glm::vec3>();
+	auto posBuffer = new BufferObject<glm::vec3>(IBufferObject::USAGE_HINT::STATIC);
 	posBuffer->data.resize(4);
 	posBuffer->data[0] = glm::vec3(-m_size, -m_size, 0);
 	posBuffer->data[1] = glm::vec3(m_size, -m_size, 0);
 	posBuffer->data[2] = glm::vec3(m_size, m_size, 0);
 	posBuffer->data[3] = glm::vec3(-m_size, m_size, 0);
 
-	auto UVBuffer = new BufferObject<glm::vec2>();
+	auto UVBuffer = new BufferObject<glm::vec2>(IBufferObject::USAGE_HINT::STATIC);
 	UVBuffer->data.resize(4);
 	UVBuffer->data[0] = glm::vec2(0, 0);
 	UVBuffer->data[1] = glm::vec2(1, 0);
 	UVBuffer->data[2] = glm::vec2(1, 1);
 	UVBuffer->data[3] = glm::vec2(0, 1);
 
-	auto indexBuffer = new IndexBufferObject<uint32_t>();
+	auto indexBuffer = new IndexBufferObject<uint32_t>(IBufferObject::USAGE_HINT::STATIC);
 	indexBuffer->data.resize(6);
 	indexBuffer->data[0] = 3;
 	indexBuffer->data[1] = 0;
@@ -40,7 +40,7 @@ Quad::Quad(float size)
 
 Quad::Quad(const Plane3d &plane)
 {
-	auto posBuffer = new BufferObject<glm::vec3>();
+	auto posBuffer = new BufferObject<glm::vec3>(IBufferObject::USAGE_HINT::STATIC);
 	posBuffer->data.resize(4);
 	auto points = plane.GetPoints();
 	posBuffer->data[0] = points[0];
@@ -48,14 +48,14 @@ Quad::Quad(const Plane3d &plane)
 	posBuffer->data[2] = points[2];
 	posBuffer->data[3] = points[3];
 
-	auto UVBuffer = new BufferObject<glm::vec2>();
+	auto UVBuffer = new BufferObject<glm::vec2>(IBufferObject::USAGE_HINT::STATIC);
 	UVBuffer->data.resize(4);
 	UVBuffer->data[0] = glm::vec2(0, 0);
 	UVBuffer->data[1] = glm::vec2(1, 0);
 	UVBuffer->data[2] = glm::vec2(1, 1);
 	UVBuffer->data[3] = glm::vec2(0, 1);
 
-	auto indexBuffer = new IndexBufferObject<uint32_t>();
+	auto indexBuffer = new IndexBufferObject<uint32_t>(IBufferObject::USAGE_HINT::STATIC);
 	indexBuffer->data.resize(6);
 	indexBuffer->data[0] = 3;
 	indexBuffer->data[1] = 0;
