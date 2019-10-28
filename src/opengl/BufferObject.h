@@ -4,6 +4,35 @@
 #include "IBufferObject.h"
 #include "utility/Vector.h"
 
+#define RegisterBufferObject(type, gltype, components) \
+template <> \
+uint32_t BufferObject<type>::GetDataType() \
+{ \
+	return gltype; \
+} \
+template <> \
+uint32_t BufferObject<type>::GetComponentCount() \
+{ \
+	return components; \
+} \
+template <> \
+void BufferObject<type>::Init() \
+{ \
+	glGenBuffers(1, &this->Id); \
+} \
+template <> \
+void BufferObject<type>::Upload() \
+{ \
+	glBindBuffer(GL_ARRAY_BUFFER, this->Id); \
+	glBufferData(GL_ARRAY_BUFFER, GetSize() * sizeof(type), data.size() > 0 ? &data[0] : 0, this->UsageHint); \
+} \
+template <> \
+void BufferObject<type>::UploadSubData(vector<type> subdata, uint32_t offset) \
+{ \
+	glBindBuffer(GL_ARRAY_BUFFER, this->Id); \
+	glBufferSubData(GL_ARRAY_BUFFER, offset * sizeof(type), subdata.size() * sizeof(type), &subdata[0]); \
+}
+
 template <class T>
 struct BufferObject : public IBufferObject
 {
@@ -40,6 +69,36 @@ struct BufferObject : public IBufferObject
 		return (uint32_t)(data.size() > 0 ? data.size() : (data.capacity() > 0 ? data.capacity() : preallocatedSize));
 	}
 };
+
+
+#define RegisterIndexBufferObject(type, gltype, components) \
+template <> \
+uint32_t IndexBufferObject<type>::GetDataType() \
+{ \
+	return gltype; \
+} \
+template <> \
+uint32_t IndexBufferObject<type>::GetComponentCount() \
+{ \
+	return components; \
+} \
+template <> \
+void IndexBufferObject<type>::Init() \
+{ \
+	glGenBuffers(1, &this->Id); \
+} \
+template <> \
+void IndexBufferObject<type>::Upload() \
+{ \
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->Id); \
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, GetSize() * sizeof(type), data.size() > 0 ? &data[0] : 0, this->UsageHint); \
+} \
+template <> \
+void IndexBufferObject<type>::UploadSubData(vector<type> subdata, uint32_t offset) \
+{ \
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->Id); \
+	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset * sizeof(type), subdata.size() * sizeof(type), &subdata[0]); \
+}
 
 template <class T>
 struct IndexBufferObject : public IBufferObject

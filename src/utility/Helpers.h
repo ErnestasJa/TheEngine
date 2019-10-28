@@ -19,11 +19,6 @@ namespace helpers
 	[[deprecated("Use filesystem functionality instead.")]]
 	uint32_t read(const std::string & file, char *& buf);
 
-	struct u8vec4
-	{
-		uint8_t v[4];
-	};
-
 	template <typename T> inline std::string to_str(const T& t);
 	template <typename T> inline std::wstring to_wstr(const T& t);
 	template <typename T> inline T limit(T val, T min, T max);

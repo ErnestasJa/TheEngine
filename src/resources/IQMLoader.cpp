@@ -47,8 +47,8 @@ MeshPtr IQMLoader::Load(const char* data, const uint32_t size)
 	auto texcoords = new BufferObject<glm::vec2>(IBufferObject::USAGE_HINT::STATIC);
 	auto normals = new BufferObject<glm::vec3>(IBufferObject::USAGE_HINT::STATIC);
 	auto tangents = new BufferObject<glm::vec4>(IBufferObject::USAGE_HINT::STATIC);
-	auto bindexes = new BufferObject<helpers::u8vec4>(IBufferObject::USAGE_HINT::STATIC);
-	auto bweights = new BufferObject<helpers::u8vec4>(IBufferObject::USAGE_HINT::STATIC);
+	auto bindexes = new BufferObject<glm::tvec4<uint8_t>>(IBufferObject::USAGE_HINT::STATIC);
+	auto bweights = new BufferObject<glm::tvec4<uint8_t>>(IBufferObject::USAGE_HINT::STATIC);
 	auto colors = new BufferObject<glm::vec3>(IBufferObject::USAGE_HINT::STATIC);
 	auto indices = new IndexBufferObject<uint32_t>(IBufferObject::USAGE_HINT::STATIC);
 
@@ -96,13 +96,13 @@ MeshPtr IQMLoader::Load(const char* data, const uint32_t size)
 
 		case IQM_BLENDINDEXES:
 			bindexes->data.resize(head.num_vertexes);
-			std::copy((helpers::u8vec4*)&data[va.offset], (helpers::u8vec4*)&data[va.offset + head.num_vertexes*sizeof(helpers::u8vec4)], &bindexes->data[0]);
+			std::copy((glm::tvec4<uint8_t>*)&data[va.offset], (glm::tvec4<uint8_t>*)&data[va.offset + head.num_vertexes*sizeof(glm::tvec4<uint8_t>)], &bindexes->data[0]);
 
 			break;
 
 		case IQM_BLENDWEIGHTS:
 			bweights->data.resize(head.num_vertexes);
-			std::copy((helpers::u8vec4*)&data[va.offset], (helpers::u8vec4*)&data[va.offset + head.num_vertexes*sizeof(helpers::u8vec4)], &bweights->data[0]);
+			std::copy((glm::tvec4<uint8_t>*)&data[va.offset], (glm::tvec4<uint8_t>*)&data[va.offset + head.num_vertexes*sizeof(glm::tvec4<uint8_t>)], &bweights->data[0]);
 
 			break;
 
